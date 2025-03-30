@@ -51,7 +51,7 @@ public class ArticleService {
         return ArticleReadVersionsResponse.of(article);
     }
 
-    private Article getArticle(final Long id) {
+    public Article getArticle(final Long id) {
         return articleRepository.findById(id).orElseThrow(() -> {
             final String error = String.format("찾을 수 없는 게시글 번호입니다. [ID: %d]", id);
             return new IllegalArgumentException(error);

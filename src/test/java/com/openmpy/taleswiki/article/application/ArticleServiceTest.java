@@ -111,4 +111,12 @@ class ArticleServiceTest {
         assertThatThrownBy(() -> articleService.create(request)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 카테고리에 이미 작성된 글입니다. [카테고리: 인물, 제목: 제목]");
     }
+
+    @DisplayName("[예외] 게시글 번호를 찾을 수 없다.")
+    @Test
+    void 예외_article_service_test_02() {
+        // when & then
+        assertThatThrownBy(() -> articleService.getArticle(1L)).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("찾을 수 없는 게시글 번호입니다. [ID: 1]");
+    }
 }
