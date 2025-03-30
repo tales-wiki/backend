@@ -65,6 +65,16 @@ public class Article extends BaseEntity {
         this.latestVersion = latestVersion;
     }
 
+    public static Article create(final String title, final String nickname, final String category) {
+        return Article.builder()
+                .title(title)
+                .nickname(nickname)
+                .category(ArticleCategory.of(category))
+                .versions(new ArrayList<>())
+                .latestVersion(null)
+                .build();
+    }
+
     public void addVersion(final ArticleVersion version) {
         versions.add(version);
         latestVersion = version;

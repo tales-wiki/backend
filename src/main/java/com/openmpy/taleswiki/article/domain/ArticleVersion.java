@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class ArticleVersion extends BaseEntity {
 
+    private static final int DEFAULT_ARTICLE_VERSION = 1;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,6 +44,14 @@ public class ArticleVersion extends BaseEntity {
         this.content = new ArticleContent(content);
         this.version = new ArticleVersionNumber(version);
         this.article = article;
+    }
+
+    public static ArticleVersion create(final String content, final Article article) {
+        return ArticleVersion.builder()
+                .content(content)
+                .version(DEFAULT_ARTICLE_VERSION)
+                .article(article)
+                .build();
     }
 
     public String getContent() {

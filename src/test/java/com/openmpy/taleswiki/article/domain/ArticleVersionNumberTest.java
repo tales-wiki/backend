@@ -23,17 +23,6 @@ class ArticleVersionNumberTest {
         assertThat(versionNumber.getValue()).isEqualTo(123);
     }
 
-    @DisplayName("[통과] 게시글 버전 값 객체의 기본 값은 1이다.")
-    @Test
-    void article_version_number_test_02() {
-
-        // when
-        final ArticleVersionNumber versionNumber = new ArticleVersionNumber();
-
-        // then
-        assertThat(versionNumber.getValue()).isEqualTo(1);
-    }
-
     @DisplayName("[예외] 게시글 버전 값이 0 또는 음수일 수 없다.")
     @ParameterizedTest(name = "값: {0}")
     @ValueSource(ints = {-1, 0})
