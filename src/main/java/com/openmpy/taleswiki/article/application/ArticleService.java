@@ -6,6 +6,7 @@ import com.openmpy.taleswiki.article.domain.ArticleTitle;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
+import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
 
     @Transactional
-    public void create(final ArticleCreateRequest request) {
+    public ArticleCreateResponse create(final ArticleCreateRequest request) {
         final ArticleTitle title = new ArticleTitle(request.title());
         final ArticleCategory category = ArticleCategory.of(request.category());
 
@@ -32,5 +33,7 @@ public class ArticleService {
 
         article.addVersion(version);
         articleRepository.save(article);
+
+        return ArticleCreateResponse.of(article);
     }
 }

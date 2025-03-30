@@ -2,6 +2,7 @@ package com.openmpy.taleswiki.article.presentation;
 
 import com.openmpy.taleswiki.article.application.ArticleService;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
+import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,8 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody @Valid ArticleCreateRequest request) {
-        articleService.create(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ArticleCreateResponse> create(@RequestBody @Valid ArticleCreateRequest request) {
+        final ArticleCreateResponse response = articleService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
