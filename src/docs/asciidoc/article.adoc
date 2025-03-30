@@ -1,0 +1,5 @@
+== 게시글
+
+=== 작성
+
+operation::createArticle[snippets="http-request,http-response"]
