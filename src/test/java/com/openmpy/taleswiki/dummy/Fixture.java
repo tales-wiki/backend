@@ -12,4 +12,8 @@ public class Fixture {
 
     public static final ArticleVersion VERSION01 = new ArticleVersion("버전1", 1, null);
     public static final ArticleVersion VERSION02 = new ArticleVersion("버전2", 2, null);
+
+    public static Article createArticle() {
+        return new Article("제목입니다.", "닉네임입니다.", ArticleCategory.PERSON, new ArrayList<>(), null);
+    }
 }

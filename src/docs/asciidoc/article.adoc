@@ -3,3 +3,7 @@
 === 작성
 
 operation::createArticle[snippets="http-request,http-response"]
+
+=== 조회
+
+operation::readArticle[snippets="path-parameters,http-request,http-response"]

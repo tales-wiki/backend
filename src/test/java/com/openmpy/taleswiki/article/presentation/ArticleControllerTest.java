@@ -1,6 +1,7 @@
 package com.openmpy.taleswiki.article.presentation;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -8,6 +9,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -17,6 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openmpy.taleswiki.article.application.ArticleService;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +77,39 @@ class ArticleControllerTest {
                                         fieldWithPath("nickname").description("작성자"),
                                         fieldWithPath("category").description("카테고리"),
                                         fieldWithPath("content").description("내용")
+                                )
+                        )
+                );
+    }
+
+    @DisplayName("[통과] 게시글을 조회한다.")
+    @Test
+    void article_controller_test_02() throws Exception {
+        // given
+        final Long articleId = 1L;
+        final LocalDateTime latestUpdatedAt = LocalDateTime.of(2025, 3, 30, 12, 0, 0);
+        final ArticleReadResponse response = new ArticleReadResponse("제목", "닉네임", "내용", 1L, latestUpdatedAt);
+
+        // stub
+        when(articleService.read(anyLong())).thenReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/articles/{articleId}", articleId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("제목"))
+                .andExpect(jsonPath("$.nickname").value("닉네임"))
+                .andExpect(jsonPath("$.content").value("내용"))
+                .andExpect(jsonPath("$.latestVersion").value("1"))
+                .andExpect(jsonPath("$.latestUpdatedAt").value("2025-03-30T12:00:00"))
+                .andDo(print())
+                .andDo(
+                        document("readArticle",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("articleId").description("게시글 ID")
                                 )
                         )
                 );

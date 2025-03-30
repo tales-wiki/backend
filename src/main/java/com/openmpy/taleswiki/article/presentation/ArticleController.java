@@ -3,10 +3,13 @@ package com.openmpy.taleswiki.article.presentation;
 import com.openmpy.taleswiki.article.application.ArticleService;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +23,14 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @PostMapping
-    public ResponseEntity<ArticleCreateResponse> create(@RequestBody @Valid ArticleCreateRequest request) {
+    public ResponseEntity<ArticleCreateResponse> create(@RequestBody @Valid final ArticleCreateRequest request) {
         final ArticleCreateResponse response = articleService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ArticleReadResponse> read(@PathVariable final Long id) {
+        final ArticleReadResponse response = articleService.read(id);
+        return ResponseEntity.ok(response);
     }
 }
