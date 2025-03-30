@@ -12,6 +12,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,7 +32,23 @@ public class ArticleVersion extends BaseEntity {
     @AttributeOverride(name = "value", column = @Column(name = "version", nullable = false))
     private ArticleVersionNumber version;
 
+    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
+
+    @Builder
+    public ArticleVersion(final String content, final int version, final Article article) {
+        this.content = new ArticleContent(content);
+        this.version = new ArticleVersionNumber(version);
+        this.article = article;
+    }
+
+    public String getContent() {
+        return content.getValue();
+    }
+
+    public int getVersion() {
+        return version.getValue();
+    }
 }

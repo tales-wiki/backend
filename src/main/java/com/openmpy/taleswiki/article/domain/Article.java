@@ -16,8 +16,11 @@ import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Article extends BaseEntity {
@@ -40,4 +43,30 @@ public class Article extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lastest_version_id")
     private ArticleVersion latestVersion;
+
+    @Builder
+    public Article(
+            final String title,
+            final String nickname,
+            final List<ArticleVersion> versions,
+            final ArticleVersion latestVersion
+    ) {
+        this.title = new ArticleTitle(title);
+        this.nickname = new ArticleNickname(nickname);
+        this.versions = versions;
+        this.latestVersion = latestVersion;
+    }
+
+    public void addVersion(final ArticleVersion version) {
+        versions.add(version);
+        latestVersion = version;
+    }
+
+    public String getTitle() {
+        return title.getValue();
+    }
+
+    public String getNickname() {
+        return nickname.getValue();
+    }
 }
