@@ -15,16 +15,18 @@ class ArticleTest {
         // given
         final String title = "제목입니다.";
         final String nickname = "닉네임입니다.";
+        final ArticleCategory category = ArticleCategory.PERSON;
 
         final ArticleVersion version01 = Fixture.VERSION01;
         final ArticleVersion version02 = Fixture.VERSION02;
 
         // when
-        final Article article = new Article(title, nickname, List.of(version01, version02), version02);
+        final Article article = new Article(title, nickname, category, List.of(version01, version02), version02);
 
         // then
         assertThat(article.getTitle()).isEqualTo("제목입니다.");
         assertThat(article.getNickname()).isEqualTo("닉네임입니다.");
+        assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
         assertThat(article.getVersions().getFirst()).isEqualTo(version01);
         assertThat(article.getVersions().getLast()).isEqualTo(version02);
 

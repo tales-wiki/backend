@@ -54,11 +54,13 @@ public class Article extends BaseEntity {
     public Article(
             final String title,
             final String nickname,
+            final ArticleCategory category,
             final List<ArticleVersion> versions,
             final ArticleVersion latestVersion
     ) {
         this.title = new ArticleTitle(title);
         this.nickname = new ArticleNickname(nickname);
+        this.category = category;
         this.versions = versions;
         this.latestVersion = latestVersion;
     }
