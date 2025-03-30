@@ -24,7 +24,7 @@ class ArticleTitleTest {
     }
 
     @DisplayName("[예외] 게시글 제목 객체가 빈 값일 수 없다.")
-    @ParameterizedTest
+    @ParameterizedTest(name = "값: {0}")
     @NullAndEmptySource
     void 예외_article_title_test_01(final String value) {
         // when & then

@@ -1,0 +1,41 @@
+package com.openmpy.taleswiki.article.domain;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+class ArticleCategoryTest {
+
+    @DisplayName("[통과] 게시글 카테고리 객체가 정상적으로 생성된다.")
+    @Test
+    void article_category_test_01() {
+        // when
+        final ArticleCategory person = ArticleCategory.of("인물");
+        final ArticleCategory guild = ArticleCategory.of("길드");
+
+        // then
+        assertThat(person).isEqualTo(ArticleCategory.PERSON);
+        assertThat(person.name()).isEqualTo("PERSON");
+        assertThat(person.getValue()).isEqualTo("인물");
+
+        assertThat(guild).isEqualTo(ArticleCategory.GUILD);
+        assertThat(guild.name()).isEqualTo("GUILD");
+        assertThat(guild.getValue()).isEqualTo("길드");
+    }
+
+    @DisplayName("[예외] 찾을 수 없는 게시글 카테고리를 입력한다.")
+    @ParameterizedTest(name = "값: {0}")
+    @ValueSource(strings = {"동물", "식물"})
+    void 예외_article_category_test_01(final String value) {
+        // given
+        final String error = String.format("찾을 수 없는 카테고리입니다. [%s]", value);
+
+        // when & then
+        assertThatThrownBy(() -> ArticleCategory.of(value)).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(error);
+    }
+}

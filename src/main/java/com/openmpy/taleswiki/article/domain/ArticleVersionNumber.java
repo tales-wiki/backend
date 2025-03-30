@@ -23,7 +23,8 @@ public class ArticleVersionNumber {
 
     private void validateVersionNumber(final int value) {
         if (value <= INVALID_VERSION_NUMBER) {
-            throw new IllegalArgumentException("버전 값이 0 또는 음수일 수 없습니다.");
+            final String error = String.format("버전 값이 0 또는 음수일 수 없습니다. [%d]", value);
+            throw new IllegalArgumentException(error);
         }
     }
 }

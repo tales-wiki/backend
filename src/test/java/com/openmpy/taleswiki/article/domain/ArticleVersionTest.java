@@ -27,5 +27,6 @@ class ArticleVersionTest {
         assertThat(version.getArticle()).isEqualTo(article);
         assertThat(version.getArticle().getTitle()).isEqualTo("제목입니다.");
         assertThat(version.getArticle().getNickname()).isEqualTo("닉네임입니다.");
+        assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
     }
 }
