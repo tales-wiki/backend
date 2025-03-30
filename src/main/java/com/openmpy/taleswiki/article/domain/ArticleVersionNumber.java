@@ -11,9 +11,8 @@ import lombok.NoArgsConstructor;
 public class ArticleVersionNumber {
 
     private static final int INVALID_VERSION_NUMBER = 0;
-    private static final int DEFAULT_VERSION_NUMBER = 1;
 
-    private int value = DEFAULT_VERSION_NUMBER;
+    private int value;
 
     public ArticleVersionNumber(final int value) {
         validateVersionNumber(value);
