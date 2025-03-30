@@ -11,7 +11,7 @@ public record ArticleReadVersionsResponse(
         final List<ArticleReadVersionResponse> versions = article.getVersions()
                 .stream()
                 .map(it -> new ArticleReadVersionResponse(
-                        it.getArticle().getNickname(),
+                        it.getNickname(),
                         it.getVersion(),
                         it.getCreatedAt())
                 )

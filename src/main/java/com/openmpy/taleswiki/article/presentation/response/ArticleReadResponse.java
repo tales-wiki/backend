@@ -14,7 +14,7 @@ public record ArticleReadResponse(
     public static ArticleReadResponse of(final Article article) {
         return new ArticleReadResponse(
                 article.getTitle(),
-                article.getNickname(),
+                article.getLatestVersion().getNickname(),
                 article.getLatestVersion().getContent(),
                 article.getLatestVersion().getVersion(),
                 article.getLatestVersion().getCreatedAt()

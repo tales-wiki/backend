@@ -13,26 +13,26 @@ class ArticleTest {
     @Test
     void article_test_01() {
         // given
-        final String title = "제목입니다.";
-        final String nickname = "닉네임입니다.";
+        final String title = "제목";
         final ArticleCategory category = ArticleCategory.PERSON;
 
         final ArticleVersion version01 = Fixture.VERSION01;
         final ArticleVersion version02 = Fixture.VERSION02;
 
         // when
-        final Article article = new Article(title, nickname, category, List.of(version01, version02), version02);
+        final Article article = new Article(title, category, List.of(version01, version02), version02);
 
         // then
-        assertThat(article.getTitle()).isEqualTo("제목입니다.");
-        assertThat(article.getNickname()).isEqualTo("닉네임입니다.");
+        assertThat(article.getTitle()).isEqualTo("제목");
         assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
         assertThat(article.getVersions().getFirst()).isEqualTo(version01);
         assertThat(article.getVersions().getLast()).isEqualTo(version02);
 
+        assertThat(article.getVersions().getFirst().getNickname()).isEqualTo("초원");
         assertThat(article.getVersions().getFirst().getContent()).isEqualTo("버전1");
         assertThat(article.getVersions().getFirst().getVersion()).isEqualTo(1);
 
+        assertThat(article.getVersions().getLast().getNickname()).isEqualTo("밍밍");
         assertThat(article.getVersions().getLast().getContent()).isEqualTo("버전2");
         assertThat(article.getVersions().getLast().getVersion()).isEqualTo(2);
 
@@ -59,9 +59,11 @@ class ArticleTest {
         assertThat(article.getVersions().getFirst()).isEqualTo(version01);
         assertThat(article.getVersions().getLast()).isEqualTo(version02);
 
+        assertThat(article.getVersions().getFirst().getNickname()).isEqualTo("초원");
         assertThat(article.getVersions().getFirst().getContent()).isEqualTo("버전1");
         assertThat(article.getVersions().getFirst().getVersion()).isEqualTo(1);
 
+        assertThat(article.getVersions().getLast().getNickname()).isEqualTo("밍밍");
         assertThat(article.getVersions().getLast().getContent()).isEqualTo("버전2");
         assertThat(article.getVersions().getLast().getVersion()).isEqualTo(2);
 
@@ -75,16 +77,14 @@ class ArticleTest {
     @Test
     void article_test_03() {
         // given
-        final String title = "제목입니다.";
-        final String nickname = "닉네임입니다.";
+        final String title = "제목";
         final String category = "인물";
 
         // when
-        final Article article = Article.create(title, nickname, category);
+        final Article article = Article.create(title, category);
 
         // then
-        assertThat(article.getTitle()).isEqualTo("제목입니다.");
-        assertThat(article.getNickname()).isEqualTo("닉네임입니다.");
+        assertThat(article.getTitle()).isEqualTo("제목");
         assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
     }
 }

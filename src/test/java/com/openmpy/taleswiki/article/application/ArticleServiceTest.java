@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.openmpy.taleswiki.article.domain.Article;
-import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
@@ -47,18 +46,15 @@ class ArticleServiceTest {
     @Test
     void article_service_test_02() {
         // given
-        final Article article = Fixture.createArticle();
-        final ArticleVersion version = new ArticleVersion("버전1", 1, article);
-
-        article.addVersion(version);
+        final Article article = Fixture.createArticleWithVersion();
         final Article savedArticle = articleRepository.save(article);
 
         // when
         final ArticleReadResponse response = articleService.read(savedArticle.getId());
 
         // then
-        assertThat(response.title()).isEqualTo("제목입니다.");
-        assertThat(response.nickname()).isEqualTo("닉네임입니다.");
+        assertThat(response.title()).isEqualTo("제목");
+        assertThat(response.nickname()).isEqualTo("초원");
         assertThat(response.content()).isEqualTo("버전1");
         assertThat(response.latestVersion()).isEqualTo(1);
         assertThat(response.latestUpdatedAt()).isNotNull();
@@ -68,20 +64,15 @@ class ArticleServiceTest {
     @Test
     void article_service_test_03() {
         // given
-        final Article article = Fixture.createArticle();
-        final ArticleVersion version01 = new ArticleVersion("버전1", 1, article);
-        final ArticleVersion version02 = new ArticleVersion("버전2", 2, article);
-
-        article.addVersion(version01);
-        article.addVersion(version02);
+        final Article article = Fixture.createArticleWithVersions();
         final Article savedArticle = articleRepository.save(article);
 
         // when
         final ArticleReadResponse response = articleService.read(savedArticle.getId());
 
         // then
-        assertThat(response.title()).isEqualTo("제목입니다.");
-        assertThat(response.nickname()).isEqualTo("닉네임입니다.");
+        assertThat(response.title()).isEqualTo("제목");
+        assertThat(response.nickname()).isEqualTo("밍밍");
         assertThat(response.content()).isEqualTo("버전2");
         assertThat(response.latestVersion()).isEqualTo(2);
         assertThat(response.latestUpdatedAt()).isNotNull();
@@ -91,12 +82,7 @@ class ArticleServiceTest {
     @Test
     void article_service_test_04() {
         // given
-        final Article article = Fixture.createArticle();
-        final ArticleVersion version01 = new ArticleVersion("버전1", 1, article);
-        final ArticleVersion version02 = new ArticleVersion("버전2", 2, article);
-
-        article.addVersion(version01);
-        article.addVersion(version02);
+        final Article article = Fixture.createArticleWithVersions();
         final Article savedArticle = articleRepository.save(article);
 
         // when
@@ -104,8 +90,10 @@ class ArticleServiceTest {
         final List<ArticleReadVersionResponse> responses = response.responses();
 
         // then
-        assertThat(response.title()).isEqualTo("제목입니다.");
+        assertThat(response.title()).isEqualTo("제목");
+        assertThat(responses.getFirst().nickname()).isEqualTo("초원");
         assertThat(responses.getFirst().version()).isEqualTo(1);
+        assertThat(responses.getLast().nickname()).isEqualTo("밍밍");
         assertThat(responses.getLast().version()).isEqualTo(2);
         assertThat(responses).hasSize(2);
     }
@@ -115,12 +103,12 @@ class ArticleServiceTest {
     void 예외_article_service_test_01() {
         // given
         final Article article = Fixture.ARTICLE01;
-        final ArticleCreateRequest request = new ArticleCreateRequest("제목입니다.", "닉네임", "인물", "내용");
+        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "초원", "인물", "내용");
 
         articleRepository.save(article);
 
         // when & then
         assertThatThrownBy(() -> articleService.create(request)).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당 카테고리에 이미 작성된 글입니다. [카테고리: 인물, 제목: 제목입니다.]");
+                .hasMessage("해당 카테고리에 이미 작성된 글입니다. [카테고리: 인물, 제목: 제목]");
     }
 }

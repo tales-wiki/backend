@@ -35,10 +35,6 @@ public class Article extends BaseEntity {
     @AttributeOverride(name = "value", column = @Column(name = "title", nullable = false))
     private ArticleTitle title;
 
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "nickname", nullable = false))
-    private ArticleNickname nickname;
-
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private ArticleCategory category;
@@ -53,22 +49,19 @@ public class Article extends BaseEntity {
     @Builder
     public Article(
             final String title,
-            final String nickname,
             final ArticleCategory category,
             final List<ArticleVersion> versions,
             final ArticleVersion latestVersion
     ) {
         this.title = new ArticleTitle(title);
-        this.nickname = new ArticleNickname(nickname);
         this.category = category;
         this.versions = versions;
         this.latestVersion = latestVersion;
     }
 
-    public static Article create(final String title, final String nickname, final String category) {
+    public static Article create(final String title, final String category) {
         return Article.builder()
                 .title(title)
-                .nickname(nickname)
                 .category(ArticleCategory.of(category))
                 .versions(new ArrayList<>())
                 .latestVersion(null)
@@ -82,9 +75,5 @@ public class Article extends BaseEntity {
 
     public String getTitle() {
         return title.getValue();
-    }
-
-    public String getNickname() {
-        return nickname.getValue();
     }
 }

@@ -30,8 +30,8 @@ public class ArticleService {
             throw new IllegalArgumentException(error);
         }
 
-        final Article article = Article.create(request.title(), request.nickname(), request.category());
-        final ArticleVersion version = ArticleVersion.create(request.content(), article);
+        final Article article = Article.create(request.title(), request.category());
+        final ArticleVersion version = ArticleVersion.create(request.nickname(), request.content(), article);
 
         article.addVersion(version);
         articleRepository.save(article);
