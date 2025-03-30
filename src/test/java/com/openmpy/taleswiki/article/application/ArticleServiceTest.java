@@ -4,10 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.openmpy.taleswiki.article.domain.Article;
+import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
@@ -152,6 +155,32 @@ class ArticleServiceTest {
         // then
         final Optional<Article> foundArticle = articleRepository.findById(savedArticle.getId());
         assertThat(foundArticle).isEmpty();
+    }
+
+    @DisplayName("[통과] 카테고리에 해당하는 게시글 전체를 조회한다.")
+    @Test
+    void article_service_test_08() {
+        // given
+        final List<Article> articles = Fixture.createArticles();
+        articleRepository.saveAll(articles);
+
+        // when
+        final ArticleReadAllByCategoryResponse responseByPerson =
+                articleService.readAllByCategory(ArticleCategory.PERSON);
+        final ArticleReadAllByCategoryResponse responseByGuild =
+                articleService.readAllByCategory(ArticleCategory.GUILD);
+
+        final List<ArticleReadByCategoryResponse> responsesByPerson = responseByPerson.responses();
+        final List<ArticleReadByCategoryResponse> responsesByGuild = responseByGuild.responses();
+
+        // then
+        assertThat(responseByPerson.size()).isEqualTo(2);
+        assertThat(responsesByPerson.getFirst().title()).isEqualTo("제목01");
+        assertThat(responsesByPerson.getLast().title()).isEqualTo("제목02");
+
+        assertThat(responseByGuild.size()).isEqualTo(2);
+        assertThat(responsesByGuild.getFirst().title()).isEqualTo("제목01");
+        assertThat(responsesByGuild.getLast().title()).isEqualTo("제목02");
     }
 
     @DisplayName("[예외] 해당 카테고리에 이미 작성된 게시글이 존재한다.")
