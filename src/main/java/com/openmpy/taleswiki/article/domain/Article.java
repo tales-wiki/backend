@@ -73,6 +73,10 @@ public class Article extends BaseEntity {
         latestVersion = version;
     }
 
+    public void update(final String title) {
+        this.title = new ArticleTitle(title);
+    }
+
     public String getTitle() {
         return title.getValue();
     }

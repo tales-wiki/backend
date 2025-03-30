@@ -60,6 +60,20 @@ public class ArticleVersion extends BaseEntity {
                 .build();
     }
 
+    public static ArticleVersion update(
+            final String nickname,
+            final String content,
+            final int version,
+            final Article article
+    ) {
+        return ArticleVersion.builder()
+                .nickname(nickname)
+                .content(content)
+                .version(version)
+                .article(article)
+                .build();
+    }
+
     public String getNickname() {
         return nickname.getValue();
     }
