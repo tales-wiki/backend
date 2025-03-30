@@ -29,4 +29,23 @@ class ArticleVersionTest {
         assertThat(version.getArticle().getNickname()).isEqualTo("닉네임입니다.");
         assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
     }
+
+    @DisplayName("[통과] 게시글 버전 객체를 생성한다.")
+    @Test
+    void article_version_test_02() {
+        // given
+        final Article article = Fixture.ARTICLE01;
+
+        // when
+        final ArticleVersion version = ArticleVersion.create("내용입니다.", article);
+
+        // then
+        assertThat(version.getContent()).isEqualTo("내용입니다.");
+        assertThat(version.getVersion()).isEqualTo(1);
+
+        assertThat(version.getArticle()).isEqualTo(article);
+        assertThat(version.getArticle().getTitle()).isEqualTo("제목입니다.");
+        assertThat(version.getArticle().getNickname()).isEqualTo("닉네임입니다.");
+        assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
+    }
 }

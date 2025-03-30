@@ -70,4 +70,21 @@ class ArticleTest {
         assertThat(article.getLatestVersion().getContent()).isEqualTo("버전2");
         assertThat(article.getLatestVersion().getVersion()).isEqualTo(2);
     }
+
+    @DisplayName("[통과] 게시글 객체를 생성한다.")
+    @Test
+    void article_test_03() {
+        // given
+        final String title = "제목입니다.";
+        final String nickname = "닉네임입니다.";
+        final String category = "인물";
+
+        // when
+        final Article article = Article.create(title, nickname, category);
+
+        // then
+        assertThat(article.getTitle()).isEqualTo("제목입니다.");
+        assertThat(article.getNickname()).isEqualTo("닉네임입니다.");
+        assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
+    }
 }
