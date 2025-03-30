@@ -4,6 +4,7 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Fixture {
 
@@ -32,5 +33,13 @@ public class Fixture {
         article.addVersion(version01);
         article.addVersion(version02);
         return article;
+    }
+
+    public static List<Article> createArticles() {
+        final Article article01 = new Article("제목01", ArticleCategory.PERSON, new ArrayList<>(), null);
+        final Article article02 = new Article("제목02", ArticleCategory.PERSON, new ArrayList<>(), null);
+        final Article article03 = new Article("제목01", ArticleCategory.GUILD, new ArrayList<>(), null);
+        final Article article04 = new Article("제목02", ArticleCategory.GUILD, new ArrayList<>(), null);
+        return List.of(article01, article02, article03, article04);
     }
 }

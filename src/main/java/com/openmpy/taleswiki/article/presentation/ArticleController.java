@@ -1,9 +1,11 @@
 package com.openmpy.taleswiki.article.presentation;
 
 import com.openmpy.taleswiki.article.application.ArticleService;
+import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
@@ -52,6 +54,14 @@ public class ArticleController {
             @PathVariable final Integer version
     ) {
         final ArticleReadByVersionResponse response = articleService.readByVersion(id, version);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/categories/{category}")
+    public ResponseEntity<ArticleReadAllByCategoryResponse> readAllByCategory(
+            @PathVariable final ArticleCategory category
+    ) {
+        final ArticleReadAllByCategoryResponse response = articleService.readAllByCategory(category);
         return ResponseEntity.ok(response);
     }
 

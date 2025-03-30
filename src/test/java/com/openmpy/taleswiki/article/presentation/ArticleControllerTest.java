@@ -23,9 +23,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openmpy.taleswiki.article.application.ArticleService;
+import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
@@ -267,5 +270,38 @@ class ArticleControllerTest {
                                 )
                         )
                 );
+    }
+
+    @DisplayName("[통과] 카테고리에 해당하는 게시글 전체를 조회한다.")
+    @Test
+    void article_controller_test_07() throws Exception {
+        // given
+        final ArticleReadByCategoryResponse response01 = new ArticleReadByCategoryResponse(1L, "제목01");
+        final ArticleReadByCategoryResponse response02 = new ArticleReadByCategoryResponse(2L, "제목02");
+        final List<ArticleReadByCategoryResponse> responses = List.of(response01, response02);
+        final ArticleReadAllByCategoryResponse response = new ArticleReadAllByCategoryResponse(2, responses);
+
+        // stub
+        when(articleService.readAllByCategory(any(ArticleCategory.class))).thenReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/articles/categories/{category}", ArticleCategory.PERSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value("2"))
+                .andExpect(jsonPath("$.responses").isArray())
+                .andExpect(jsonPath("$.responses[0].id").value("1"))
+                .andExpect(jsonPath("$.responses[0].title").value("제목01"))
+                .andExpect(jsonPath("$.responses[1].id").value("2"))
+                .andExpect(jsonPath("$.responses[1].title").value("제목02"))
+                .andDo(print())
+                .andDo(
+                        document("readArticlesByCategory",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                )
+        ;
     }
 }

@@ -10,10 +10,12 @@ import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +72,12 @@ public class ArticleService {
                 });
 
         return ArticleReadByVersionResponse.of(articleVersion);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleReadAllByCategoryResponse readAllByCategory(final ArticleCategory category) {
+        final List<Article> articles = articleRepository.findAllByCategory(category);
+        return ArticleReadAllByCategoryResponse.of(articles);
     }
 
     @Transactional
