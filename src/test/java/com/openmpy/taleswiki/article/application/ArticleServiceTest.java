@@ -9,8 +9,11 @@ import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.dummy.Fixture;
 import com.openmpy.taleswiki.support.annotation.CustomServiceTest;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +85,29 @@ class ArticleServiceTest {
         assertThat(response.content()).isEqualTo("버전2");
         assertThat(response.latestVersion()).isEqualTo(2);
         assertThat(response.latestUpdatedAt()).isNotNull();
+    }
+
+    @DisplayName("[통과] 게시글의 버전을 조회한다.")
+    @Test
+    void article_service_test_04() {
+        // given
+        final Article article = Fixture.createArticle();
+        final ArticleVersion version01 = new ArticleVersion("버전1", 1, article);
+        final ArticleVersion version02 = new ArticleVersion("버전2", 2, article);
+
+        article.addVersion(version01);
+        article.addVersion(version02);
+        final Article savedArticle = articleRepository.save(article);
+
+        // when
+        final ArticleReadVersionsResponse response = articleService.readWithVersions(savedArticle.getId());
+        final List<ArticleReadVersionResponse> responses = response.responses();
+
+        // then
+        assertThat(response.title()).isEqualTo("제목입니다.");
+        assertThat(responses.getFirst().version()).isEqualTo(1);
+        assertThat(responses.getLast().version()).isEqualTo(2);
+        assertThat(responses).hasSize(2);
     }
 
     @DisplayName("[예외] 해당 카테고리에 이미 작성된 게시글이 존재한다.")

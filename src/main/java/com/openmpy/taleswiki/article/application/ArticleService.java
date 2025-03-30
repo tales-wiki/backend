@@ -8,6 +8,7 @@ import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,12 @@ public class ArticleService {
     public ArticleReadResponse read(final Long id) {
         final Article article = getArticle(id).getLatestVersion().getArticle();
         return ArticleReadResponse.of(article);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleReadVersionsResponse readWithVersions(final Long id) {
+        final Article article = getArticle(id);
+        return ArticleReadVersionsResponse.of(article);
     }
 
     private Article getArticle(final Long id) {

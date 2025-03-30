@@ -4,6 +4,7 @@ import com.openmpy.taleswiki.article.application.ArticleService;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,12 @@ public class ArticleController {
     @GetMapping("/{id}")
     public ResponseEntity<ArticleReadResponse> read(@PathVariable final Long id) {
         final ArticleReadResponse response = articleService.read(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/versions")
+    public ResponseEntity<ArticleReadVersionsResponse> readWithVersions(@PathVariable final Long id) {
+        final ArticleReadVersionsResponse response = articleService.readWithVersions(id);
         return ResponseEntity.ok(response);
     }
 }
