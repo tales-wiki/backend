@@ -9,10 +9,10 @@ public record ArticleReadAllByCategoryResponse(
 ) {
 
     public static ArticleReadAllByCategoryResponse of(final List<Article> articles) {
-        final List<ArticleReadByCategoryResponse> list = articles.stream()
+        final List<ArticleReadByCategoryResponse> response = articles.stream()
                 .map(it -> new ArticleReadByCategoryResponse(it.getId(), it.getTitle()))
                 .toList();
 
-        return new ArticleReadAllByCategoryResponse(articles.size(), list);
+        return new ArticleReadAllByCategoryResponse(articles.size(), response);
     }
 }

@@ -34,6 +34,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -67,7 +68,8 @@ class ArticleControllerTest {
         final String body = objectMapper.writeValueAsString(request);
 
         // stub
-        when(articleService.create(any(ArticleCreateRequest.class))).thenReturn(response);
+        when(articleService.create(any(ArticleCreateRequest.class), any(HttpServletRequest.class)))
+                .thenReturn(response);
 
         // when & then
         mockMvc.perform(post("/api/articles")
@@ -101,7 +103,7 @@ class ArticleControllerTest {
         // given
         final Long articleId = 1L;
         final LocalDateTime latestUpdatedAt = LocalDateTime.of(2025, 3, 30, 12, 0, 0);
-        final ArticleReadResponse response = new ArticleReadResponse("제목", "닉네임", "내용", 1L, latestUpdatedAt);
+        final ArticleReadResponse response = new ArticleReadResponse("제목", "닉네임", "내용", 1, latestUpdatedAt);
 
         // stub
         when(articleService.read(anyLong())).thenReturn(response);
@@ -134,9 +136,9 @@ class ArticleControllerTest {
         // given
         final Long articleId = 1L;
         final ArticleReadVersionResponse response01 =
-                new ArticleReadVersionResponse("초원", 1, LocalDateTime.of(2025, 3, 29, 12, 0, 0));
+                new ArticleReadVersionResponse("초원", 1, 10, LocalDateTime.of(2025, 3, 29, 12, 0, 0));
         final ArticleReadVersionResponse response02 =
-                new ArticleReadVersionResponse("밍밍", 2, LocalDateTime.of(2025, 3, 30, 12, 0, 0));
+                new ArticleReadVersionResponse("밍밍", 2, 20, LocalDateTime.of(2025, 3, 30, 12, 0, 0));
         final ArticleReadVersionsResponse response =
                 new ArticleReadVersionsResponse("제목입니다.", List.of(response01, response02));
 
@@ -152,9 +154,11 @@ class ArticleControllerTest {
                 .andExpect(jsonPath("$.responses").isArray())
                 .andExpect(jsonPath("$.responses[0].nickname").value("초원"))
                 .andExpect(jsonPath("$.responses[0].version").value("1"))
+                .andExpect(jsonPath("$.responses[0].size").value("10"))
                 .andExpect(jsonPath("$.responses[0].createdAt").value("2025-03-29T12:00:00"))
                 .andExpect(jsonPath("$.responses[1].nickname").value("밍밍"))
                 .andExpect(jsonPath("$.responses[1].version").value("2"))
+                .andExpect(jsonPath("$.responses[1].size").value("20"))
                 .andExpect(jsonPath("$.responses[1].createdAt").value("2025-03-30T12:00:00"))
                 .andDo(print())
                 .andDo(
@@ -174,7 +178,7 @@ class ArticleControllerTest {
     void article_controller_test_04() throws Exception {
         // given
         final Long articleId = 1L;
-        final Integer version = 1;
+        final int version = 1;
 
         final LocalDateTime latestUpdatedAt = LocalDateTime.of(2025, 3, 30, 12, 0, 0);
         final ArticleReadByVersionResponse response =
@@ -217,7 +221,8 @@ class ArticleControllerTest {
         final String body = objectMapper.writeValueAsString(request);
 
         // stub
-        when(articleService.update(anyLong(), any(ArticleUpdateRequest.class))).thenReturn(response);
+        when(articleService.update(anyLong(), any(ArticleUpdateRequest.class), any(HttpServletRequest.class)))
+                .thenReturn(response);
 
         // when & then
         mockMvc.perform(put("/api/articles/{articleId}", articleId)

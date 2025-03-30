@@ -40,7 +40,7 @@ class ArticleServiceTest {
         final ArticleCreateRequest request = new ArticleCreateRequest("제목", "닉네임", "인물", "내용");
 
         // when
-        final ArticleCreateResponse response = articleService.create(request);
+        final ArticleCreateResponse response = articleService.create(request, Fixture.createMockServetRequest(10));
 
         // then
         assertThat(response.title()).isEqualTo("제목");
@@ -132,7 +132,8 @@ class ArticleServiceTest {
         final ArticleUpdateRequest request = new ArticleUpdateRequest("수정된 제목", "수정된 닉네임", "수정된 내용");
 
         // when
-        final ArticleUpdateResponse response = articleService.update(savedArticle.getId(), request);
+        final ArticleUpdateResponse response =
+                articleService.update(savedArticle.getId(), request, Fixture.createMockServetRequest(10));
 
         // then
         assertThat(response.id()).isEqualTo(savedArticle.getId());
@@ -193,7 +194,8 @@ class ArticleServiceTest {
         articleRepository.save(article);
 
         // when & then
-        assertThatThrownBy(() -> articleService.create(request)).isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> articleService.create(request, Fixture.createMockServetRequest(10)))
+                .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 카테고리에 이미 작성된 글입니다. [카테고리: 인물, 제목: 제목]");
     }
 
@@ -212,7 +214,7 @@ class ArticleServiceTest {
         final Article article = Fixture.createArticle();
         final Article savedArticle = articleRepository.save(article);
         final Long articleId = savedArticle.getId();
-        final Integer version = 1;
+        final int version = 1;
 
         // when & then
         final String error = String.format("찾을 수 없는 버전의 게시글 번호입니다. [ID: %d, 버전: %d]", articleId, version);

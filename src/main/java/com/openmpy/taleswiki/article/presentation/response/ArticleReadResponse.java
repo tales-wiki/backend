@@ -7,7 +7,7 @@ public record ArticleReadResponse(
         String title,
         String nickname,
         String content,
-        long version,
+        int version,
         LocalDateTime createdAt
 ) {
 

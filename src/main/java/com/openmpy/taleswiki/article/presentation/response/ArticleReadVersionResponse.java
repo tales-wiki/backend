@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 
 public record ArticleReadVersionResponse(
         String nickname,
-        long version,
+        int version,
+        int size,
         LocalDateTime createdAt
 ) {
 }

@@ -38,25 +38,42 @@ public class ArticleVersion extends BaseEntity {
     @AttributeOverride(name = "value", column = @Column(name = "version", nullable = false))
     private ArticleVersionNumber version;
 
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "size", nullable = false))
+    private ArticleSize size;
+
     @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
 
     @Builder
-    public ArticleVersion(final String nickname, final String content, final int version, final Article article) {
+    public ArticleVersion(
+            final String nickname,
+            final String content,
+            final int version,
+            final int size,
+            final Article article
+    ) {
         this.nickname = new ArticleNickname(nickname);
         this.content = new ArticleContent(content);
         this.version = new ArticleVersionNumber(version);
+        this.size = new ArticleSize(size);
         this.article = article;
     }
 
-    public static ArticleVersion create(final String nickname, final String content, final Article article) {
+    public static ArticleVersion create(
+            final String nickname,
+            final String content,
+            final int size,
+            final Article article
+    ) {
         return ArticleVersion.builder()
                 .nickname(nickname)
                 .content(content)
                 .version(DEFAULT_ARTICLE_VERSION)
                 .article(article)
+                .size(size)
                 .build();
     }
 
@@ -64,12 +81,14 @@ public class ArticleVersion extends BaseEntity {
             final String nickname,
             final String content,
             final int version,
+            final int size,
             final Article article
     ) {
         return ArticleVersion.builder()
                 .nickname(nickname)
                 .content(content)
                 .version(version)
+                .size(size)
                 .article(article)
                 .build();
     }
@@ -84,5 +103,9 @@ public class ArticleVersion extends BaseEntity {
 
     public int getVersion() {
         return version.getValue();
+    }
+
+    public int getSize() {
+        return size.getValue();
     }
 }
