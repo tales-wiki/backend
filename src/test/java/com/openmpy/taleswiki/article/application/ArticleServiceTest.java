@@ -6,11 +6,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
+import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import com.openmpy.taleswiki.dummy.Fixture;
 import com.openmpy.taleswiki.support.annotation.CustomServiceTest;
 import java.util.List;
@@ -114,6 +116,26 @@ class ArticleServiceTest {
         assertThat(response.nickname()).isEqualTo("초원");
         assertThat(response.content()).isEqualTo("버전1");
         assertThat(response.latestUpdatedAt()).isNotNull();
+    }
+
+    @DisplayName("[통과] 게시글을 수정한다.")
+    @Test
+    void article_service_test_06() {
+        // given
+        final Article article = Fixture.createArticleWithVersion();
+        final Article savedArticle = articleRepository.save(article);
+
+        final ArticleUpdateRequest request = new ArticleUpdateRequest("수정된 제목", "수정된 닉네임", "수정된 내용");
+
+        // when
+        final ArticleUpdateResponse response = articleService.update(savedArticle.getId(), request);
+
+        // then
+        assertThat(response.id()).isEqualTo(savedArticle.getId());
+        assertThat(response.title()).isEqualTo("수정된 제목");
+        assertThat(response.nickname()).isEqualTo("수정된 닉네임");
+        assertThat(response.content()).isEqualTo("수정된 내용");
+        assertThat(response.version()).isEqualTo(2);
     }
 
     @DisplayName("[예외] 해당 카테고리에 이미 작성된 게시글이 존재한다.")
