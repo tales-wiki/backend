@@ -15,3 +15,15 @@ operation::readArticleWithVersion[snippets="path-parameters,http-request,http-re
 === 해당 버전 조회
 
 operation::readArticleByVersion[snippets="path-parameters,http-request,http-response"]
+
+=== 카테고리별 전체 조회
+
+operation::readArticlesByCategory[snippets="http-request,http-response"]
+
+=== 수정
+
+operation::updateArticle[snippets="path-parameters,http-request,http-response"]
+
+=== 삭제
+
+operation::deleteArticle[snippets="path-parameters,http-request,http-response"]

@@ -10,8 +10,10 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionR
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/articles")
 @RestController
@@ -31,8 +34,11 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @PostMapping
-    public ResponseEntity<ArticleCreateResponse> create(@RequestBody @Valid final ArticleCreateRequest request) {
-        final ArticleCreateResponse response = articleService.create(request);
+    public ResponseEntity<ArticleCreateResponse> create(
+            @RequestBody @Valid final ArticleCreateRequest request,
+            final HttpServletRequest servletRequest
+    ) {
+        final ArticleCreateResponse response = articleService.create(request, servletRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -51,7 +57,7 @@ public class ArticleController {
     @GetMapping("/{id}/versions/{version}")
     public ResponseEntity<ArticleReadByVersionResponse> readByVersion(
             @PathVariable final Long id,
-            @PathVariable final Integer version
+            @PathVariable final int version
     ) {
         final ArticleReadByVersionResponse response = articleService.readByVersion(id, version);
         return ResponseEntity.ok(response);
@@ -68,9 +74,10 @@ public class ArticleController {
     @PutMapping("/{id}")
     public ResponseEntity<ArticleUpdateResponse> update(
             @PathVariable final Long id,
-            @RequestBody @Valid final ArticleUpdateRequest request
+            @RequestBody @Valid final ArticleUpdateRequest request,
+            final HttpServletRequest servletRequest
     ) {
-        final ArticleUpdateResponse response = articleService.update(id, request);
+        final ArticleUpdateResponse response = articleService.update(id, request, servletRequest);
         return ResponseEntity.ok(response);
     }
 

@@ -8,15 +8,15 @@ public record ArticleReadVersionsResponse(
         List<ArticleReadVersionResponse> responses
 ) {
     public static ArticleReadVersionsResponse of(final Article article) {
-        final List<ArticleReadVersionResponse> versions = article.getVersions()
-                .stream()
+        final List<ArticleReadVersionResponse> response = article.getVersions().stream()
                 .map(it -> new ArticleReadVersionResponse(
                         it.getNickname(),
                         it.getVersion(),
+                        it.getSize(),
                         it.getCreatedAt())
                 )
                 .toList();
 
-        return new ArticleReadVersionsResponse(article.getTitle(), versions);
+        return new ArticleReadVersionsResponse(article.getTitle(), response);
     }
 }

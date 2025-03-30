@@ -15,6 +15,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionR
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,10 @@ public class ArticleService {
     private final ArticleVersionRepository articleVersionRepository;
 
     @Transactional
-    public ArticleCreateResponse create(final ArticleCreateRequest request) {
+    public ArticleCreateResponse create(final ArticleCreateRequest request, final HttpServletRequest servletRequest) {
         final ArticleTitle title = new ArticleTitle(request.title());
         final ArticleCategory category = ArticleCategory.of(request.category());
+        final int size = servletRequest.getContentLength();
 
         if (articleRepository.existsByTitleAndCategory(title, category)) {
             final String error =
@@ -41,7 +43,7 @@ public class ArticleService {
         }
 
         final Article article = Article.create(request.title(), request.category());
-        final ArticleVersion version = ArticleVersion.create(request.nickname(), request.content(), article);
+        final ArticleVersion version = ArticleVersion.create(request.nickname(), request.content(), size, article);
 
         article.addVersion(version);
         articleRepository.save(article);
@@ -62,7 +64,7 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public ArticleReadByVersionResponse readByVersion(final Long id, final Integer version) {
+    public ArticleReadByVersionResponse readByVersion(final Long id, final int version) {
         final Article article = getArticle(id);
         final ArticleVersionNumber versionNumber = new ArticleVersionNumber(version);
         final ArticleVersion articleVersion = articleVersionRepository.findByArticleAndVersion(article, versionNumber)
@@ -81,11 +83,17 @@ public class ArticleService {
     }
 
     @Transactional
-    public ArticleUpdateResponse update(final Long id, final ArticleUpdateRequest request) {
+    public ArticleUpdateResponse update(
+            final Long id,
+            final ArticleUpdateRequest request,
+            final HttpServletRequest servletRequest
+    ) {
         final Article article = getArticle(id);
         final int newVersion = article.getVersions().size() + PLUS_VERSION_NUMBER;
+        final int size = servletRequest.getContentLength();
+
         final ArticleVersion articleVersion =
-                ArticleVersion.update(request.nickname(), request.content(), newVersion, article);
+                ArticleVersion.update(request.nickname(), request.content(), newVersion, size, article);
 
         article.addVersion(articleVersion);
         article.update(request.title());
