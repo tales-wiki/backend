@@ -27,6 +27,10 @@ public class ArticleVersion extends BaseEntity {
     private Long id;
 
     @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "nickname", nullable = false))
+    private ArticleNickname nickname;
+
+    @Embedded
     @AttributeOverride(name = "value", column = @Column(columnDefinition = "TEXT", name = "content"))
     private ArticleContent content;
 
@@ -40,18 +44,24 @@ public class ArticleVersion extends BaseEntity {
     private Article article;
 
     @Builder
-    public ArticleVersion(final String content, final int version, final Article article) {
+    public ArticleVersion(final String nickname, final String content, final int version, final Article article) {
+        this.nickname = new ArticleNickname(nickname);
         this.content = new ArticleContent(content);
         this.version = new ArticleVersionNumber(version);
         this.article = article;
     }
 
-    public static ArticleVersion create(final String content, final Article article) {
+    public static ArticleVersion create(final String nickname, final String content, final Article article) {
         return ArticleVersion.builder()
+                .nickname(nickname)
                 .content(content)
                 .version(DEFAULT_ARTICLE_VERSION)
                 .article(article)
                 .build();
+    }
+
+    public String getNickname() {
+        return nickname.getValue();
     }
 
     public String getContent() {

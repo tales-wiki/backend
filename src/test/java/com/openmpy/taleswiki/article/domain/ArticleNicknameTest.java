@@ -14,13 +14,13 @@ class ArticleNicknameTest {
     @Test
     void article_nickname_test_01() {
         // given
-        final String value = "홍길동";
+        final String value = "초원";
 
         // when
         final ArticleNickname nickname = new ArticleNickname(value);
 
         // then
-        assertThat(nickname.getValue()).isEqualTo("홍길동");
+        assertThat(nickname.getValue()).isEqualTo("초원");
     }
 
     @DisplayName("[예외] 게시글 닉네임 객체가 빈 값일 수 없다.")

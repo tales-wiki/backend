@@ -11,12 +11,12 @@ class ArticleContentTest {
     @Test
     void article_content_test_01() {
         // given
-        final String value = "내용입니다.";
+        final String value = "내용";
 
         // when
         final ArticleContent content = new ArticleContent(value);
 
         // then
-        assertThat(content.getValue()).isEqualTo("내용입니다.");
+        assertThat(content.getValue()).isEqualTo("내용");
     }
 }

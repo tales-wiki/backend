@@ -4,9 +4,14 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleTitle;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
+import com.openmpy.taleswiki.article.domain.ArticleVersionNumber;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
+import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final ArticleVersionRepository articleVersionRepository;
 
     @Transactional
     public ArticleCreateResponse create(final ArticleCreateRequest request) {
@@ -28,12 +34,44 @@ public class ArticleService {
             throw new IllegalArgumentException(error);
         }
 
-        final Article article = Article.create(request.title(), request.nickname(), request.category());
-        final ArticleVersion version = ArticleVersion.create(request.content(), article);
+        final Article article = Article.create(request.title(), request.category());
+        final ArticleVersion version = ArticleVersion.create(request.nickname(), request.content(), article);
 
         article.addVersion(version);
         articleRepository.save(article);
 
         return ArticleCreateResponse.of(article);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleReadResponse read(final Long id) {
+        final Article article = getArticle(id).getLatestVersion().getArticle();
+        return ArticleReadResponse.of(article);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleReadVersionsResponse readWithVersions(final Long id) {
+        final Article article = getArticle(id);
+        return ArticleReadVersionsResponse.of(article);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleReadByVersionResponse readByVersion(final Long id, final Integer version) {
+        final Article article = getArticle(id);
+        final ArticleVersionNumber versionNumber = new ArticleVersionNumber(version);
+        final ArticleVersion articleVersion = articleVersionRepository.findByArticleAndVersion(article, versionNumber)
+                .orElseThrow(() -> {
+                    final String error = String.format("찾을 수 없는 버전의 게시글 번호입니다. [ID: %d, 버전: %d]", id, version);
+                    return new IllegalArgumentException(error);
+                });
+
+        return ArticleReadByVersionResponse.of(articleVersion);
+    }
+
+    public Article getArticle(final Long id) {
+        return articleRepository.findById(id).orElseThrow(() -> {
+            final String error = String.format("찾을 수 없는 게시글 번호입니다. [ID: %d]", id);
+            return new IllegalArgumentException(error);
+        });
     }
 }

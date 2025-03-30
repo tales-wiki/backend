@@ -14,13 +14,13 @@ class ArticleTitleTest {
     @Test
     void article_title_test_01() {
         // given
-        final String value = "제목입니다.";
+        final String value = "제목";
 
         // when
         final ArticleTitle title = new ArticleTitle(value);
 
         // then
-        assertThat(title.getValue()).isEqualTo("제목입니다.");
+        assertThat(title.getValue()).isEqualTo("제목");
     }
 
     @DisplayName("[예외] 게시글 제목 객체가 빈 값일 수 없다.")
