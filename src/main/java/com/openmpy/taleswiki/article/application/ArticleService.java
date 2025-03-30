@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ArticleService {
 
+    private static final int PLUS_VERSION_NUMBER = 1;
+
     private final ArticleRepository articleRepository;
     private final ArticleVersionRepository articleVersionRepository;
 
@@ -73,7 +75,7 @@ public class ArticleService {
     @Transactional
     public ArticleUpdateResponse update(final Long id, final ArticleUpdateRequest request) {
         final Article article = getArticle(id);
-        final int newVersion = article.getVersions().size() + 1;
+        final int newVersion = article.getVersions().size() + PLUS_VERSION_NUMBER;
         final ArticleVersion articleVersion =
                 ArticleVersion.update(request.nickname(), request.content(), newVersion, article);
 

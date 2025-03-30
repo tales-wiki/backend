@@ -60,8 +60,8 @@ class ArticleServiceTest {
         assertThat(response.title()).isEqualTo("제목");
         assertThat(response.nickname()).isEqualTo("초원");
         assertThat(response.content()).isEqualTo("버전1");
-        assertThat(response.latestVersion()).isEqualTo(1);
-        assertThat(response.latestUpdatedAt()).isNotNull();
+        assertThat(response.version()).isEqualTo(1);
+        assertThat(response.createdAt()).isNotNull();
     }
 
     @DisplayName("[통과] 게시글의 버전이 여러개일 경우 최신 버전을 조회한다.")
@@ -78,8 +78,8 @@ class ArticleServiceTest {
         assertThat(response.title()).isEqualTo("제목");
         assertThat(response.nickname()).isEqualTo("밍밍");
         assertThat(response.content()).isEqualTo("버전2");
-        assertThat(response.latestVersion()).isEqualTo(2);
-        assertThat(response.latestUpdatedAt()).isNotNull();
+        assertThat(response.version()).isEqualTo(2);
+        assertThat(response.createdAt()).isNotNull();
     }
 
     @DisplayName("[통과] 게시글의 버전을 조회한다.")
@@ -116,7 +116,7 @@ class ArticleServiceTest {
         assertThat(response.title()).isEqualTo("제목");
         assertThat(response.nickname()).isEqualTo("초원");
         assertThat(response.content()).isEqualTo("버전1");
-        assertThat(response.latestUpdatedAt()).isNotNull();
+        assertThat(response.createdAt()).isNotNull();
     }
 
     @DisplayName("[통과] 게시글을 수정한다.")
