@@ -30,8 +30,9 @@ public class Article extends BaseEntity {
     @AttributeOverride(name = "value", column = @Column(name = "title", nullable = false))
     private ArticleTitle title;
 
-    @Column
-    private String nickname;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "nickname", nullable = false))
+    private ArticleNickname nickname;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArticleVersion> versions = new ArrayList<>();
