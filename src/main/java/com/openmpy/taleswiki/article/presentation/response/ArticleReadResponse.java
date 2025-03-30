@@ -7,8 +7,8 @@ public record ArticleReadResponse(
         String title,
         String nickname,
         String content,
-        long latestVersion,
-        LocalDateTime latestUpdatedAt
+        long version,
+        LocalDateTime createdAt
 ) {
 
     public static ArticleReadResponse of(final Article article) {

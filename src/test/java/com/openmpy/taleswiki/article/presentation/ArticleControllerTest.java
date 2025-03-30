@@ -111,8 +111,8 @@ class ArticleControllerTest {
                 .andExpect(jsonPath("$.title").value("제목"))
                 .andExpect(jsonPath("$.nickname").value("닉네임"))
                 .andExpect(jsonPath("$.content").value("내용"))
-                .andExpect(jsonPath("$.latestVersion").value("1"))
-                .andExpect(jsonPath("$.latestUpdatedAt").value("2025-03-30T12:00:00"))
+                .andExpect(jsonPath("$.version").value("1"))
+                .andExpect(jsonPath("$.createdAt").value("2025-03-30T12:00:00"))
                 .andDo(print())
                 .andDo(
                         document("readArticle",
@@ -188,7 +188,7 @@ class ArticleControllerTest {
                 .andExpect(jsonPath("$.title").value("제목"))
                 .andExpect(jsonPath("$.nickname").value("닉네임"))
                 .andExpect(jsonPath("$.content").value("내용"))
-                .andExpect(jsonPath("$.latestUpdatedAt").value("2025-03-30T12:00:00"))
+                .andExpect(jsonPath("$.createdAt").value("2025-03-30T12:00:00"))
                 .andDo(print())
                 .andDo(
                         document("readArticleByVersion",

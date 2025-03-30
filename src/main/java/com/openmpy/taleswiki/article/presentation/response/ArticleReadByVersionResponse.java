@@ -7,7 +7,7 @@ public record ArticleReadByVersionResponse(
         String title,
         String nickname,
         String content,
-        LocalDateTime latestUpdatedAt
+        LocalDateTime createdAt
 ) {
 
     public static ArticleReadByVersionResponse of(final ArticleVersion articleVersion) {
