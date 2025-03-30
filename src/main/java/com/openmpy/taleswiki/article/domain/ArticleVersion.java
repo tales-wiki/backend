@@ -26,8 +26,9 @@ public class ArticleVersion extends BaseEntity {
     @AttributeOverride(name = "value", column = @Column(columnDefinition = "TEXT", name = "content"))
     private ArticleContent content;
 
-    @Column
-    private int version;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "version", nullable = false))
+    private ArticleVersionNumber version;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
