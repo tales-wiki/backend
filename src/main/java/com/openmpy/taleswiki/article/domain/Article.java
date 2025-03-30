@@ -1,8 +1,10 @@
 package com.openmpy.taleswiki.article.domain;
 
 import com.openmpy.taleswiki.common.domain.BaseEntity;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,8 +26,9 @@ public class Article extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String title;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "title", nullable = false))
+    private ArticleTitle title;
 
     @Column
     private String nickname;
