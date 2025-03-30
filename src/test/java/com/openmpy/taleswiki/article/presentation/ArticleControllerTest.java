@@ -1,6 +1,7 @@
 package com.openmpy.taleswiki.article.presentation;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openmpy.taleswiki.article.application.ArticleService;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
@@ -157,5 +159,41 @@ class ArticleControllerTest {
                         )
                 )
         ;
+    }
+
+    @DisplayName("[통과] 게시글을 버전으로 조회한다.")
+    @Test
+    void article_controller_test_04() throws Exception {
+        // given
+        final Long articleId = 1L;
+        final Integer version = 1;
+
+        final LocalDateTime latestUpdatedAt = LocalDateTime.of(2025, 3, 30, 12, 0, 0);
+        final ArticleReadByVersionResponse response =
+                new ArticleReadByVersionResponse("제목", "닉네임", "내용", latestUpdatedAt);
+
+        // stub
+        when(articleService.readByVersion(anyLong(), anyInt())).thenReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/articles/{articleId}/versions/{version}", articleId, version)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("제목"))
+                .andExpect(jsonPath("$.nickname").value("닉네임"))
+                .andExpect(jsonPath("$.content").value("내용"))
+                .andExpect(jsonPath("$.latestUpdatedAt").value("2025-03-30T12:00:00"))
+                .andDo(print())
+                .andDo(
+                        document("readArticleByVersion",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("articleId").description("게시글 ID"),
+                                        parameterWithName("version").description("게시글 버전")
+                                )
+                        )
+                );
     }
 }

@@ -7,6 +7,7 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
@@ -98,6 +99,23 @@ class ArticleServiceTest {
         assertThat(responses).hasSize(2);
     }
 
+    @DisplayName("[통과] 게시글을 버전으로 조회한다.")
+    @Test
+    void article_service_test_05() {
+        // given
+        final Article article = Fixture.createArticleWithVersions();
+        final Article savedArticle = articleRepository.save(article);
+
+        // when
+        final ArticleReadByVersionResponse response = articleService.readByVersion(savedArticle.getId(), 1);
+
+        // then
+        assertThat(response.title()).isEqualTo("제목");
+        assertThat(response.nickname()).isEqualTo("초원");
+        assertThat(response.content()).isEqualTo("버전1");
+        assertThat(response.latestUpdatedAt()).isNotNull();
+    }
+
     @DisplayName("[예외] 해당 카테고리에 이미 작성된 게시글이 존재한다.")
     @Test
     void 예외_article_service_test_01() {
@@ -118,5 +136,21 @@ class ArticleServiceTest {
         // when & then
         assertThatThrownBy(() -> articleService.getArticle(1L)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("찾을 수 없는 게시글 번호입니다. [ID: 1]");
+    }
+
+    @DisplayName("[예외] 게시글 버전을 조회할 수 없다.")
+    @Test
+    void 예외_article_service_test_03() {
+        // given
+        final Article article = Fixture.createArticle();
+        final Article savedArticle = articleRepository.save(article);
+        final Long articleId = savedArticle.getId();
+        final Integer version = 1;
+
+        // when & then
+        final String error = String.format("찾을 수 없는 버전의 게시글 번호입니다. [ID: %d, 버전: %d]", articleId, version);
+        assertThatThrownBy(() -> articleService.readByVersion(articleId, version))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(error);
     }
 }

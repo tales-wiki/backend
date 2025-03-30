@@ -8,6 +8,10 @@ operation::createArticle[snippets="http-request,http-response"]
 
 operation::readArticle[snippets="path-parameters,http-request,http-response"]
 
-=== 조회(버전)
+=== 버전 목록 조회
 
 operation::readArticleWithVersion[snippets="path-parameters,http-request,http-response"]
+
+=== 해당 버전 조회
+
+operation::readArticleByVersion[snippets="path-parameters,http-request,http-response"]
