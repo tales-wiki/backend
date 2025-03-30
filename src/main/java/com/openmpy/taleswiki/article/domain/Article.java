@@ -6,6 +6,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,6 +38,10 @@ public class Article extends BaseEntity {
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "nickname", nullable = false))
     private ArticleNickname nickname;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private ArticleCategory category;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArticleVersion> versions = new ArrayList<>();
