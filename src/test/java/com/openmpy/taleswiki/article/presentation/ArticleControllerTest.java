@@ -3,6 +3,7 @@ package com.openmpy.taleswiki.article.presentation;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -12,6 +13,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -236,6 +238,32 @@ class ArticleControllerTest {
                                         fieldWithPath("title").description("제목"),
                                         fieldWithPath("nickname").description("작성자"),
                                         fieldWithPath("content").description("내용")
+                                )
+                        )
+                );
+    }
+
+    @DisplayName("[통과] 게시글을 삭제한다.")
+    @Test
+    void article_controller_test_06() throws Exception {
+        // given
+        final Long articleId = 1L;
+
+        // stub
+        doNothing().when(articleService).delete(anyLong());
+
+        // when & then
+        mockMvc.perform(delete("/api/articles/{articleId}", articleId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(
+                        document("deleteArticle",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("articleId").description("게시글 ID")
                                 )
                         )
                 );
