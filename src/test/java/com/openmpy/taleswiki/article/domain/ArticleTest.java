@@ -2,25 +2,25 @@ package com.openmpy.taleswiki.article.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
+import com.openmpy.taleswiki.dummy.Fixture;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ArticleTest {
 
-    private static final String TITLE = "제목입니다.";
-    private static final String NICKNAME = "닉네임입니다.";
-
     @DisplayName("[통과] 게시글 객체가 정상적으로 생성된다.")
     @Test
     void article_test_01() {
         // given
-        final ArticleVersion version01 = new ArticleVersion("버전1", 1, null);
-        final ArticleVersion version02 = new ArticleVersion("버전2", 2, null);
+        final String title = "제목입니다.";
+        final String nickname = "닉네임입니다.";
+
+        final ArticleVersion version01 = Fixture.VERSION01;
+        final ArticleVersion version02 = Fixture.VERSION02;
 
         // when
-        final Article article = new Article(TITLE, NICKNAME, List.of(version01, version02), version02);
+        final Article article = new Article(title, nickname, List.of(version01, version02), version02);
 
         // then
         assertThat(article.getTitle()).isEqualTo("제목입니다.");
@@ -44,10 +44,10 @@ class ArticleTest {
     @Test
     void article_test_02() {
         // given
-        final Article article = new Article(TITLE, NICKNAME, new ArrayList<>(), null);
+        final Article article = Fixture.ARTICLE01;
 
-        final ArticleVersion version01 = new ArticleVersion("버전1", 1, null);
-        final ArticleVersion version02 = new ArticleVersion("버전2", 2, null);
+        final ArticleVersion version01 = Fixture.VERSION01;
+        final ArticleVersion version02 = Fixture.VERSION02;
 
         // when
         article.addVersion(version01);

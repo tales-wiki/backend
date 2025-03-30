@@ -2,7 +2,7 @@ package com.openmpy.taleswiki.article.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
+import com.openmpy.taleswiki.dummy.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,7 @@ class ArticleVersionTest {
         final String content = "내용입니다.";
         final int versionNumber = 1;
 
-        final Article article = new Article("제목입니다.", "닉네임입니다.", new ArrayList<>(), null);
+        final Article article = Fixture.ARTICLE01;
 
         // when
         final ArticleVersion version = new ArticleVersion(content, versionNumber, article);
