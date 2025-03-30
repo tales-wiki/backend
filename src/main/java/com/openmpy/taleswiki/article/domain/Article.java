@@ -47,7 +47,7 @@ public class Article extends BaseEntity {
     private List<ArticleVersion> versions = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lastest_version_id")
+    @JoinColumn(name = "latest_version_id")
     private ArticleVersion latestVersion;
 
     @Builder
