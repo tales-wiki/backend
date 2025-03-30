@@ -16,6 +16,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse
 import com.openmpy.taleswiki.dummy.Fixture;
 import com.openmpy.taleswiki.support.annotation.CustomServiceTest;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +137,21 @@ class ArticleServiceTest {
         assertThat(response.nickname()).isEqualTo("수정된 닉네임");
         assertThat(response.content()).isEqualTo("수정된 내용");
         assertThat(response.version()).isEqualTo(2);
+    }
+
+    @DisplayName("[통과] 게시글을 삭제한다.")
+    @Test
+    void article_service_test_07() {
+        // given
+        final Article article = Fixture.createArticleWithVersion();
+        final Article savedArticle = articleRepository.save(article);
+
+        // when
+        articleService.delete(savedArticle.getId());
+
+        // then
+        final Optional<Article> foundArticle = articleRepository.findById(savedArticle.getId());
+        assertThat(foundArticle).isEmpty();
     }
 
     @DisplayName("[예외] 해당 카테고리에 이미 작성된 게시글이 존재한다.")
