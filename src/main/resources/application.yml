@@ -22,3 +22,9 @@ security:
     token:
       secret-key: secret
       expire-length: 3600000
+
+kakao:
+  client-id: 6012ecff72b7535d4819622919e1d78d
+  redirect-uri: http://localhost:8080/api/members/login/kakao
+  oauth-token-uri: https://kauth.kakao.com/oauth/token
+  grant-type: authorization_code

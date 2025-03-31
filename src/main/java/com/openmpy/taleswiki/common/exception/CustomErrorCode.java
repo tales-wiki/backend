@@ -8,6 +8,8 @@ public enum CustomErrorCode {
     // member domain
     NOT_ALLOWED_MEMBER_EMAIL_NULL_AND_BLANK("이메일이 빈 값일 수 없습니다."),
     INVALID_MEMBER_EMAIL("올바르지 않은 이메일입니다. [%s]"),
+    FAILED_KAKAO_LOGIN("카카오 로그인에 실패했습니다. [코드: %s]"),
+    ALREADY_SIGNUP_MEMBER("이미 가입된 이메일입니다. [이메일: %s]"),
 
     // article domain
     NOT_FOUND_ARTICLE_CATEGORY("찾을 수 없는 카테고리입니다. [%s]"),
