@@ -42,6 +42,10 @@ public class ArticleVersion extends BaseEntity {
     @AttributeOverride(name = "value", column = @Column(name = "size", nullable = false))
     private ArticleSize size;
 
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "ip", nullable = false))
+    private ArticleIp ip;
+
     @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
@@ -53,12 +57,14 @@ public class ArticleVersion extends BaseEntity {
             final String content,
             final int version,
             final int size,
+            final String ip,
             final Article article
     ) {
         this.nickname = new ArticleNickname(nickname);
         this.content = new ArticleContent(content);
         this.version = new ArticleVersionNumber(version);
         this.size = new ArticleSize(size);
+        this.ip = new ArticleIp(ip);
         this.article = article;
     }
 
@@ -66,6 +72,7 @@ public class ArticleVersion extends BaseEntity {
             final String nickname,
             final String content,
             final int size,
+            final String ip,
             final Article article
     ) {
         return ArticleVersion.builder()
@@ -74,6 +81,7 @@ public class ArticleVersion extends BaseEntity {
                 .version(DEFAULT_ARTICLE_VERSION)
                 .article(article)
                 .size(size)
+                .ip(ip)
                 .build();
     }
 
@@ -82,6 +90,7 @@ public class ArticleVersion extends BaseEntity {
             final String content,
             final int version,
             final int size,
+            final String ip,
             final Article article
     ) {
         return ArticleVersion.builder()
@@ -89,6 +98,7 @@ public class ArticleVersion extends BaseEntity {
                 .content(content)
                 .version(version)
                 .size(size)
+                .ip(ip)
                 .article(article)
                 .build();
     }
@@ -107,5 +117,9 @@ public class ArticleVersion extends BaseEntity {
 
     public int getSize() {
         return size.getValue();
+    }
+
+    public String getIp() {
+        return ip.getValue();
     }
 }

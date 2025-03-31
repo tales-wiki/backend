@@ -9,10 +9,12 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 public class Fixture {
 
+    public static final String IP = "127.0.0.1";
     public static final Article ARTICLE01 = new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);
-
-    public static final ArticleVersion VERSION01 = new ArticleVersion("초원", "버전1", 1, 10, null);
-    public static final ArticleVersion VERSION02 = new ArticleVersion("밍밍", "버전2", 2, 20, null);
+    public static final ArticleVersion VERSION01 =
+            new ArticleVersion("초원", "버전1", 1, 10, IP, null);
+    public static final ArticleVersion VERSION02 =
+            new ArticleVersion("밍밍", "버전2", 2, 20, IP, null);
 
     public static Article createArticle() {
         return new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);
@@ -20,7 +22,7 @@ public class Fixture {
 
     public static Article createArticleWithVersion() {
         final Article article = new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);
-        final ArticleVersion version01 = new ArticleVersion("초원", "버전1", 1, 10, article);
+        final ArticleVersion version01 = new ArticleVersion("초원", "버전1", 1, 10, IP, article);
 
         article.addVersion(version01);
         return article;
@@ -28,8 +30,8 @@ public class Fixture {
 
     public static Article createArticleWithVersions() {
         final Article article = new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);
-        final ArticleVersion version01 = new ArticleVersion("초원", "버전1", 1, 10, article);
-        final ArticleVersion version02 = new ArticleVersion("밍밍", "버전2", 2, 20, article);
+        final ArticleVersion version01 = new ArticleVersion("초원", "버전1", 1, 10, IP, article);
+        final ArticleVersion version02 = new ArticleVersion("밍밍", "버전2", 2, 20, IP, article);
 
         article.addVersion(version01);
         article.addVersion(version02);

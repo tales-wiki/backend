@@ -15,6 +15,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionR
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
+import com.openmpy.taleswiki.common.util.IpAddressUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class ArticleService {
         final ArticleTitle title = new ArticleTitle(request.title());
         final ArticleCategory category = ArticleCategory.of(request.category());
         final int size = servletRequest.getContentLength();
+        final String ip = IpAddressUtil.getClientIp(servletRequest);
 
         if (articleRepository.existsByTitleAndCategory(title, category)) {
             final String error =
@@ -43,7 +45,7 @@ public class ArticleService {
         }
 
         final Article article = Article.create(request.title(), request.category());
-        final ArticleVersion version = ArticleVersion.create(request.nickname(), request.content(), size, article);
+        final ArticleVersion version = ArticleVersion.create(request.nickname(), request.content(), size, ip, article);
 
         article.addVersion(version);
         articleRepository.save(article);
@@ -91,12 +93,13 @@ public class ArticleService {
         final Article article = getArticle(id);
         final int newVersion = article.getVersions().size() + PLUS_VERSION_NUMBER;
         final int size = servletRequest.getContentLength();
+        final String ip = IpAddressUtil.getClientIp(servletRequest);
 
         final ArticleVersion articleVersion =
-                ArticleVersion.update(request.nickname(), request.content(), newVersion, size, article);
+                ArticleVersion.update(request.nickname(), request.content(), newVersion, size, ip, article);
 
-        article.addVersion(articleVersion);
         article.update(request.title());
+        article.addVersion(articleVersion);
         articleRepository.save(article);
 
         return ArticleUpdateResponse.of(article);
