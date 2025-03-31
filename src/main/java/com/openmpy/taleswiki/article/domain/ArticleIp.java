@@ -1,5 +1,9 @@
 package com.openmpy.taleswiki.article.domain;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.INVALID_ARTICLE_IP;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_ALLOWED_ARTICLE_IP_NULL_AND_BLANK;
+
+import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -22,13 +26,13 @@ public class ArticleIp {
 
     private void validateBlank(final String value) {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("Ip가 빈 값일 수 없습니다.");
+            throw new CustomException(NOT_ALLOWED_ARTICLE_IP_NULL_AND_BLANK);
         }
     }
 
     private void validateIp(final String value) {
         if (!IpAddressUtil.isValidIPv4(value) && !IpAddressUtil.isValidIPv6(value)) {
-            throw new IllegalArgumentException("올바르지 않은 Ip 입니다.");
+            throw new CustomException(INVALID_ARTICLE_IP);
         }
     }
 }

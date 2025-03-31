@@ -1,5 +1,8 @@
 package com.openmpy.taleswiki.article.domain;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE;
+
+import com.openmpy.taleswiki.common.exception.CustomException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,8 +25,7 @@ public class ArticleSize {
 
     private void validateSize(final int value) {
         if (value < INVALID_CONTENT_SIZE) {
-            final String error = String.format("크기 값이 음수일 수 없습니다. [%d]", value);
-            throw new IllegalArgumentException(error);
+            throw new CustomException(NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE, value);
         }
     }
 }
