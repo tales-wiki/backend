@@ -1,8 +1,10 @@
 package com.openmpy.taleswiki.article.domain;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.openmpy.taleswiki.common.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,10 +30,11 @@ class ArticleVersionNumberTest {
     @ValueSource(ints = {-1, 0})
     void 예외_article_version_number_test_01(final int value) {
         // given
-        final String error = String.format("버전 값이 0 또는 음수일 수 없습니다. [%d]", value);
+        final String error = String.format(NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE.getMessage(), value);
 
         // when & then
-        assertThatThrownBy(() -> new ArticleVersionNumber(value)).isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> new ArticleVersionNumber(value))
+                .isInstanceOf(CustomException.class)
                 .hasMessage(error);
     }
 }

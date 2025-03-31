@@ -1,8 +1,10 @@
 package com.openmpy.taleswiki.article.domain;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_ALLOWED_ARTICLE_NICKNAME_NULL_AND_BLANK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.openmpy.taleswiki.common.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,7 +30,8 @@ class ArticleNicknameTest {
     @NullAndEmptySource
     void 예외_article_nickname_test_01(final String value) {
         // when & then
-        assertThatThrownBy(() -> new ArticleNickname(value)).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("닉네임이 빈 값일 수 없습니다.");
+        assertThatThrownBy(() -> new ArticleNickname(value))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(NOT_ALLOWED_ARTICLE_NICKNAME_NULL_AND_BLANK.getMessage());
     }
 }

@@ -1,8 +1,10 @@
 package com.openmpy.taleswiki.article.domain;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_CATEGORY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.openmpy.taleswiki.common.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,10 +34,11 @@ class ArticleCategoryTest {
     @ValueSource(strings = {"동물", "식물"})
     void 예외_article_category_test_01(final String value) {
         // given
-        final String error = String.format("찾을 수 없는 카테고리입니다. [%s]", value);
+        final String error = String.format(NOT_FOUND_ARTICLE_CATEGORY.getMessage(), value);
 
         // when & then
-        assertThatThrownBy(() -> ArticleCategory.of(value)).isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> ArticleCategory.of(value))
+                .isInstanceOf(CustomException.class)
                 .hasMessage(error);
     }
 }

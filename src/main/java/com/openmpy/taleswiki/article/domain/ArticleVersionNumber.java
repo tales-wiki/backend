@@ -1,5 +1,8 @@
 package com.openmpy.taleswiki.article.domain;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE;
+
+import com.openmpy.taleswiki.common.exception.CustomException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,8 +25,7 @@ public class ArticleVersionNumber {
 
     private void validateVersionNumber(final int value) {
         if (value <= INVALID_VERSION_NUMBER) {
-            final String error = String.format("버전 값이 0 또는 음수일 수 없습니다. [%d]", value);
-            throw new IllegalArgumentException(error);
+            throw new CustomException(NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE, value);
         }
     }
 }

@@ -1,5 +1,8 @@
 package com.openmpy.taleswiki.article.domain;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_CATEGORY;
+
+import com.openmpy.taleswiki.common.exception.CustomException;
 import java.util.Arrays;
 import lombok.Getter;
 
@@ -20,9 +23,6 @@ public enum ArticleCategory {
         return Arrays.stream(values())
                 .filter(it -> it.value.equals(category))
                 .findFirst()
-                .orElseThrow(() -> {
-                    final String error = String.format("찾을 수 없는 카테고리입니다. [%s]", category);
-                    return new IllegalArgumentException(error);
-                });
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_CATEGORY, category));
     }
 }

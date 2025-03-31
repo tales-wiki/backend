@@ -1,5 +1,9 @@
 package com.openmpy.taleswiki.article.application;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION;
+
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleTitle;
@@ -15,6 +19,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionR
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
+import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -39,9 +44,7 @@ public class ArticleService {
         final String ip = IpAddressUtil.getClientIp(servletRequest);
 
         if (articleRepository.existsByTitleAndCategory(title, category)) {
-            final String error =
-                    String.format("해당 카테고리에 이미 작성된 글입니다. [카테고리: %s, 제목: %s]", request.category(), request.title());
-            throw new IllegalArgumentException(error);
+            throw new CustomException(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY, request.category(), request.title());
         }
 
         final Article article = Article.create(request.title(), request.category());
@@ -70,10 +73,7 @@ public class ArticleService {
         final Article article = getArticle(id);
         final ArticleVersionNumber versionNumber = new ArticleVersionNumber(version);
         final ArticleVersion articleVersion = articleVersionRepository.findByArticleAndVersion(article, versionNumber)
-                .orElseThrow(() -> {
-                    final String error = String.format("찾을 수 없는 버전의 게시글 번호입니다. [ID: %d, 버전: %d]", id, version);
-                    return new IllegalArgumentException(error);
-                });
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION, id, version));
 
         return ArticleReadByVersionResponse.of(articleVersion);
     }
@@ -112,9 +112,6 @@ public class ArticleService {
     }
 
     public Article getArticle(final Long id) {
-        return articleRepository.findById(id).orElseThrow(() -> {
-            final String error = String.format("찾을 수 없는 게시글 번호입니다. [ID: %d]", id);
-            return new IllegalArgumentException(error);
-        });
+        return articleRepository.findById(id).orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID, id));
     }
 }

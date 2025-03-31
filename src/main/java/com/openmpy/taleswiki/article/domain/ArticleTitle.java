@@ -1,5 +1,8 @@
 package com.openmpy.taleswiki.article.domain;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_ALLOWED_ARTICLE_TITLE_NULL_AND_BLANK;
+
+import com.openmpy.taleswiki.common.exception.CustomException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +23,7 @@ public class ArticleTitle {
 
     private void validateBlank(final String value) {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("제목이 빈 값일 수 없습니다.");
+            throw new CustomException(NOT_ALLOWED_ARTICLE_TITLE_NULL_AND_BLANK);
         }
     }
 }

@@ -1,5 +1,8 @@
 package com.openmpy.taleswiki.article.application;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -16,6 +19,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
+import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.dummy.Fixture;
 import com.openmpy.taleswiki.support.annotation.CustomServiceTest;
 import java.util.List;
@@ -23,6 +27,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 @CustomServiceTest
 class ArticleServiceTest {
@@ -194,17 +199,23 @@ class ArticleServiceTest {
         articleRepository.save(article);
 
         // when & then
-        assertThatThrownBy(() -> articleService.create(request, Fixture.createMockServetRequest(10)))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당 카테고리에 이미 작성된 글입니다. [카테고리: 인물, 제목: 제목]");
+        final String error = String.format(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY.getMessage(), "인물", "제목");
+        final MockHttpServletRequest mockServetRequest = Fixture.createMockServetRequest(10);
+
+        assertThatThrownBy(() -> articleService.create(request, mockServetRequest))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(error);
     }
 
     @DisplayName("[예외] 게시글 번호를 찾을 수 없다.")
     @Test
     void 예외_article_service_test_02() {
         // when & then
-        assertThatThrownBy(() -> articleService.getArticle(1L)).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("찾을 수 없는 게시글 번호입니다. [ID: 1]");
+        final String error = String.format(NOT_FOUND_ARTICLE_ID.getMessage(), 1L);
+
+        assertThatThrownBy(() -> articleService.getArticle(1L))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(error);
     }
 
     @DisplayName("[예외] 게시글 버전을 조회할 수 없다.")
@@ -217,9 +228,10 @@ class ArticleServiceTest {
         final int version = 1;
 
         // when & then
-        final String error = String.format("찾을 수 없는 버전의 게시글 번호입니다. [ID: %d, 버전: %d]", articleId, version);
+        final String error = String.format(NOT_FOUND_ARTICLE_VERSION.getMessage(), articleId, version);
+
         assertThatThrownBy(() -> articleService.readByVersion(articleId, version))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(CustomException.class)
                 .hasMessage(error);
     }
 }
