@@ -5,6 +5,10 @@ import lombok.Getter;
 @Getter
 public enum CustomErrorCode {
 
+    // member domain
+    NOT_ALLOWED_MEMBER_EMAIL_NULL_AND_BLANK("이메일이 빈 값일 수 없습니다."),
+    INVALID_MEMBER_EMAIL("올바르지 않은 이메일입니다. [%s]"),
+
     // article domain
     NOT_FOUND_ARTICLE_CATEGORY("찾을 수 없는 카테고리입니다. [%s]"),
     NOT_ALLOWED_ARTICLE_IP_NULL_AND_BLANK("Ip가 빈 값일 수 없습니다."),
