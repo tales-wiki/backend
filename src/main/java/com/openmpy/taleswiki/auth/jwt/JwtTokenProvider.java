@@ -8,8 +8,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
+@Component
 public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
