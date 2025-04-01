@@ -22,7 +22,6 @@ public class MemberService {
     @Transactional
     public MemberLoginResponse join(final String email, final MemberSocial social) {
         final MemberEmail memberEmail = new MemberEmail(email);
-
         final Optional<Member> member = memberRepository.findByEmail(memberEmail);
 
         if (member.isPresent()) {
