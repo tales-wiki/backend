@@ -13,54 +13,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openmpy.taleswiki.auth.infrastructure.AuthenticationExtractor;
-import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
-import com.openmpy.taleswiki.common.properties.CookieProperties;
-import com.openmpy.taleswiki.member.application.GoogleService;
-import com.openmpy.taleswiki.member.application.KakaoService;
-import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.presentation.response.MemberLoginResponse;
+import com.openmpy.taleswiki.support.ControllerTestSupport;
 import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
 
-@AutoConfigureRestDocs
-@WebMvcTest(controllers = MemberController.class)
-class MemberControllerTest {
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockitoBean
-    private MemberService memberService;
-
-    @MockitoBean
-    private KakaoService kakaoService;
-
-    @MockitoBean
-    private GoogleService googleService;
-
-    @MockitoBean
-    private CookieProperties cookieProperties;
-
-    @MockitoBean
-    private JwtTokenProvider jwtTokenProvider;
-
-    @MockitoBean
-    private AuthenticationExtractor authenticationExtractor;
+class MemberControllerTest extends ControllerTestSupport {
 
     @BeforeEach
     void setUp() {
