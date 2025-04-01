@@ -3,6 +3,7 @@ package com.openmpy.taleswiki.dummy;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
+import jakarta.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,8 +55,10 @@ public class Fixture {
     public static MockHttpServletRequest createMockServetRequest(int size) {
         final byte[] bytes = new byte[size];
         final MockHttpServletRequest servletRequest = new MockHttpServletRequest();
+        final Cookie cookie = new Cookie("access-token", "token");
 
         servletRequest.setContent(bytes);
+        servletRequest.setCookies(cookie);
         return servletRequest;
     }
 }

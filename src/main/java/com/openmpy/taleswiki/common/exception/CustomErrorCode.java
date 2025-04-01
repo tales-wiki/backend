@@ -27,7 +27,7 @@ public enum CustomErrorCode {
     NOT_FOUND_ARTICLE_ID("찾을 수 없는 게시글 번호입니다. [ID: %d]"),
 
     // other
-    NOT_FOUND_COOKIE("쿠키를 찾을 수 없습니다."),
+    NOT_FOUND_COOKIE("쿠키를 찾을 수 없습니다. [쿠키: %s]"),
     INVALID_ACCESS_TOKEN("액세스 토큰이 올바르지 않습니다. [토큰: %s]"),
 
     // server

@@ -11,13 +11,13 @@ public class AuthenticationExtractor {
     public String extract(final HttpServletRequest servletRequest, final String cookieName) {
         final Cookie[] cookies = servletRequest.getCookies();
         if (cookies == null) {
-            throw new AuthenticationException(CustomErrorCode.NOT_FOUND_COOKIE);
+            throw new AuthenticationException(CustomErrorCode.NOT_FOUND_COOKIE, cookieName);
         }
 
         return Arrays.stream(cookies)
                 .filter(it -> cookieName.equals(it.getName()))
                 .findFirst()
-                .orElseThrow(() -> new AuthenticationException(CustomErrorCode.NOT_FOUND_COOKIE))
+                .orElseThrow(() -> new AuthenticationException(CustomErrorCode.NOT_FOUND_COOKIE, cookieName))
                 .getValue();
     }
 }
