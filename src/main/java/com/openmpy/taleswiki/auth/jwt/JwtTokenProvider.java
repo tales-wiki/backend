@@ -62,6 +62,6 @@ public class JwtTokenProvider {
         }
 
         final Map<String, Object> payload = getPayload(token);
-        return (Long) payload.get(ID_KEY);
+        return ((Integer) payload.get(ID_KEY)).longValue();
     }
 }

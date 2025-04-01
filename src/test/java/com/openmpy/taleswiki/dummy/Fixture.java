@@ -16,7 +16,10 @@ public class Fixture {
             new ArticleVersion("초원", "버전1", 1, 10, IP, null);
     public static final ArticleVersion VERSION02 =
             new ArticleVersion("밍밍", "버전2", 2, 20, IP, null);
-    public static final Map<String, Object> PAYLOAD = Map.of("email", "test@test.com");
+    public static final Map<String, Object> PAYLOAD = Map.of(
+            "id", 1L,
+            "role", "MEMBER"
+    );
 
     public static Article createArticle() {
         return new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);

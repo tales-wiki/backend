@@ -6,14 +6,14 @@ import lombok.Getter;
 public class AuthenticationException extends RuntimeException {
 
     private final CustomErrorCode errorCode;
-    private final String message;
 
     public AuthenticationException(final CustomErrorCode errorCode) {
-        this(errorCode, errorCode.getMessage());
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
-    public AuthenticationException(final CustomErrorCode errorCode, final String message) {
+    public AuthenticationException(final CustomErrorCode errorCode, final Object... args) {
+        super(String.format(errorCode.getMessage(), args));
         this.errorCode = errorCode;
-        this.message = message;
     }
 }
