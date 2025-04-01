@@ -13,12 +13,12 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final AuthenticationExtractor authenticationExtractor;
     private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationExtractor authenticationExtractor;
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(Login.class);
+        return parameter.hasParameterAnnotation(Login.class) && parameter.getParameterType().equals(Long.class);
     }
 
     @Override

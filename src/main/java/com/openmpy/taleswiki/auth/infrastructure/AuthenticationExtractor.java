@@ -5,7 +5,9 @@ import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AuthenticationExtractor {
 
     public String extract(final HttpServletRequest servletRequest, final String cookieName) {

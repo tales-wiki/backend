@@ -14,6 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.openmpy.taleswiki.auth.infrastructure.AuthenticationExtractor;
+import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
 import com.openmpy.taleswiki.common.properties.CookieProperties;
 import com.openmpy.taleswiki.member.application.GoogleService;
 import com.openmpy.taleswiki.member.application.KakaoService;
@@ -53,6 +55,12 @@ class MemberControllerTest {
 
     @MockitoBean
     private CookieProperties cookieProperties;
+
+    @MockitoBean
+    private JwtTokenProvider jwtTokenProvider;
+
+    @MockitoBean
+    private AuthenticationExtractor authenticationExtractor;
 
     @BeforeEach
     void setUp() {
