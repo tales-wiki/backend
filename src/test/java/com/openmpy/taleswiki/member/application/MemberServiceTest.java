@@ -1,5 +1,6 @@
 package com.openmpy.taleswiki.member.application;
 
+import static com.openmpy.taleswiki.member.domain.MemberAuthority.MEMBER;
 import static com.openmpy.taleswiki.member.domain.MemberSocial.KAKAO;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,6 +32,7 @@ class MemberServiceTest {
 
         // then
         assertThat(response.email()).isEqualTo("test@test.com");
+        assertThat(response.role()).isEqualTo(MEMBER.name());
     }
 
     @DisplayName("[통과] 이미 회원가입 되어있는 경우 로그인을 한다.")
@@ -47,6 +49,7 @@ class MemberServiceTest {
 
         // then
         assertThat(response.email()).isEqualTo("test@test.com");
+        assertThat(response.role()).isEqualTo(MEMBER.name());
     }
 
     @DisplayName("[통과] 회원가입 또는 로그인 시 토큰이 발행된다.")

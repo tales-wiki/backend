@@ -1,5 +1,6 @@
 package com.openmpy.taleswiki.member.presentation;
 
+import static com.openmpy.taleswiki.member.domain.MemberAuthority.MEMBER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -67,7 +68,7 @@ class MemberControllerTest {
     @Test
     void member_controller_test_01() throws Exception {
         // given
-        final MemberLoginResponse response = new MemberLoginResponse(1L, "test@test.com");
+        final MemberLoginResponse response = new MemberLoginResponse(1L, "test@test.com", MEMBER.name());
         final String token = "access-token";
         final ResponseCookie cookie = createCookie(token);
 
@@ -95,7 +96,7 @@ class MemberControllerTest {
     @Test
     void member_controller_test_02() throws Exception {
         // given
-        final MemberLoginResponse response = new MemberLoginResponse(1L, "test@test.com");
+        final MemberLoginResponse response = new MemberLoginResponse(1L, "test@test.com", MEMBER.name());
         final String token = "access-token";
         final ResponseCookie cookie = createCookie(token);
 

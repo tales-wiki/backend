@@ -16,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MemberService {
 
+    private static final String ID_KEY = "id";
+    private static final String ROLE_KEY = "role";
+
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -34,7 +37,10 @@ public class MemberService {
     }
 
     public String generateToken(final MemberLoginResponse response) {
-        final Map<String, Object> payload = Map.of("id", response.id());
+        final Map<String, Object> payload = Map.of(
+                ID_KEY, response.id(),
+                ROLE_KEY, response.role()
+        );
         return jwtTokenProvider.createToken(payload);
     }
 }
