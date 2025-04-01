@@ -1,0 +1,33 @@
+== 회원
+
+=== 카카오 로그인
+
+operation::loginKakao[snippets="http-request,http-response"]
+
+==== [.red]#Exceptions#
+
+[source,json,options="nowrap"]
+----
+[
+  {
+    "code": "FAILED_KAKAO_LOGIN",
+    "message": "카카오 로그인에 실패했습니다. [코드: %s]"
+  }
+]
+----
+
+=== 구글 로그인
+
+operation::loginGoogle[snippets="http-request,http-response"]
+
+==== [.red]#Exceptions#
+
+[source,json,options="nowrap"]
+----
+[
+  {
+    "code": "FAILED_GOOGLE_LOGIN",
+    "message": "구글 로그인에 실패했습니다. [코드: %s]"
+  }
+]
+----
