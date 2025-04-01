@@ -1,5 +1,6 @@
 package com.openmpy.taleswiki.member.presentation;
 
+import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
 import com.openmpy.taleswiki.common.properties.CookieProperties;
 import com.openmpy.taleswiki.member.application.GoogleService;
 import com.openmpy.taleswiki.member.application.KakaoService;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/members")
 @RestController
 public class MemberController {
-
-    private static final String ACCESS_TOKEN = "access-token";
 
     private final MemberService memberService;
     private final KakaoService kakaoService;
@@ -43,7 +42,7 @@ public class MemberController {
     }
 
     private ResponseCookie createCookie(final String token) {
-        return ResponseCookie.from(ACCESS_TOKEN, token)
+        return ResponseCookie.from(JwtTokenProvider.ACCESS_TOKEN, token)
                 .httpOnly(cookieProperties.httpOnly())
                 .secure(cookieProperties.secure())
                 .domain(cookieProperties.domain())

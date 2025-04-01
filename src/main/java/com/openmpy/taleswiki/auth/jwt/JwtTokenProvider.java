@@ -1,5 +1,7 @@
 package com.openmpy.taleswiki.auth.jwt;
 
+import com.openmpy.taleswiki.common.exception.AuthenticationException;
+import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -13,6 +15,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
+
+    public static final String ID_KEY = "id";
+    public static final String ROLE_KEY = "role";
+    public static final String ACCESS_TOKEN = "access-token";
 
     private final JwtProperties jwtProperties;
 
@@ -48,5 +54,14 @@ public class JwtTokenProvider {
         } catch (final JwtException | IllegalArgumentException e) {
             return false;
         }
+    }
+
+    public Long getMemberId(final String token) {
+        if (!isValidToken(token)) {
+            throw new AuthenticationException(CustomErrorCode.INVALID_ACCESS_TOKEN, token);
+        }
+
+        final Map<String, Object> payload = getPayload(token);
+        return (Long) payload.get(ID_KEY);
     }
 }

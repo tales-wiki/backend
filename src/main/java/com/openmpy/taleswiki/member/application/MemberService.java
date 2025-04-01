@@ -1,5 +1,8 @@
 package com.openmpy.taleswiki.member.application;
 
+import static com.openmpy.taleswiki.auth.jwt.JwtTokenProvider.ID_KEY;
+import static com.openmpy.taleswiki.auth.jwt.JwtTokenProvider.ROLE_KEY;
+
 import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.MemberEmail;
@@ -15,9 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-
-    private static final String ID_KEY = "id";
-    private static final String ROLE_KEY = "role";
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;

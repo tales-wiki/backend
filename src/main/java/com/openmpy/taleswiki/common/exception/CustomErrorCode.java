@@ -26,6 +26,10 @@ public enum CustomErrorCode {
     NOT_FOUND_ARTICLE_VERSION("찾을 수 없는 버전의 게시글 번호입니다. [ID: %d, 버전: %d]"),
     NOT_FOUND_ARTICLE_ID("찾을 수 없는 게시글 번호입니다. [ID: %d]"),
 
+    // other
+    NOT_FOUND_COOKIE("쿠키를 찾을 수 없습니다."),
+    INVALID_ACCESS_TOKEN("액세스 토큰이 올바르지 않습니다. [토큰: %s]"),
+
     // server
     REQUEST_METHOD_NOT_SUPPORTED("지원하지 않는 요청 메서드입니다."),
     NO_RESOURCE_REQUEST("존재하지 않는 리소스입니다."),
