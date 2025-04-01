@@ -3,16 +3,16 @@ package com.openmpy.taleswiki.common.exception;
 import lombok.Getter;
 
 @Getter
-public class CustomException extends RuntimeException {
+public class AuthenticationException extends RuntimeException {
 
     private final CustomErrorCode errorCode;
 
-    public CustomException(final CustomErrorCode errorCode) {
+    public AuthenticationException(final CustomErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 
-    public CustomException(final CustomErrorCode errorCode, final Object... args) {
+    public AuthenticationException(final CustomErrorCode errorCode, final Object... args) {
         super(String.format(errorCode.getMessage(), args));
         this.errorCode = errorCode;
     }

@@ -43,6 +43,14 @@ public class Member extends BaseEntity {
         this.authority = authority;
     }
 
+    public static Member create(final String email, final MemberSocial social) {
+        return Member.builder()
+                .email(email)
+                .social(social)
+                .authority(MemberAuthority.MEMBER)
+                .build();
+    }
+
     public String getEmail() {
         return email.getValue();
     }

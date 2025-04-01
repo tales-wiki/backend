@@ -6,3 +6,4 @@
 :seclinks:
 
 include::article.adoc[]
+include::member.adoc[]

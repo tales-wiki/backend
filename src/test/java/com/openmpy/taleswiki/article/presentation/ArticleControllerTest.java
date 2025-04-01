@@ -34,6 +34,8 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
+import com.openmpy.taleswiki.auth.infrastructure.AuthenticationExtractor;
+import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -58,6 +60,12 @@ class ArticleControllerTest {
 
     @MockitoBean
     private ArticleService articleService;
+
+    @MockitoBean
+    private JwtTokenProvider jwtTokenProvider;
+
+    @MockitoBean
+    private AuthenticationExtractor AuthenticationExtractor;
 
     @DisplayName("[통과] 게시글을 작성한다.")
     @Test

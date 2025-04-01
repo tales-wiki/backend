@@ -3,8 +3,10 @@ package com.openmpy.taleswiki.dummy;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
+import jakarta.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 public class Fixture {
@@ -15,6 +17,10 @@ public class Fixture {
             new ArticleVersion("초원", "버전1", 1, 10, IP, null);
     public static final ArticleVersion VERSION02 =
             new ArticleVersion("밍밍", "버전2", 2, 20, IP, null);
+    public static final Map<String, Object> PAYLOAD = Map.of(
+            "id", 1L,
+            "role", "MEMBER"
+    );
 
     public static Article createArticle() {
         return new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);
@@ -49,8 +55,10 @@ public class Fixture {
     public static MockHttpServletRequest createMockServetRequest(int size) {
         final byte[] bytes = new byte[size];
         final MockHttpServletRequest servletRequest = new MockHttpServletRequest();
+        final Cookie cookie = new Cookie("access-token", "token");
 
         servletRequest.setContent(bytes);
+        servletRequest.setCookies(cookie);
         return servletRequest;
     }
 }
