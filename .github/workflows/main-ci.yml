@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Create application-dev.yml
+      - name: Create application-local.yml
         run: |
           cd ./src/main/resources
           touch ./application-local.yml
