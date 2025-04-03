@@ -6,6 +6,7 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllRecentEditsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
@@ -66,6 +67,12 @@ public class ArticleController {
             @PathVariable final ArticleCategory category
     ) {
         final ArticleReadAllByCategoryResponse response = articleService.readAllByCategory(category);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/recent-edits")
+    public ResponseEntity<ArticleReadAllRecentEditsResponse> readRecentEdits() {
+        final ArticleReadAllRecentEditsResponse response = articleService.readAllRecentEdits();
         return ResponseEntity.ok(response);
     }
 

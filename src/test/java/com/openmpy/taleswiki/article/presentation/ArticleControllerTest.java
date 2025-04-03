@@ -26,8 +26,10 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllRecentEditsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadRecentEditsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
@@ -35,10 +37,12 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
 class ArticleControllerTest extends ControllerTestSupport {
 
@@ -291,5 +295,46 @@ class ArticleControllerTest extends ControllerTestSupport {
                         )
                 )
         ;
+    }
+
+    @DisplayName("[통과] 최근 편집된 게시글 10개를 수정 날짜 기준으로 내림차순 한다.")
+    @Test
+    void article_controller_test_08() throws Exception {
+        // given
+        final List<ArticleReadRecentEditsResponse> list = new ArrayList<>();
+
+        for (int i = 11; i > 1; i--) {
+            final String title = String.format("제목%02d", i);
+            final LocalDateTime dateTime = LocalDateTime.of(2025, 4, i, 12, 0, 1);
+            final ArticleReadRecentEditsResponse response =
+                    new ArticleReadRecentEditsResponse((long) i, title, "PERSON", dateTime);
+
+            list.add(response);
+        }
+
+        final ArticleReadAllRecentEditsResponse response = new ArticleReadAllRecentEditsResponse(list);
+
+        // stub
+        when(articleService.readAllRecentEdits()).thenReturn(response);
+
+        // when & then
+        final ResultActions resultActions = mockMvc.perform(get("/api/articles/recent-edits")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responses").isArray());
+
+        for (int i = 0; i < list.size(); i++) {
+            resultActions
+                    .andExpect(jsonPath("$.responses[" + i + "].id").value(list.get(i).id()))
+                    .andExpect(jsonPath("$.responses[" + i + "].title").value(list.get(i).title()))
+                    .andExpect(jsonPath("$.responses[" + i + "].category").value(list.get(i).category()))
+                    .andExpect(jsonPath("$.responses[" + i + "].createdAt").value(list.get(i).createdAt().toString()));
+        }
+
+        resultActions
+                .andDo(print())
+                .andDo(document("readArticlesOrderByRecentEdits",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())));
     }
 }
