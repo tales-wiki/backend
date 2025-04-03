@@ -52,6 +52,20 @@ public class Fixture {
         return List.of(article01, article02, article03, article04);
     }
 
+    public static List<Article> createArticlesWithVersions() {
+        final List<Article> articles = new ArrayList<>();
+
+        for (int i = 0; i < 11; i++) {
+            final Article article =
+                    new Article("제목" + String.format("%02d", i + 1), ArticleCategory.PERSON, new ArrayList<>(), null);
+            final ArticleVersion version = new ArticleVersion("초원", "버전1", 1, 10, IP, null);
+
+            article.addVersion(version);
+            articles.add(article);
+        }
+        return articles;
+    }
+
     public static MockHttpServletRequest createMockServetRequest(int size) {
         final byte[] bytes = new byte[size];
         final MockHttpServletRequest servletRequest = new MockHttpServletRequest();

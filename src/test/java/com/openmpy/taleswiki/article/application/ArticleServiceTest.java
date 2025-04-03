@@ -13,8 +13,10 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllRecentEditsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadRecentEditsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
@@ -187,6 +189,25 @@ class ArticleServiceTest {
         assertThat(responseByGuild.size()).isEqualTo(2);
         assertThat(responsesByGuild.getFirst().title()).isEqualTo("제목01");
         assertThat(responsesByGuild.getLast().title()).isEqualTo("제목02");
+    }
+
+    @DisplayName("[통과] 최근 편집된 게시글 10개를 편집된 날짜를 기준으로 내림차순 조회한다.")
+    @Test
+    void article_service_test_09() {
+        // given
+        final List<Article> articles = Fixture.createArticlesWithVersions();
+        articleRepository.saveAll(articles);
+
+        // when
+        final ArticleReadAllRecentEditsResponse response = articleService.readAllRecentEdits();
+
+        // then
+        final List<ArticleReadRecentEditsResponse> responses = response.responses();
+
+        assertThat(responses).hasSize(10);
+        assertThat(responses.getFirst().title()).isEqualTo("제목11");
+        assertThat(responses.getLast().title()).isEqualTo("제목02");
+        assertThat(responses.getFirst().createdAt().isAfter(responses.getLast().createdAt())).isTrue();
     }
 
     @DisplayName("[예외] 해당 카테고리에 이미 작성된 게시글이 존재한다.")
