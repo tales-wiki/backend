@@ -16,9 +16,9 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllRecentEditsResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
@@ -64,9 +64,9 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public ArticleReadVersionsResponse readWithVersions(final Long id) {
+    public ArticleReadAllVersionsResponse readAllVersions(final Long id) {
         final Article article = getArticle(id);
-        return ArticleReadVersionsResponse.of(article);
+        return ArticleReadAllVersionsResponse.of(article);
     }
 
     @Transactional(readOnly = true)

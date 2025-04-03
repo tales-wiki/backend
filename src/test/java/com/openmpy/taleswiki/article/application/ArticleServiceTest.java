@@ -14,12 +14,12 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllRecentEditsResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadRecentEditsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.dummy.Fixture;
@@ -100,15 +100,15 @@ class ArticleServiceTest {
         final Article savedArticle = articleRepository.save(article);
 
         // when
-        final ArticleReadVersionsResponse response = articleService.readWithVersions(savedArticle.getId());
+        final ArticleReadAllVersionsResponse response = articleService.readAllVersions(savedArticle.getId());
         final List<ArticleReadVersionResponse> responses = response.responses();
 
         // then
         assertThat(response.title()).isEqualTo("제목");
-        assertThat(responses.getFirst().nickname()).isEqualTo("초원");
-        assertThat(responses.getFirst().version()).isEqualTo(1);
-        assertThat(responses.getLast().nickname()).isEqualTo("밍밍");
-        assertThat(responses.getLast().version()).isEqualTo(2);
+        assertThat(responses.getFirst().nickname()).isEqualTo("밍밍");
+        assertThat(responses.getFirst().version()).isEqualTo(2);
+        assertThat(responses.getLast().nickname()).isEqualTo("초원");
+        assertThat(responses.getLast().version()).isEqualTo(1);
         assertThat(responses).hasSize(2);
     }
 

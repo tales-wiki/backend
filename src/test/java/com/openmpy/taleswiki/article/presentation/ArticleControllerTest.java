@@ -27,12 +27,12 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllRecentEditsResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadRecentEditsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import jakarta.servlet.http.HttpServletRequest;
@@ -126,11 +126,11 @@ class ArticleControllerTest extends ControllerTestSupport {
                 new ArticleReadVersionResponse("초원", 1, 10, LocalDateTime.of(2025, 3, 29, 12, 0, 0));
         final ArticleReadVersionResponse response02 =
                 new ArticleReadVersionResponse("밍밍", 2, 20, LocalDateTime.of(2025, 3, 30, 12, 0, 0));
-        final ArticleReadVersionsResponse response =
-                new ArticleReadVersionsResponse("제목입니다.", List.of(response01, response02));
+        final ArticleReadAllVersionsResponse response =
+                new ArticleReadAllVersionsResponse("제목입니다.", List.of(response01, response02));
 
         // stub
-        when(articleService.readWithVersions(anyLong())).thenReturn(response);
+        when(articleService.readAllVersions(anyLong())).thenReturn(response);
 
         // when & then
         mockMvc.perform(get("/api/articles/{articleId}/versions", articleId)

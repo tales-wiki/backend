@@ -7,9 +7,9 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllRecentEditsResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -48,8 +48,8 @@ public class ArticleController {
     }
 
     @GetMapping("/{id}/versions")
-    public ResponseEntity<ArticleReadVersionsResponse> readWithVersions(@PathVariable final Long id) {
-        final ArticleReadVersionsResponse response = articleService.readWithVersions(id);
+    public ResponseEntity<ArticleReadAllVersionsResponse> readWithVersions(@PathVariable final Long id) {
+        final ArticleReadAllVersionsResponse response = articleService.readAllVersions(id);
         return ResponseEntity.ok(response);
     }
 
