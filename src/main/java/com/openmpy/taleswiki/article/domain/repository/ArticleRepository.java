@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    List<Article> findAllByCategory(final ArticleCategory category);
+    List<Article> findAllByCategoryOrderByTitleAsc(final ArticleCategory category);
 
     List<Article> findTop10ByOrderByUpdatedAtDesc();
 
