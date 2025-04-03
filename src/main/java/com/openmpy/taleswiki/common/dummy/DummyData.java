@@ -6,7 +6,9 @@ import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import lombok.extern.slf4j.Slf4j;
+import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -25,19 +27,22 @@ public class DummyData {
     }
 
     private static void saveArticles(final ArticleRepository articleRepository) {
+        final Faker faker = new Faker(new Locale("ko"));
         final List<Article> articles = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             ArticleCategory category = ArticleCategory.PERSON;
 
             if (i % 2 == 0) {
                 category = ArticleCategory.GUILD;
             }
 
-            final Article article =
-                    new Article("제목" + String.format("%02d", i + 1), category, new ArrayList<>(),
-                            null);
-            final ArticleVersion version = new ArticleVersion("초원", "버전1", 1, 10, "127.0.0.1", null);
+            final String title = faker.kpop().iiiGroups().replace(" ", "");
+            final String nickname = faker.name().toString();
+            final String content = faker.animal().toString();
+
+            final Article article = new Article(title, category, new ArrayList<>(), null);
+            final ArticleVersion version = new ArticleVersion(nickname, content, 1, 10, "127.0.0.1", null);
 
             article.addVersion(version);
             articles.add(article);
