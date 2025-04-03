@@ -81,7 +81,7 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public ArticleReadAllByCategoryResponse readAllByCategory(final ArticleCategory category) {
-        final List<Article> articles = articleRepository.findAllByCategory(category);
+        final List<Article> articles = articleRepository.findAllByCategoryOrderByTitleAsc(category);
         return ArticleReadAllByCategoryResponse.of(articles);
     }
 
