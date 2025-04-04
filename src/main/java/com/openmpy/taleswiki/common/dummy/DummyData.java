@@ -38,11 +38,11 @@ public class DummyData {
             }
 
             final String title = faker.kpop().iiiGroups().replace(" ", "");
-            final String nickname = faker.name().toString();
-            final String content = faker.animal().toString();
+            final String nickname = faker.name().fullName();
+            final String content = faker.animal().name();
 
             final Article article = new Article(title, category, new ArrayList<>(), null);
-            final ArticleVersion version = new ArticleVersion(nickname, content, 1, 10, "127.0.0.1", null);
+            final ArticleVersion version = new ArticleVersion(nickname, content, 1, 10, "127.0.0.1", article);
 
             article.addVersion(version);
             articles.add(article);
