@@ -10,6 +10,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllRecentE
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleSearchAllResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -90,5 +92,11 @@ public class ArticleController {
     public ResponseEntity<Void> delete(@PathVariable final Long id) {
         articleService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ArticleSearchAllResponse> search(@RequestParam("keyword") final String keyword) {
+        final ArticleSearchAllResponse response = articleService.search(keyword);
+        return ResponseEntity.ok(response);
     }
 }
