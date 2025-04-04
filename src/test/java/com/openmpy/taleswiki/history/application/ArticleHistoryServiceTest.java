@@ -17,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 @CustomServiceTest
-class ArticleEditHistoryServiceTest {
+class ArticleHistoryServiceTest {
 
     @Autowired
-    private ArticleEditHistoryService articleEditHistoryService;
+    private ArticleHistoryService articleHistoryService;
 
     @Autowired
     private ArticleEditHistoryRepository articleEditHistoryRepository;
@@ -43,7 +43,7 @@ class ArticleEditHistoryServiceTest {
         final Article savedArticle = articleRepository.save(article);
 
         // when
-        articleEditHistoryService.save(savedMember, savedArticle, savedArticle.getLatestVersion(), servetRequest);
+        articleHistoryService.saveByEdit(savedMember, savedArticle, savedArticle.getLatestVersion(), servetRequest);
 
         // then
         final List<ArticleEditHistory> histories = articleEditHistoryRepository.findAll();

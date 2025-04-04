@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class ArticleEditHistoryService {
+public class ArticleHistoryService {
 
     private final ArticleEditHistoryRepository articleEditHistoryRepository;
 
     @Transactional
-    public void save(
+    public void saveByEdit(
             final Member member,
             final Article article,
             final ArticleVersion articleVersion,

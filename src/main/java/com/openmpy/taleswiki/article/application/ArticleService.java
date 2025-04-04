@@ -20,7 +20,9 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchAllResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import com.openmpy.taleswiki.common.exception.CustomException;
+import com.openmpy.taleswiki.history.application.ArticleHistoryService;
 import com.openmpy.taleswiki.member.application.MemberService;
+import com.openmpy.taleswiki.member.domain.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,9 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleVersionRepository articleVersionRepository;
+
     private final MemberService memberService;
+    private final ArticleHistoryService articleHistoryService;
 
     @Transactional
     public ArticleCreateResponse create(final ArticleCreateRequest request, final HttpServletRequest servletRequest) {
@@ -96,17 +100,18 @@ public class ArticleService {
             final ArticleUpdateRequest request,
             final HttpServletRequest servletRequest
     ) {
-        memberService.getMember(memberId);
+        final Member member = memberService.getMember(memberId);
 
         final Article article = getArticle(id);
         final int newVersion = article.getVersions().size() + PLUS_VERSION_NUMBER;
         final int size = servletRequest.getContentLength();
-
         final ArticleVersion articleVersion =
                 ArticleVersion.update(request.nickname(), request.content(), newVersion, size, article);
-        article.addVersion(articleVersion);
-        articleRepository.save(article);
 
+        article.addVersion(articleVersion);
+        final Article savedArticle = articleRepository.save(article);
+
+        articleHistoryService.saveByEdit(member, savedArticle, savedArticle.getLatestVersion(), servletRequest);
         return ArticleUpdateResponse.of(article);
     }
 
