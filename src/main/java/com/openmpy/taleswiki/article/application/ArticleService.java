@@ -19,6 +19,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllRecentE
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllVersionsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleSearchAllResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
@@ -116,6 +117,13 @@ public class ArticleService {
     public void delete(final Long id) {
         final Article article = getArticle(id);
         articleRepository.delete(article);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleSearchAllResponse search(final String title) {
+        final List<Article> articles =
+                articleRepository.findAllByTitle_ValueContainingIgnoreCaseOrderByLatestVersionDesc(title);
+        return ArticleSearchAllResponse.of(articles);
     }
 
     public Article getArticle(final Long id) {

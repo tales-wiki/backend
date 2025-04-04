@@ -20,6 +20,8 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionR
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadRecentEditsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleSearchAllResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.dummy.Fixture;
@@ -208,6 +210,42 @@ class ArticleServiceTest {
         assertThat(responses.getFirst().title()).isEqualTo("제목11");
         assertThat(responses.getLast().title()).isEqualTo("제목02");
         assertThat(responses.getFirst().createdAt().isAfter(responses.getLast().createdAt())).isTrue();
+    }
+
+    @DisplayName("[통과] 게시글에서 제목을 검색한다.")
+    @Test
+    void article_service_test_10() {
+        // given
+        final List<Article> articles = Fixture.createArticles();
+        articleRepository.saveAll(articles);
+
+        // when
+        final ArticleSearchAllResponse response = articleService.search("제목");
+
+        // then
+        final List<ArticleSearchResponse> responses = response.responses();
+
+        assertThat(responses).hasSize(4);
+        assertThat(responses.getFirst().title()).isEqualTo("제목02");
+        assertThat(responses.getFirst().category()).isEqualTo("GUILD");
+        assertThat(responses.getLast().title()).isEqualTo("제목01");
+        assertThat(responses.getLast().category()).isEqualTo("PERSON");
+    }
+
+    @DisplayName("[통과] 게시글을 검색하지만 아무것도 찾지 못한다.")
+    @Test
+    void article_service_test_11() {
+        // given
+        final List<Article> articles = Fixture.createArticles();
+        articleRepository.saveAll(articles);
+
+        // when
+        final ArticleSearchAllResponse response = articleService.search("목제");
+
+        // then
+        final List<ArticleSearchResponse> responses = response.responses();
+
+        assertThat(responses).isEmpty();
     }
 
     @DisplayName("[예외] 해당 카테고리에 이미 작성된 게시글이 존재한다.")

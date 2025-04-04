@@ -3,6 +3,7 @@ package com.openmpy.taleswiki.article.presentation;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -13,6 +14,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -33,6 +35,8 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionR
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadRecentEditsResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadVersionResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleSearchAllResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import jakarta.servlet.http.HttpServletRequest;
@@ -336,5 +340,43 @@ class ArticleControllerTest extends ControllerTestSupport {
                 .andDo(document("readArticlesOrderByRecentEdits",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())));
+    }
+
+    @DisplayName("[통과] 제목을 입력하여 게시글을 검색한다.")
+    @Test
+    void article_controller_test_09() throws Exception {
+        // given
+        final String title = "제목";
+        final ArticleSearchResponse response01 = new ArticleSearchResponse(2L, "제목02", ArticleCategory.GUILD.name());
+        final ArticleSearchResponse response02 = new ArticleSearchResponse(1L, "제목01", ArticleCategory.PERSON.name());
+        final List<ArticleSearchResponse> responses = List.of(response01, response02);
+        final ArticleSearchAllResponse response = new ArticleSearchAllResponse(responses);
+
+        // stub
+        when(articleService.search(anyString())).thenReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/articles/search?keyword={title}", title)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responses").isArray())
+                .andExpect(jsonPath("$.responses[0].id").value("2"))
+                .andExpect(jsonPath("$.responses[0].title").value("제목02"))
+                .andExpect(jsonPath("$.responses[0].category").value("GUILD"))
+                .andExpect(jsonPath("$.responses[1].id").value("1"))
+                .andExpect(jsonPath("$.responses[1].title").value("제목01"))
+                .andExpect(jsonPath("$.responses[1].category").value("PERSON"))
+                .andDo(print())
+                .andDo(
+                        document("searchArticleByTitle",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                queryParameters(
+                                        parameterWithName("keyword").description("검색할 게시글 제목")
+                                )
+                        )
+                )
+        ;
     }
 }
