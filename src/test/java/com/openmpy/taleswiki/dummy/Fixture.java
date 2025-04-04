@@ -3,6 +3,9 @@ package com.openmpy.taleswiki.dummy;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
+import com.openmpy.taleswiki.member.domain.Member;
+import com.openmpy.taleswiki.member.domain.MemberAuthority;
+import com.openmpy.taleswiki.member.domain.MemberSocial;
 import jakarta.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,11 @@ public class Fixture {
             "id", 1L,
             "role", "MEMBER"
     );
+    public static final Cookie MEMBER_COOKIE = new Cookie("access-token", "token");
+
+    public static Member createMember() {
+        return new Member("test@test.com", MemberSocial.KAKAO, MemberAuthority.MEMBER);
+    }
 
     public static Article createArticle() {
         return new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);
