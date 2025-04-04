@@ -57,7 +57,8 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public ArticleReadResponse read(final Long id) {
-        final Article article = getArticle(id).getLatestVersion().getArticle();
+        final Article article = articleRepository.findByIdWithLastVersion(id)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID, id));
         return ArticleReadResponse.of(article);
     }
 
