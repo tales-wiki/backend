@@ -42,7 +42,7 @@ public class DummyData {
             final String content = faker.animal().name();
 
             final Article article = new Article(title, category, new ArrayList<>(), null);
-            final ArticleVersion version = new ArticleVersion(nickname, content, 1, 10, "127.0.0.1", article);
+            final ArticleVersion version = new ArticleVersion(nickname, content, 1, 10, article);
 
             article.addVersion(version);
             articles.add(article);

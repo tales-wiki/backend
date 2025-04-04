@@ -16,14 +16,9 @@ public class Fixture {
 
     public static final String IP = "127.0.0.1";
     public static final Article ARTICLE01 = new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);
-    public static final ArticleVersion VERSION01 =
-            new ArticleVersion("초원", "버전1", 1, 10, IP, null);
-    public static final ArticleVersion VERSION02 =
-            new ArticleVersion("밍밍", "버전2", 2, 20, IP, null);
-    public static final Map<String, Object> PAYLOAD = Map.of(
-            "id", 1L,
-            "role", "MEMBER"
-    );
+    public static final ArticleVersion VERSION01 = new ArticleVersion("초원", "버전1", 1, 10, null);
+    public static final ArticleVersion VERSION02 = new ArticleVersion("밍밍", "버전2", 2, 20, null);
+    public static final Map<String, Object> PAYLOAD = Map.of("id", 1L, "role", "MEMBER");
     public static final Cookie MEMBER_COOKIE = new Cookie("access-token", "token");
 
     public static Member createMember() {
@@ -36,7 +31,7 @@ public class Fixture {
 
     public static Article createArticleWithVersion() {
         final Article article = new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);
-        final ArticleVersion version01 = new ArticleVersion("초원", "버전1", 1, 10, IP, article);
+        final ArticleVersion version01 = new ArticleVersion("초원", "버전1", 1, 10, article);
 
         article.addVersion(version01);
         return article;
@@ -44,8 +39,8 @@ public class Fixture {
 
     public static Article createArticleWithVersions() {
         final Article article = new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);
-        final ArticleVersion version01 = new ArticleVersion("초원", "버전1", 1, 10, IP, article);
-        final ArticleVersion version02 = new ArticleVersion("밍밍", "버전2", 2, 20, IP, article);
+        final ArticleVersion version01 = new ArticleVersion("초원", "버전1", 1, 10, article);
+        final ArticleVersion version02 = new ArticleVersion("밍밍", "버전2", 2, 20, article);
 
         article.addVersion(version01);
         article.addVersion(version02);
@@ -66,7 +61,7 @@ public class Fixture {
         for (int i = 0; i < 11; i++) {
             final Article article =
                     new Article("제목" + String.format("%02d", i + 1), ArticleCategory.PERSON, new ArrayList<>(), null);
-            final ArticleVersion version = new ArticleVersion("초원", "버전1", 1, 10, IP, null);
+            final ArticleVersion version = new ArticleVersion("초원", "버전1", 1, 10, null);
 
             article.addVersion(version);
             articles.add(article);

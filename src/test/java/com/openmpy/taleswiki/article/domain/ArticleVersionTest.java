@@ -19,14 +19,13 @@ class ArticleVersionTest {
         final Article article = Fixture.ARTICLE01;
 
         // when
-        final ArticleVersion version = new ArticleVersion("초원", content, versionNumber, size, Fixture.IP, article);
+        final ArticleVersion version = new ArticleVersion("초원", content, versionNumber, size, article);
 
         // then
         assertThat(version.getNickname()).isEqualTo("초원");
         assertThat(version.getContent()).isEqualTo("내용");
         assertThat(version.getVersion()).isEqualTo(1);
         assertThat(version.getSize()).isEqualTo(10);
-        assertThat(version.getIp()).isEqualTo("127.0.0.1");
 
         assertThat(version.getArticle()).isEqualTo(article);
         assertThat(version.getArticle().getTitle()).isEqualTo("제목");
@@ -40,14 +39,13 @@ class ArticleVersionTest {
         final Article article = Fixture.ARTICLE01;
 
         // when
-        final ArticleVersion version = ArticleVersion.create("초원", "내용", 10, Fixture.IP, article);
+        final ArticleVersion version = ArticleVersion.create("초원", "내용", 10, article);
 
         // then
         assertThat(version.getNickname()).isEqualTo("초원");
         assertThat(version.getContent()).isEqualTo("내용");
         assertThat(version.getVersion()).isEqualTo(1);
         assertThat(version.getSize()).isEqualTo(10);
-        assertThat(version.getIp()).isEqualTo("127.0.0.1");
 
         assertThat(version.getArticle()).isEqualTo(article);
         assertThat(version.getArticle().getTitle()).isEqualTo("제목");
