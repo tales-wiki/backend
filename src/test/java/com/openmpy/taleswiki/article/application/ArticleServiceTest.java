@@ -94,7 +94,7 @@ class ArticleServiceTest {
         assertThat(response.createdAt()).isNotNull();
     }
 
-    @DisplayName("[통과] 게시글의 버전을 조회한다.")
+    @DisplayName("[통과] 게시글의 버전 목록을 조회한다.")
     @Test
     void article_service_test_04() {
         // given
@@ -114,7 +114,7 @@ class ArticleServiceTest {
         assertThat(responses).hasSize(2);
     }
 
-    @DisplayName("[통과] 게시글을 버전으로 조회한다.")
+    @DisplayName("[통과] 게시글의 특정 버전을 조회한다.")
     @Test
     void article_service_test_05() {
         // given
@@ -167,7 +167,7 @@ class ArticleServiceTest {
         assertThat(foundArticle).isEmpty();
     }
 
-    @DisplayName("[통과] 카테고리에 해당하는 게시글 전체를 조회한다.")
+    @DisplayName("[통과] 카테고리에 해당하는 게시글 목록을 조회한다.")
     @Test
     void article_service_test_08() {
         // given
