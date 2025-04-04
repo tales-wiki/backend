@@ -7,7 +7,6 @@ import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_A
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
-import com.openmpy.taleswiki.article.domain.ArticleVersionNumber;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
@@ -71,8 +70,7 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public ArticleReadByVersionResponse readByVersion(final Long id, final int version) {
         final Article article = getArticle(id);
-        final ArticleVersionNumber versionNumber = new ArticleVersionNumber(version);
-        final ArticleVersion articleVersion = articleVersionRepository.findByArticleAndVersion(article, versionNumber)
+        final ArticleVersion articleVersion = articleVersionRepository.findByArticleAndVersion_Value(article, version)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION, id, version));
 
         return ArticleReadByVersionResponse.of(articleVersion);

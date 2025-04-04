@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleVersionRepository extends JpaRepository<ArticleVersion, Long> {
 
-    Optional<ArticleVersion> findByArticleAndVersion(final Article article, final ArticleVersionNumber version);
+    Optional<ArticleVersion> findByArticleAndVersion_Value(final Article article, final int version);
 }
