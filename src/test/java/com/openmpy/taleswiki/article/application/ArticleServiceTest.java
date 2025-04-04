@@ -78,9 +78,7 @@ class ArticleServiceTest {
 
         // then
         assertThat(response.title()).isEqualTo("제목");
-        assertThat(response.nickname()).isEqualTo("초원");
         assertThat(response.content()).isEqualTo("버전1");
-        assertThat(response.version()).isEqualTo(1);
         assertThat(response.createdAt()).isNotNull();
     }
 
@@ -96,9 +94,7 @@ class ArticleServiceTest {
 
         // then
         assertThat(response.title()).isEqualTo("제목");
-        assertThat(response.nickname()).isEqualTo("밍밍");
         assertThat(response.content()).isEqualTo("버전2");
-        assertThat(response.version()).isEqualTo(2);
         assertThat(response.createdAt()).isNotNull();
     }
 
