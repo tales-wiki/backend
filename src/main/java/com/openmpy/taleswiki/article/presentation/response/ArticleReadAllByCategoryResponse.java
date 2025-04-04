@@ -4,7 +4,6 @@ import com.openmpy.taleswiki.article.domain.Article;
 import java.util.List;
 
 public record ArticleReadAllByCategoryResponse(
-        int size,
         List<ArticleReadByCategoryResponse> responses
 ) {
 
@@ -13,6 +12,6 @@ public record ArticleReadAllByCategoryResponse(
                 .map(it -> new ArticleReadByCategoryResponse(it.getId(), it.getTitle()))
                 .toList();
 
-        return new ArticleReadAllByCategoryResponse(articles.size(), response);
+        return new ArticleReadAllByCategoryResponse(response);
     }
 }

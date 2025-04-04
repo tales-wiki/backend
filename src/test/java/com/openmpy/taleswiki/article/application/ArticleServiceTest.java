@@ -200,11 +200,9 @@ class ArticleServiceTest {
         final List<ArticleReadByCategoryResponse> responsesByGuild = responseByGuild.responses();
 
         // then
-        assertThat(responseByPerson.size()).isEqualTo(2);
         assertThat(responsesByPerson.getFirst().title()).isEqualTo("제목01");
         assertThat(responsesByPerson.getLast().title()).isEqualTo("제목02");
 
-        assertThat(responseByGuild.size()).isEqualTo(2);
         assertThat(responsesByGuild.getFirst().title()).isEqualTo("제목01");
         assertThat(responsesByGuild.getLast().title()).isEqualTo("제목02");
     }

@@ -281,7 +281,7 @@ class ArticleControllerTest extends ControllerTestSupport {
         final ArticleReadByCategoryResponse response01 = new ArticleReadByCategoryResponse(1L, "제목01");
         final ArticleReadByCategoryResponse response02 = new ArticleReadByCategoryResponse(2L, "제목02");
         final List<ArticleReadByCategoryResponse> responses = List.of(response01, response02);
-        final ArticleReadAllByCategoryResponse response = new ArticleReadAllByCategoryResponse(2, responses);
+        final ArticleReadAllByCategoryResponse response = new ArticleReadAllByCategoryResponse(responses);
 
         // stub
         when(articleService.readAllByCategory(any(ArticleCategory.class))).thenReturn(response);
@@ -291,7 +291,6 @@ class ArticleControllerTest extends ControllerTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size").value("2"))
                 .andExpect(jsonPath("$.responses").isArray())
                 .andExpect(jsonPath("$.responses[0].id").value("1"))
                 .andExpect(jsonPath("$.responses[0].title").value("제목01"))
