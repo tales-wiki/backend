@@ -143,7 +143,7 @@ class ArticleServiceTest {
         final Article article = Fixture.createArticleWithVersion();
         final Article savedArticle = articleRepository.save(article);
 
-        final ArticleUpdateRequest request = new ArticleUpdateRequest("수정제목", "수정된 닉네임", "수정된 내용");
+        final ArticleUpdateRequest request = new ArticleUpdateRequest("수정된 닉네임", "수정된 내용");
 
         // stub
         when(memberService.getMember(anyLong())).thenReturn(member);
@@ -158,7 +158,7 @@ class ArticleServiceTest {
 
         // then
         assertThat(response.id()).isEqualTo(savedArticle.getId());
-        assertThat(response.title()).isEqualTo("수정제목");
+        assertThat(response.title()).isEqualTo("제목");
         assertThat(response.nickname()).isEqualTo("수정된 닉네임");
         assertThat(response.content()).isEqualTo("수정된 내용");
         assertThat(response.version()).isEqualTo(2);

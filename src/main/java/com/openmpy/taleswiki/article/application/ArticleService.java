@@ -107,8 +107,6 @@ public class ArticleService {
 
         final ArticleVersion articleVersion =
                 ArticleVersion.update(request.nickname(), request.content(), newVersion, size, ip, article);
-
-        article.update(request.title());
         article.addVersion(articleVersion);
         articleRepository.save(article);
 

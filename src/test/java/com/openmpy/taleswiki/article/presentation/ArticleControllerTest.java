@@ -205,9 +205,9 @@ class ArticleControllerTest extends ControllerTestSupport {
         // given
         final Long articleId = 1L;
 
-        final ArticleUpdateRequest request = new ArticleUpdateRequest("제목", "닉네임", "내용");
+        final ArticleUpdateRequest request = new ArticleUpdateRequest("닉네임", "내용");
         final ArticleUpdateResponse response =
-                new ArticleUpdateResponse(articleId, "수정된제목", "수정된 닉네임", "수정된 내용", 2);
+                new ArticleUpdateResponse(articleId, "제목", "수정된 닉네임", "수정된 내용", 2);
         final String body = objectMapper.writeValueAsString(request);
 
         // stub
@@ -226,7 +226,7 @@ class ArticleControllerTest extends ControllerTestSupport {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.title").value("수정된제목"))
+                .andExpect(jsonPath("$.title").value("제목"))
                 .andExpect(jsonPath("$.nickname").value("수정된 닉네임"))
                 .andExpect(jsonPath("$.version").value("2"))
                 .andDo(print())
@@ -238,7 +238,6 @@ class ArticleControllerTest extends ControllerTestSupport {
                                         parameterWithName("id").description("게시글 ID")
                                 ),
                                 requestFields(
-                                        fieldWithPath("title").description("제목"),
                                         fieldWithPath("nickname").description("작성자"),
                                         fieldWithPath("content").description("내용")
                                 )
