@@ -37,7 +37,7 @@ public class DummyData {
                 category = ArticleCategory.GUILD;
             }
 
-            final String title = faker.kpop().iiiGroups().replace(" ", "");
+            final String title = faker.name().fullName().replace(" ", "");
             final String nickname = faker.name().fullName();
             final String content = faker.animal().name();
 
