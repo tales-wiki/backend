@@ -6,7 +6,6 @@ import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_A
 
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
-import com.openmpy.taleswiki.article.domain.ArticleTitle;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.ArticleVersionNumber;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
@@ -40,12 +39,11 @@ public class ArticleService {
 
     @Transactional
     public ArticleCreateResponse create(final ArticleCreateRequest request, final HttpServletRequest servletRequest) {
-        final ArticleTitle title = new ArticleTitle(request.title());
         final ArticleCategory category = ArticleCategory.of(request.category());
         final int size = servletRequest.getContentLength();
         final String ip = IpAddressUtil.getClientIp(servletRequest);
 
-        if (articleRepository.existsByTitleAndCategory(title, category)) {
+        if (articleRepository.existsByTitle_ValueAndCategory(request.title(), category)) {
             throw new CustomException(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY, request.category(), request.title());
         }
 
