@@ -18,7 +18,15 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(Login.class) && parameter.getParameterType().equals(Long.class);
+        if (!parameter.hasParameterAnnotation(Login.class)) {
+            return false;
+        }
+
+        Login loginAnnotation = parameter.getParameterAnnotation(Login.class);
+        if (!loginAnnotation.isRequired()) {
+            return false;
+        }
+        return parameter.getParameterType().equals(Long.class);
     }
 
     @Override
