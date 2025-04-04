@@ -122,7 +122,7 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public ArticleSearchAllResponse search(final String title) {
         final List<Article> articles =
-                articleRepository.findAllByTitle_ValueContainingIgnoreCaseOrderByUpdatedAtDesc(title);
+                articleRepository.findAllByTitle_ValueContainingIgnoreCaseOrderByLatestVersionDesc(title);
         return ArticleSearchAllResponse.of(articles);
     }
 

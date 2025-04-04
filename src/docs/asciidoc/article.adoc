@@ -107,3 +107,7 @@ operation::deleteArticle[snippets="path-parameters,http-request,http-response"]
   }
 ]
 ----
+
+=== 검색
+
+operation::searchArticleByTitle[snippets="http-request,http-response"]
