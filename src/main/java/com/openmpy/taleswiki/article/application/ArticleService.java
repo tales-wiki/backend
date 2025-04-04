@@ -108,7 +108,6 @@ public class ArticleService {
             final HttpServletRequest servletRequest
     ) {
         final Member member = memberService.getMember(memberId);
-
         final Article article = getArticle(id);
         final int newVersion = article.getVersions().size() + PLUS_VERSION_NUMBER;
         final int size = servletRequest.getContentLength();
@@ -123,8 +122,11 @@ public class ArticleService {
     }
 
     @Transactional
-    public void delete(final Long id) {
+    public void delete(final Long memberId, final Long id, final HttpServletRequest servletRequest) {
+        final Member member = memberService.getMember(memberId);
         final Article article = getArticle(id);
+
+        articleHistoryService.saveByDelete(member, article, servletRequest);
         articleRepository.delete(article);
     }
 

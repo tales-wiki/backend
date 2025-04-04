@@ -92,8 +92,12 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable final Long id) {
-        articleService.delete(id);
+    public ResponseEntity<Void> delete(
+            @Login final Long memberId,
+            @PathVariable final Long id,
+            final HttpServletRequest servletRequest
+    ) {
+        articleService.delete(memberId, id, servletRequest);
         return ResponseEntity.noContent().build();
     }
 

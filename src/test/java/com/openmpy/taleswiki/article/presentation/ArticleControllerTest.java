@@ -252,10 +252,11 @@ class ArticleControllerTest extends ControllerTestSupport {
         final Long articleId = 1L;
 
         // stub
-        doNothing().when(articleService).delete(anyLong());
+        doNothing().when(articleService).delete(anyLong(), anyLong(), any(HttpServletRequest.class));
 
         // when & then
         mockMvc.perform(delete("/api/articles/{articleId}", articleId)
+                        .cookie(Fixture.MEMBER_COOKIE)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())

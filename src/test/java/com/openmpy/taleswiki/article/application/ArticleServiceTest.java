@@ -169,11 +169,15 @@ class ArticleServiceTest {
     @Test
     void article_service_test_07() {
         // given
+        final Member member = Fixture.createMember();
         final Article article = Fixture.createArticleWithVersion();
         final Article savedArticle = articleRepository.save(article);
 
+        // stub
+        when(memberService.getMember(anyLong())).thenReturn(member);
+
         // when
-        articleService.delete(savedArticle.getId());
+        articleService.delete(member.getId(), savedArticle.getId(), Fixture.createMockServetRequest(10));
 
         // then
         final Optional<Article> foundArticle = articleRepository.findById(savedArticle.getId());

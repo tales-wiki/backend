@@ -44,4 +44,16 @@ public class ArticleHistoryService {
 
         articleEditHistoryRepository.save(articleEditHistory);
     }
+
+    @Transactional
+    public void saveByDelete(
+            final Member member,
+            final Article article,
+            final HttpServletRequest servletRequest
+    ) {
+        final String ip = IpAddressUtil.getClientIp(servletRequest);
+        final ArticleHistory articleHistory = ArticleHistory.saveByDelete(ip, member, article);
+
+        articleHistoryRepository.save(articleHistory);
+    }
 }
