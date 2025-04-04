@@ -1,0 +1,107 @@
+==== [.red]#예외 목록#
+
+[source,json,options="nowrap"]
+----
+[
+  {
+    "code": "NOT_ALLOWED_MEMBER_EMAIL_NULL_AND_BLANK",
+    "message": "이메일이 빈 값일 수 없습니다."
+  },
+  {
+    "code": "INVALID_MEMBER_EMAIL",
+    "message": "올바르지 않은 이메일입니다. [%s]"
+  },
+  {
+    "code": "FAILED_KAKAO_LOGIN",
+    "message": "카카오 로그인에 실패했습니다. [코드: %s]"
+  },
+  {
+    "code": "FAILED_GOOGLE_LOGIN",
+    "message": "구글 로그인에 실패했습니다. [코드: %s]"
+  },
+  {
+    "code": "ALREADY_SIGNUP_MEMBER",
+    "message": "이미 가입된 이메일입니다. [이메일: %s]"
+  },
+  {
+    "code": "NOT_FOUND_MEMBER_ID",
+    "message": "찾을 수 없는 회원 번호입니다. [ID: %d]"
+  },
+  {
+    "code": "ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY",
+    "message": "찾을 수 없는 카테고리입니다. [%s]"
+  },
+  {
+    "code": "NOT_ALLOWED_ARTICLE_IP_NULL_AND_BLANK",
+    "message": "Ip가 빈 값일 수 없습니다."
+  },
+  {
+    "code": "INVALID_ARTICLE_IP",
+    "message": "올바르지 않은 Ip 입니다."
+  },
+  {
+    "code": "NOT_ALLOWED_ARTICLE_NICKNAME_NULL_AND_BLANK",
+    "message": "닉네임이 빈 값일 수 없습니다."
+  },
+  {
+    "code": "NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE",
+    "message": "크기 값이 음수일 수 없습니다. [%d]"
+  },
+  {
+    "code": "NOT_ALLOWED_ARTICLE_TITLE_NULL_AND_BLANK",
+    "message": "제목이 빈 값일 수 없습니다."
+  },
+  {
+    "code": "NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE",
+    "message": "버전 값이 0 또는 음수일 수 없습니다. [%d]"
+  },
+  {
+    "code": "INVALID_ARTICLE_TITLE_LENGTH",
+    "message": "게시글 제목 길이가 올바르지 않습니다. [길이: %d]"
+  },
+  {
+    "code": "INVALID_ARTICLE_TITLE",
+    "message": "올바르지 않은 게시글 제목입니다. [%s]"
+  },
+  {
+    "code": "INVALID_ARTICLE_NICKNAME_LENGTH",
+    "message": "게시글 닉네임 길이가 올바르지 않습니다. [길이: %d]"
+  },
+  {
+    "code": "ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY",
+    "message": "해당 카테고리에 이미 작성된 글입니다. [카테고리: %s, 제목: %s]"
+  },
+  {
+    "code": "NOT_FOUND_ARTICLE_VERSION",
+    "message": "찾을 수 없는 버전의 게시글 번호입니다. [ID: %d, 버전: %d]"
+  },
+  {
+    "code": "NOT_FOUND_ARTICLE_ID",
+    "message": "찾을 수 없는 게시글 번호입니다. [ID: %d]"
+  },
+  {
+    "code": "NOT_FOUND_COOKIE",
+    "message": "쿠키를 찾을 수 없습니다. [쿠키: %s]"
+  },
+  {
+    "code": "INVALID_ACCESS_TOKEN",
+    "message": "액세스 토큰이 올바르지 않습니다. [토큰: %s]"
+  },
+  {
+    "code": "REQUEST_METHOD_NOT_SUPPORTED",
+    "message": "지원하지 않는 요청 메서드입니다."
+  },
+  {
+    "code": "NO_RESOURCE_REQUEST",
+    "message": "존재하지 않는 리소스입니다."
+  },
+  {
+    "code": "MESSAGE_NOT_READABLE",
+    "message": "읽을 수 없는 요청입니다."
+  },
+  {
+    "code": "INTERNAL_SERVER_ERROR",
+    "message": "서버 내부에서 에러가 발생했습니다."
+  }
+]
+----

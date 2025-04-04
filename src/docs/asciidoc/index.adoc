@@ -7,3 +7,4 @@
 
 include::article.adoc[]
 include::member.adoc[]
+include::exception.adoc[]
