@@ -21,6 +21,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleSearchAllRespo
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
+import com.openmpy.taleswiki.member.application.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleVersionRepository articleVersionRepository;
+    private final MemberService memberService;
 
     @Transactional
     public ArticleCreateResponse create(final ArticleCreateRequest request, final HttpServletRequest servletRequest) {
@@ -91,10 +93,13 @@ public class ArticleService {
 
     @Transactional
     public ArticleUpdateResponse update(
+            final Long memberId,
             final Long id,
             final ArticleUpdateRequest request,
             final HttpServletRequest servletRequest
     ) {
+        memberService.getMember(memberId);
+
         final Article article = getArticle(id);
         final int newVersion = article.getVersions().size() + PLUS_VERSION_NUMBER;
         final int size = servletRequest.getContentLength();
