@@ -2,8 +2,10 @@ package com.openmpy.taleswiki.member.application;
 
 import static com.openmpy.taleswiki.auth.jwt.JwtTokenProvider.ID_KEY;
 import static com.openmpy.taleswiki.auth.jwt.JwtTokenProvider.ROLE_KEY;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_MEMBER_ID;
 
 import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
+import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.MemberEmail;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
@@ -34,6 +36,10 @@ public class MemberService {
         final Member newMember = Member.create(email, social);
         final Member savedMember = memberRepository.save(newMember);
         return MemberLoginResponse.of(savedMember);
+    }
+
+    public Member getMember(final Long id) {
+        return memberRepository.findById(id).orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ID, id));
     }
 
     public String generateToken(final MemberLoginResponse response) {

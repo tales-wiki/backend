@@ -12,6 +12,9 @@ public enum CustomErrorCode {
     FAILED_GOOGLE_LOGIN("구글 로그인에 실패했습니다. [코드: %s]"),
     ALREADY_SIGNUP_MEMBER("이미 가입된 이메일입니다. [이메일: %s]"),
 
+    // member service
+    NOT_FOUND_MEMBER_ID("찾을 수 없는 회원 번호입니다. [ID: %d]"),
+
     // article domain
     NOT_FOUND_ARTICLE_CATEGORY("찾을 수 없는 카테고리입니다. [%s]"),
     NOT_ALLOWED_ARTICLE_IP_NULL_AND_BLANK("Ip가 빈 값일 수 없습니다."),

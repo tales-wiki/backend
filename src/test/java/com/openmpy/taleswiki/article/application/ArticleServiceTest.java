@@ -5,6 +5,8 @@ import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_A
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
@@ -25,6 +27,8 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponse
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.dummy.Fixture;
+import com.openmpy.taleswiki.member.application.MemberService;
+import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.support.annotation.CustomServiceTest;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +36,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @CustomServiceTest
 class ArticleServiceTest {
@@ -41,6 +46,9 @@ class ArticleServiceTest {
 
     @Autowired
     private ArticleRepository articleRepository;
+
+    @MockitoBean
+    private MemberService memberService;
 
     @DisplayName("[통과] 게시글을 작성한다.")
     @Test
@@ -94,7 +102,7 @@ class ArticleServiceTest {
         assertThat(response.createdAt()).isNotNull();
     }
 
-    @DisplayName("[통과] 게시글의 버전을 조회한다.")
+    @DisplayName("[통과] 게시글의 버전 목록을 조회한다.")
     @Test
     void article_service_test_04() {
         // given
@@ -114,7 +122,7 @@ class ArticleServiceTest {
         assertThat(responses).hasSize(2);
     }
 
-    @DisplayName("[통과] 게시글을 버전으로 조회한다.")
+    @DisplayName("[통과] 게시글의 특정 버전을 조회한다.")
     @Test
     void article_service_test_05() {
         // given
@@ -135,14 +143,22 @@ class ArticleServiceTest {
     @Test
     void article_service_test_06() {
         // given
+        final Member member = Fixture.createMember();
         final Article article = Fixture.createArticleWithVersion();
         final Article savedArticle = articleRepository.save(article);
 
         final ArticleUpdateRequest request = new ArticleUpdateRequest("수정제목", "수정된 닉네임", "수정된 내용");
 
+        // stub
+        when(memberService.getMember(anyLong())).thenReturn(member);
+
         // when
-        final ArticleUpdateResponse response =
-                articleService.update(savedArticle.getId(), request, Fixture.createMockServetRequest(10));
+        final ArticleUpdateResponse response = articleService.update(
+                member.getId(),
+                savedArticle.getId(),
+                request,
+                Fixture.createMockServetRequest(10)
+        );
 
         // then
         assertThat(response.id()).isEqualTo(savedArticle.getId());
@@ -167,7 +183,7 @@ class ArticleServiceTest {
         assertThat(foundArticle).isEmpty();
     }
 
-    @DisplayName("[통과] 카테고리에 해당하는 게시글 전체를 조회한다.")
+    @DisplayName("[통과] 카테고리에 해당하는 게시글 목록을 조회한다.")
     @Test
     void article_service_test_08() {
         // given

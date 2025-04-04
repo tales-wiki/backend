@@ -12,6 +12,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionR
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchAllResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
+import com.openmpy.taleswiki.auth.annotation.Login;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -80,11 +81,12 @@ public class ArticleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ArticleUpdateResponse> update(
+            @Login final Long memberId,
             @PathVariable final Long id,
             @RequestBody @Valid final ArticleUpdateRequest request,
             final HttpServletRequest servletRequest
     ) {
-        final ArticleUpdateResponse response = articleService.update(id, request, servletRequest);
+        final ArticleUpdateResponse response = articleService.update(memberId, id, request, servletRequest);
         return ResponseEntity.ok(response);
     }
 
