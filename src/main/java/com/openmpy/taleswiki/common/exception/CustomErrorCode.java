@@ -20,6 +20,8 @@ public enum CustomErrorCode {
     NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE("크기 값이 음수일 수 없습니다. [%d]"),
     NOT_ALLOWED_ARTICLE_TITLE_NULL_AND_BLANK("제목이 빈 값일 수 없습니다."),
     NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE("버전 값이 0 또는 음수일 수 없습니다. [%d]"),
+    INVALID_ARTICLE_TITLE_LENGTH("게시글 제목 길이가 올바르지 않습니다. [길이: %d]"),
+    INVALID_ARTICLE_TITLE("올바르지 않은 게시글 제목입니다. [%s]"),
 
     // article service
     ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY("해당 카테고리에 이미 작성된 글입니다. [카테고리: %s, 제목: %s]"),
