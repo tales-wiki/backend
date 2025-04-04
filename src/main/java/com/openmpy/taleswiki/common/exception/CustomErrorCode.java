@@ -17,8 +17,6 @@ public enum CustomErrorCode {
 
     // article domain
     NOT_FOUND_ARTICLE_CATEGORY("찾을 수 없는 카테고리입니다. [%s]"),
-    NOT_ALLOWED_ARTICLE_IP_NULL_AND_BLANK("Ip가 빈 값일 수 없습니다."),
-    INVALID_ARTICLE_IP("올바르지 않은 Ip 입니다."),
     NOT_ALLOWED_ARTICLE_NICKNAME_NULL_AND_BLANK("닉네임이 빈 값일 수 없습니다."),
     NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE("크기 값이 음수일 수 없습니다. [%d]"),
     NOT_ALLOWED_ARTICLE_TITLE_NULL_AND_BLANK("제목이 빈 값일 수 없습니다."),
@@ -35,6 +33,8 @@ public enum CustomErrorCode {
     // other
     NOT_FOUND_COOKIE("쿠키를 찾을 수 없습니다. [쿠키: %s]"),
     INVALID_ACCESS_TOKEN("액세스 토큰이 올바르지 않습니다. [토큰: %s]"),
+    NOT_ALLOWED_IP_NULL_AND_BLANK("Ip가 빈 값일 수 없습니다."),
+    INVALID_IP("올바르지 않은 Ip 입니다."),
 
     // server
     REQUEST_METHOD_NOT_SUPPORTED("지원하지 않는 요청 메서드입니다."),
