@@ -76,6 +76,7 @@ public class Fixture {
 
         servletRequest.setContent(bytes);
         servletRequest.setCookies(cookie);
+        servletRequest.setRemoteAddr("127.0.0.1");
         return servletRequest;
     }
 }
