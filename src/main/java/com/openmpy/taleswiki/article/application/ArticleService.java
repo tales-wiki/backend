@@ -42,7 +42,13 @@ public class ArticleService {
     private final ArticleHistoryService articleHistoryService;
 
     @Transactional
-    public ArticleCreateResponse create(final ArticleCreateRequest request, final HttpServletRequest servletRequest) {
+    public ArticleCreateResponse create(
+            final Long memberId,
+            final ArticleCreateRequest request,
+            final HttpServletRequest servletRequest
+    ) {
+        final Member member = getMemberOrNull(memberId);
+
         final ArticleCategory category = ArticleCategory.of(request.category());
         final int size = servletRequest.getContentLength();
 
@@ -56,6 +62,7 @@ public class ArticleService {
         article.addVersion(version);
         articleRepository.save(article);
 
+        articleHistoryService.saveByCreate(member, article, servletRequest);
         return ArticleCreateResponse.of(article);
     }
 
@@ -130,5 +137,12 @@ public class ArticleService {
 
     public Article getArticle(final Long id) {
         return articleRepository.findById(id).orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID, id));
+    }
+
+    private Member getMemberOrNull(final Long memberId) {
+        if (memberId == null) {
+            return null;
+        }
+        return memberService.getMember(memberId);
     }
 }

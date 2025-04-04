@@ -60,7 +60,7 @@ class ArticleControllerTest extends ControllerTestSupport {
         final String body = objectMapper.writeValueAsString(request);
 
         // stub
-        when(articleService.create(any(ArticleCreateRequest.class), any(HttpServletRequest.class)))
+        when(articleService.create(anyLong(), any(ArticleCreateRequest.class), any(HttpServletRequest.class)))
                 .thenReturn(response);
 
         // when & then

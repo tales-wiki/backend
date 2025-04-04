@@ -37,10 +37,11 @@ public class ArticleController {
 
     @PostMapping
     public ResponseEntity<ArticleCreateResponse> create(
+            @Login(isRequired = false) final Long memberId,
             @RequestBody @Valid final ArticleCreateRequest request,
             final HttpServletRequest servletRequest
     ) {
-        final ArticleCreateResponse response = articleService.create(request, servletRequest);
+        final ArticleCreateResponse response = articleService.create(memberId, request, servletRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

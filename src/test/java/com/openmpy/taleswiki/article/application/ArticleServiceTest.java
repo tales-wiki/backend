@@ -57,7 +57,8 @@ class ArticleServiceTest {
         final ArticleCreateRequest request = new ArticleCreateRequest("제목", "닉네임", "인물", "내용");
 
         // when
-        final ArticleCreateResponse response = articleService.create(request, Fixture.createMockServetRequest(10));
+        final ArticleCreateResponse response =
+                articleService.create(null, request, Fixture.createMockServetRequest(10));
 
         // then
         assertThat(response.title()).isEqualTo("제목");
@@ -271,7 +272,7 @@ class ArticleServiceTest {
         final String error = String.format(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY.getMessage(), "인물", "제목");
         final MockHttpServletRequest mockServetRequest = Fixture.createMockServetRequest(10);
 
-        assertThatThrownBy(() -> articleService.create(request, mockServetRequest))
+        assertThatThrownBy(() -> articleService.create(null, request, mockServetRequest))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(error);
     }
