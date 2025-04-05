@@ -6,6 +6,7 @@ import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
+import com.openmpy.taleswiki.discord.application.DiscordService;
 import com.openmpy.taleswiki.report.domain.ArticleReport;
 import com.openmpy.taleswiki.report.domain.repository.ArticleReportRepository;
 import com.openmpy.taleswiki.report.presentation.request.ArticleReportRequest;
@@ -23,6 +24,7 @@ public class ReportService {
     private final ArticleReportRepository articleReportRepository;
     private final ArticleRepository articleRepository;
     private final ArticleService articleService;
+    private final DiscordService discordService;
 
     @Transactional
     public void articleReport(
@@ -44,6 +46,7 @@ public class ReportService {
 
         // 숨김 처리
         if (articleReportRepository.countByArticle(article) >= MAX_ARTICLE_REPORT_COUNT) {
+            discordService.sendArticleReportMessage(article);
             article.toggleHiding(true);
         }
     }

@@ -13,6 +13,17 @@ public enum DiscordMessageType {
                     소셜: %s
                     날짜: %s```"""
     ),
+    ARTICLE_REPORT_MESSAGE(
+            """
+                    ```
+                    [숨김]
+                                        
+                    게시글 ID: %d
+                    제목: %s
+                    카테고리: %s
+                    신고 내용: %s
+                    날짜: %s```"""
+    ),
     WARNING_MESSAGE(
             """
                     ```

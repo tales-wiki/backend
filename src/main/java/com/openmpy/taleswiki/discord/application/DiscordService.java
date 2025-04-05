@@ -1,15 +1,19 @@
 package com.openmpy.taleswiki.discord.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.DISCORD_ERROR;
+import static com.openmpy.taleswiki.discord.application.DiscordMessageType.ARTICLE_REPORT_MESSAGE;
 import static com.openmpy.taleswiki.discord.application.DiscordMessageType.SIGNUP_MESSAGE;
 
+import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.properties.DiscordProperties;
 import com.openmpy.taleswiki.common.util.DateFormatterUtil;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
+import com.openmpy.taleswiki.report.domain.ArticleReport;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -71,6 +75,35 @@ public class DiscordService {
         try {
             restClient.post()
                     .uri(discordProperties.errorUrl())
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(params)
+                    .retrieve()
+                    .body(String.class);
+        } catch (final Exception e) {
+            throw new CustomException(DISCORD_ERROR);
+        }
+    }
+
+    @Async
+    public void sendArticleReportMessage(final Article article) {
+        final String now = DateFormatterUtil.convert(LocalDateTime.now());
+        final String message = String.format(
+                ARTICLE_REPORT_MESSAGE.getValue(),
+                article.getId(),
+                article.getTitle(),
+                article.getCategory().getValue(),
+                article.getReports().stream()
+                        .map(ArticleReport::getReportReason)
+                        .collect(Collectors.joining(", ")),
+                now
+        );
+
+        final Map<String, String> params = new HashMap<>();
+        params.put(DISCORD_CONTENT, message);
+
+        try {
+            restClient.post()
+                    .uri(discordProperties.reportUrl())
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .body(params)
                     .retrieve()
