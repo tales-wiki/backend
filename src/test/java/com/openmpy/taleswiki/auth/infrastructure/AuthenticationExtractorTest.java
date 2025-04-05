@@ -1,10 +1,7 @@
 package com.openmpy.taleswiki.auth.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.openmpy.taleswiki.common.exception.AuthenticationException;
-import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.dummy.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,17 +24,16 @@ class AuthenticationExtractorTest {
         assertThat(accessToken).isEqualTo("token");
     }
 
-    @DisplayName("[예외] 쿠키에서 값을 가져오지 못한다.")
+    @DisplayName("[통과] 쿠키를 찾지 못할 경우 null 값을 반환한다.")
     @Test
-    void 예외_authentication_extractor_test_01() {
+    void authentication_extractor_test_02() {
         // given
         final MockHttpServletRequest servletRequest = new MockHttpServletRequest();
 
-        // when & then
-        final String error = String.format(CustomErrorCode.NOT_FOUND_COOKIE.getMessage(), "access-token");
+        // when
+        final String extracted = authenticationExtractor.extract(servletRequest, "access-token");
 
-        assertThatThrownBy(() -> authenticationExtractor.extract(servletRequest, "access-token"))
-                .isInstanceOf(AuthenticationException.class)
-                .hasMessage(error);
+        // then
+        assertThat(extracted).isNull();
     }
 }

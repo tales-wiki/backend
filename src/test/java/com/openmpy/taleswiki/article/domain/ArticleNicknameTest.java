@@ -25,7 +25,7 @@ class ArticleNicknameTest {
         assertThat(nickname.getValue()).isEqualTo(value);
     }
 
-    @DisplayName("[예외] 게시글 작성자 양옆에 공백이 있을 경우 제거된다.")
+    @DisplayName("[통과] 게시글 작성자 양옆에 공백이 있을 경우 제거된다.")
     @ParameterizedTest(name = "값: {0}")
     @ValueSource(strings = {" 홍길동", "홍길동 ", " 홍길동 "})
     void article_nickname_test_02(final String value) {

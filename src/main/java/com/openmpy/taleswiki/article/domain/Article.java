@@ -22,10 +22,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLRestriction("deleted_at is null")
 @Entity
 public class Article extends BaseEntity {
 
@@ -40,6 +42,9 @@ public class Article extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private ArticleCategory category;
+
+    @Column
+    private LocalDateTime deletedAt;
 
     @Column(insertable = false)
     @LastModifiedDate
@@ -77,6 +82,10 @@ public class Article extends BaseEntity {
     public void addVersion(final ArticleVersion version) {
         versions.add(version);
         latestVersion = version;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
     }
 
     public String getTitle() {

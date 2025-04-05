@@ -29,12 +29,9 @@ class ArticleVersionNumberTest {
     @ParameterizedTest(name = "값: {0}")
     @ValueSource(ints = {-1, 0})
     void 예외_article_version_number_test_01(final int value) {
-        // given
-        final String error = String.format(NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE.getMessage(), value);
-
         // when & then
         assertThatThrownBy(() -> new ArticleVersionNumber(value))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE.getMessage());
     }
 }

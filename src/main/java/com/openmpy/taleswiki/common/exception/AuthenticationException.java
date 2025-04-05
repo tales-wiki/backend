@@ -11,9 +11,4 @@ public class AuthenticationException extends RuntimeException {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
-
-    public AuthenticationException(final CustomErrorCode errorCode, final Object... args) {
-        super(String.format(errorCode.getMessage(), args));
-        this.errorCode = errorCode;
-    }
 }

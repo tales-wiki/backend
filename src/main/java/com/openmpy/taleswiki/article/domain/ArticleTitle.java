@@ -37,13 +37,13 @@ public class ArticleTitle {
 
     private void validateLength(final String value) {
         if (value.length() > MAX_TITLE_LENGTH) {
-            throw new CustomException(INVALID_ARTICLE_TITLE_LENGTH, value.length());
+            throw new CustomException(INVALID_ARTICLE_TITLE_LENGTH);
         }
     }
 
     private void validateTitle(final String value) {
         if (!isValidTitle(value)) {
-            throw new CustomException(INVALID_ARTICLE_TITLE, value);
+            throw new CustomException(INVALID_ARTICLE_TITLE);
         }
     }
 

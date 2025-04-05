@@ -42,10 +42,8 @@ class MemberEmailTest {
     @ValueSource(strings = {"test", "test@", "test@test"})
     void 예외_member_email_test_02(final String value) {
         // when & then
-        final String error = String.format(INVALID_MEMBER_EMAIL.getMessage(), value);
-
         assertThatThrownBy(() -> new MemberEmail(value))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(INVALID_MEMBER_EMAIL.getMessage());
     }
 }

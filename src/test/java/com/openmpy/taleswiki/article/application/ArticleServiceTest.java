@@ -31,7 +31,6 @@ import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.support.annotation.CustomServiceTest;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +56,8 @@ class ArticleServiceTest {
         final ArticleCreateRequest request = new ArticleCreateRequest("제목", "닉네임", "인물", "내용");
 
         // when
-        final ArticleCreateResponse response = articleService.create(request, Fixture.createMockServetRequest(10));
+        final ArticleCreateResponse response =
+                articleService.create(null, request, Fixture.createMockServetRequest(10));
 
         // then
         assertThat(response.title()).isEqualTo("제목");
@@ -168,15 +168,18 @@ class ArticleServiceTest {
     @Test
     void article_service_test_07() {
         // given
+        final Member member = Fixture.createMember();
         final Article article = Fixture.createArticleWithVersion();
         final Article savedArticle = articleRepository.save(article);
 
+        // stub
+        when(memberService.getMember(anyLong())).thenReturn(member);
+
         // when
-        articleService.delete(savedArticle.getId());
+        articleService.delete(member.getId(), savedArticle.getId(), Fixture.createMockServetRequest(10));
 
         // then
-        final Optional<Article> foundArticle = articleRepository.findById(savedArticle.getId());
-        assertThat(foundArticle).isEmpty();
+        assertThat(savedArticle.getDeletedAt()).isNotNull();
     }
 
     @DisplayName("[통과] 카테고리에 해당하는 게시글 목록을 조회한다.")
@@ -258,6 +261,23 @@ class ArticleServiceTest {
         assertThat(responses).isEmpty();
     }
 
+    @DisplayName("[통과] 로그인 한 상태에서 게시글을 작성한다.")
+    @Test
+    void article_service_test_12() {
+        // given
+        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "닉네임", "인물", "내용");
+
+        // when
+        final ArticleCreateResponse response =
+                articleService.create(1L, request, Fixture.createMockServetRequest(10));
+
+        // then
+        assertThat(response.title()).isEqualTo("제목");
+        assertThat(response.nickname()).isEqualTo("닉네임");
+        assertThat(response.category()).isEqualTo("인물");
+        assertThat(response.version()).isEqualTo(1);
+    }
+
     @DisplayName("[예외] 해당 카테고리에 이미 작성된 게시글이 존재한다.")
     @Test
     void 예외_article_service_test_01() {
@@ -268,23 +288,20 @@ class ArticleServiceTest {
         articleRepository.save(article);
 
         // when & then
-        final String error = String.format(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY.getMessage(), "인물", "제목");
         final MockHttpServletRequest mockServetRequest = Fixture.createMockServetRequest(10);
 
-        assertThatThrownBy(() -> articleService.create(request, mockServetRequest))
+        assertThatThrownBy(() -> articleService.create(null, request, mockServetRequest))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY.getMessage());
     }
 
     @DisplayName("[예외] 게시글 번호를 찾을 수 없다.")
     @Test
     void 예외_article_service_test_02() {
         // when & then
-        final String error = String.format(NOT_FOUND_ARTICLE_ID.getMessage(), 1L);
-
         assertThatThrownBy(() -> articleService.getArticle(1L))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(NOT_FOUND_ARTICLE_ID.getMessage());
     }
 
     @DisplayName("[예외] 게시글 버전을 조회할 수 없다.")
@@ -297,10 +314,8 @@ class ArticleServiceTest {
         final int version = 1;
 
         // when & then
-        final String error = String.format(NOT_FOUND_ARTICLE_VERSION.getMessage(), articleId, version);
-
         assertThatThrownBy(() -> articleService.readByVersion(articleId, version))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(NOT_FOUND_ARTICLE_VERSION.getMessage());
     }
 }

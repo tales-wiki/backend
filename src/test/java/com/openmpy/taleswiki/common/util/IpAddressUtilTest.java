@@ -64,7 +64,7 @@ class IpAddressUtilTest {
         assertThat(isValid).isTrue();
     }
 
-    @DisplayName("[예외] 아이피가 IPv4 형식이 아니다.")
+    @DisplayName("[통과] 아이피가 IPv4 형식이 아니다.")
     @ParameterizedTest(name = "값: {0}")
     @ValueSource(strings = {"1", "1.1", "1.1.1", "0000:0000:0000:0000:0000:0000:0000:0000"})
     void 예외_ip_address_util_test_01(final String value) {
@@ -72,7 +72,7 @@ class IpAddressUtilTest {
         assertThat(IpAddressUtil.isValidIPv4(value)).isFalse();
     }
 
-    @DisplayName("[예외] 아이피가 IPv6 형식이 아니다.")
+    @DisplayName("[통과] 아이피가 IPv6 형식이 아니다.")
     @ParameterizedTest(name = "값: {0}")
     @ValueSource(strings = {"1", "1:1", "1:1:1", "127.0.0.1"})
     void 예외_ip_address_util_test_02(final String value) {

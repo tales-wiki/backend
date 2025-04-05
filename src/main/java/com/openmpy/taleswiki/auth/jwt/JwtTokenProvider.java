@@ -58,7 +58,7 @@ public class JwtTokenProvider {
 
     public Long getMemberId(final String token) {
         if (!isValidToken(token)) {
-            throw new AuthenticationException(CustomErrorCode.INVALID_ACCESS_TOKEN, token);
+            throw new AuthenticationException(CustomErrorCode.INVALID_ACCESS_TOKEN);
         }
 
         final Map<String, Object> payload = getPayload(token);

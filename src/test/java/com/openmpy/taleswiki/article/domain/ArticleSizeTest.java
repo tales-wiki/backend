@@ -30,10 +30,8 @@ class ArticleSizeTest {
         final int value = -1;
 
         // when & then
-        final String error = String.format(NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE.getMessage(), -1);
-
         assertThatThrownBy(() -> new ArticleSize(value))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE.getMessage());
     }
 }

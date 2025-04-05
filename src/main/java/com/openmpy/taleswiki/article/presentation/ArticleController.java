@@ -37,10 +37,11 @@ public class ArticleController {
 
     @PostMapping
     public ResponseEntity<ArticleCreateResponse> create(
+            @Login(isRequired = false) final Long memberId,
             @RequestBody @Valid final ArticleCreateRequest request,
             final HttpServletRequest servletRequest
     ) {
-        final ArticleCreateResponse response = articleService.create(request, servletRequest);
+        final ArticleCreateResponse response = articleService.create(memberId, request, servletRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -91,8 +92,12 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable final Long id) {
-        articleService.delete(id);
+    public ResponseEntity<Void> delete(
+            @Login final Long memberId,
+            @PathVariable final Long id,
+            final HttpServletRequest servletRequest
+    ) {
+        articleService.delete(memberId, id, servletRequest);
         return ResponseEntity.noContent().build();
     }
 

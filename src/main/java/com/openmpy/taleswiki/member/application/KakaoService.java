@@ -50,7 +50,7 @@ public class KakaoService {
                     .retrieve()
                     .body(KakaoLoginResponse.class);
         } catch (final Exception e) {
-            throw new CustomException(CustomErrorCode.FAILED_KAKAO_LOGIN, code);
+            throw new CustomException(CustomErrorCode.FAILED_KAKAO_LOGIN);
         }
     }
 }

@@ -42,12 +42,18 @@ public class ArticleService {
     private final ArticleHistoryService articleHistoryService;
 
     @Transactional
-    public ArticleCreateResponse create(final ArticleCreateRequest request, final HttpServletRequest servletRequest) {
+    public ArticleCreateResponse create(
+            final Long memberId,
+            final ArticleCreateRequest request,
+            final HttpServletRequest servletRequest
+    ) {
+        final Member member = getMemberOrNull(memberId);
+
         final ArticleCategory category = ArticleCategory.of(request.category());
         final int size = servletRequest.getContentLength();
 
         if (articleRepository.existsByTitle_ValueAndCategory(request.title(), category)) {
-            throw new CustomException(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY, request.category(), request.title());
+            throw new CustomException(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY);
         }
 
         final Article article = Article.create(request.title(), request.category());
@@ -56,13 +62,14 @@ public class ArticleService {
         article.addVersion(version);
         articleRepository.save(article);
 
+        articleHistoryService.saveByCreate(member, article, servletRequest);
         return ArticleCreateResponse.of(article);
     }
 
     @Transactional(readOnly = true)
     public ArticleReadResponse read(final Long id) {
         final Article article = articleRepository.findByIdWithLastVersion(id)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID, id));
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID));
         return ArticleReadResponse.of(article);
     }
 
@@ -76,7 +83,7 @@ public class ArticleService {
     public ArticleReadByVersionResponse readByVersion(final Long id, final int version) {
         final Article article = getArticle(id);
         final ArticleVersion articleVersion = articleVersionRepository.findByArticleAndVersion_Value(article, version)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION, id, version));
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION));
 
         return ArticleReadByVersionResponse.of(articleVersion);
     }
@@ -101,7 +108,6 @@ public class ArticleService {
             final HttpServletRequest servletRequest
     ) {
         final Member member = memberService.getMember(memberId);
-
         final Article article = getArticle(id);
         final int newVersion = article.getVersions().size() + PLUS_VERSION_NUMBER;
         final int size = servletRequest.getContentLength();
@@ -116,9 +122,12 @@ public class ArticleService {
     }
 
     @Transactional
-    public void delete(final Long id) {
+    public void delete(final Long memberId, final Long id, final HttpServletRequest servletRequest) {
+        final Member member = memberService.getMember(memberId);
         final Article article = getArticle(id);
-        articleRepository.delete(article);
+
+        articleHistoryService.saveByDelete(member, article, servletRequest);
+        article.delete();
     }
 
     @Transactional(readOnly = true)
@@ -129,6 +138,13 @@ public class ArticleService {
     }
 
     public Article getArticle(final Long id) {
-        return articleRepository.findById(id).orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID, id));
+        return articleRepository.findById(id).orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID));
+    }
+
+    private Member getMemberOrNull(final Long memberId) {
+        if (memberId == null) {
+            return null;
+        }
+        return memberService.getMember(memberId);
     }
 }

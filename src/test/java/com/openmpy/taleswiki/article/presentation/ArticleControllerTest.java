@@ -60,7 +60,7 @@ class ArticleControllerTest extends ControllerTestSupport {
         final String body = objectMapper.writeValueAsString(request);
 
         // stub
-        when(articleService.create(any(ArticleCreateRequest.class), any(HttpServletRequest.class)))
+        when(articleService.create(anyLong(), any(ArticleCreateRequest.class), any(HttpServletRequest.class)))
                 .thenReturn(response);
 
         // when & then
@@ -252,10 +252,11 @@ class ArticleControllerTest extends ControllerTestSupport {
         final Long articleId = 1L;
 
         // stub
-        doNothing().when(articleService).delete(anyLong());
+        doNothing().when(articleService).delete(anyLong(), anyLong(), any(HttpServletRequest.class));
 
         // when & then
         mockMvc.perform(delete("/api/articles/{articleId}", articleId)
+                        .cookie(Fixture.MEMBER_COOKIE)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())

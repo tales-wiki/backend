@@ -112,10 +112,8 @@ class JwtTokenProviderTest {
         final String token = jwtTokenProvider.createToken(Fixture.PAYLOAD);
 
         // when & then
-        final String error = String.format(INVALID_ACCESS_TOKEN.getMessage(), token);
-
         assertThatThrownBy(() -> jwtTokenProvider.getMemberId(token))
                 .isInstanceOf(AuthenticationException.class)
-                .hasMessage(error);
+                .hasMessage(INVALID_ACCESS_TOKEN.getMessage());
     }
 }

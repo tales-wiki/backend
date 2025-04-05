@@ -33,12 +33,9 @@ class ArticleCategoryTest {
     @ParameterizedTest(name = "값: {0}")
     @ValueSource(strings = {"동물", "식물"})
     void 예외_article_category_test_01(final String value) {
-        // given
-        final String error = String.format(NOT_FOUND_ARTICLE_CATEGORY.getMessage(), value);
-
         // when & then
         assertThatThrownBy(() -> ArticleCategory.of(value))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(NOT_FOUND_ARTICLE_CATEGORY.getMessage());
     }
 }
