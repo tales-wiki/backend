@@ -17,7 +17,7 @@ class DiscordServiceTest {
     @Test
     void discord_service_test_01() {
         // when
-        discordService.sendWelcomeMessage(1L, "test@test.com", MemberSocial.KAKAO);
+        discordService.sendSignupMessage(1L, "test@test.com", MemberSocial.KAKAO);
     }
 
     @DisplayName("[통과] CustomException 발생 시 경고 메세지를 보낸다.")

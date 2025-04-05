@@ -38,7 +38,7 @@ public class MemberService {
         final Member newMember = Member.create(email, social);
         final Member savedMember = memberRepository.save(newMember);
 
-        discordService.sendWelcomeMessage(savedMember.getId(), email, social);
+        discordService.sendSignupMessage(savedMember.getId(), email, social);
         return MemberLoginResponse.of(savedMember);
     }
 

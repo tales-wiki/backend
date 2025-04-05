@@ -5,10 +5,9 @@ import lombok.Getter;
 @Getter
 public enum DiscordMessageType {
 
-    WELCOME_MESSAGE(
+    SIGNUP_MESSAGE(
             """
-                    ```[회원가입]
-
+                    ```
                     ID: %d
                     이메일: %s
                     소셜: %s

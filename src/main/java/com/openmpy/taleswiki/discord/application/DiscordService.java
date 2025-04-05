@@ -1,7 +1,7 @@
 package com.openmpy.taleswiki.discord.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.DISCORD_ERROR;
-import static com.openmpy.taleswiki.discord.application.DiscordMessageType.WELCOME_MESSAGE;
+import static com.openmpy.taleswiki.discord.application.DiscordMessageType.SIGNUP_MESSAGE;
 
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.properties.DiscordProperties;
@@ -27,16 +27,16 @@ public class DiscordService {
     private final RestClient restClient;
 
     @Async
-    public void sendWelcomeMessage(final Long id, final String email, final MemberSocial social) {
+    public void sendSignupMessage(final Long id, final String email, final MemberSocial social) {
         final String now = DateFormatterUtil.convert(LocalDateTime.now());
-        final String message = String.format(WELCOME_MESSAGE.getValue(), id, email, social.name(), now);
+        final String message = String.format(SIGNUP_MESSAGE.getValue(), id, email, social.name(), now);
 
         final Map<String, String> params = new HashMap<>();
         params.put(DISCORD_CONTENT, message);
 
         try {
             restClient.post()
-                    .uri(discordProperties.infoUrl())
+                    .uri(discordProperties.signupUrl())
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .body(params)
                     .retrieve()
