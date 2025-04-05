@@ -6,11 +6,23 @@ import lombok.Getter;
 public enum DiscordMessageType {
 
     WELCOME_MESSAGE(
-            "```[회원가입]\n\n" +
-                    "ID: %d\n" +
-                    "이메일: %s\n" +
-                    "소셜: %s\n" +
-                    "날짜: %s```"
+            """
+                    ```[회원가입]
+
+                    ID: %d
+                    이메일: %s
+                    소셜: %s
+                    날짜: %s```"""
+    ),
+    WARNING_MESSAGE(
+            """
+                    ```
+                    Error Code: %s
+                    Error Message: %s
+                    Request Uri: %s %s
+                    Request Payload: %s
+                    IP: %s
+                    날짜: %s```"""
     );
 
     private final String value;

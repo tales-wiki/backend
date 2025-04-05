@@ -5,6 +5,7 @@ import com.openmpy.taleswiki.article.application.ArticleService;
 import com.openmpy.taleswiki.article.presentation.ArticleController;
 import com.openmpy.taleswiki.common.config.TestWebMvcConfig;
 import com.openmpy.taleswiki.common.properties.CookieProperties;
+import com.openmpy.taleswiki.discord.application.DiscordService;
 import com.openmpy.taleswiki.member.application.GoogleService;
 import com.openmpy.taleswiki.member.application.KakaoService;
 import com.openmpy.taleswiki.member.application.MemberService;
@@ -44,6 +45,9 @@ public abstract class ControllerTestSupport {
 
     @MockitoBean
     protected ArticleService articleService;
+
+    @MockitoBean
+    protected DiscordService discordService;
 
     @MockitoBean
     protected CookieProperties cookieProperties;

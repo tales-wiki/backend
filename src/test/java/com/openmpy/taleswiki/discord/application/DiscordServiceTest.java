@@ -16,6 +16,24 @@ class DiscordServiceTest {
     @DisplayName("[통과] 회원가입 시 회원 정보 메세지를 보낸다.")
     @Test
     void discord_service_test_01() {
+        // when
         discordService.sendWelcomeMessage(1L, "test@test.com", MemberSocial.KAKAO);
+    }
+
+    @DisplayName("[통과] CustomException 발생 시 경고 메세지를 보낸다.")
+    @Test
+    void discord_service_test_02() {
+        // given
+        final String message = """
+                    ```
+                Error Code: ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY
+                Error Message: 해당 카테고리에 이미 작성된 게시글입니다.
+                Request Uri: POST /api/articles
+                Request Payload: {"title":"레디스","nickname":"ㅇㅇ","content":"ㅇㅇ","category":"인물"}
+                IP: 0:0:0:0:0:0:0:1
+                날짜: 2025년 04월 05일 14시 18분 16초```""";
+
+        // when
+        discordService.sendWaringMessage(message);
     }
 }
