@@ -10,6 +10,8 @@ import com.openmpy.taleswiki.member.application.GoogleService;
 import com.openmpy.taleswiki.member.application.KakaoService;
 import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.presentation.MemberController;
+import com.openmpy.taleswiki.report.application.ReportService;
+import com.openmpy.taleswiki.report.presentation.ReportController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,7 +24,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @AutoConfigureRestDocs
 @WebMvcTest(
-        controllers = {MemberController.class, ArticleController.class},
+        controllers = {MemberController.class, ArticleController.class, ReportController.class},
         excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {WebMvcConfigurer.class})}
 )
 @Import(TestWebMvcConfig.class)
@@ -48,6 +50,9 @@ public abstract class ControllerTestSupport {
 
     @MockitoBean
     protected DiscordService discordService;
+
+    @MockitoBean
+    protected ReportService reportService;
 
     @MockitoBean
     protected CookieProperties cookieProperties;

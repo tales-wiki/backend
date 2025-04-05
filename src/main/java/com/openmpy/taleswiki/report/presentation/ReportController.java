@@ -21,7 +21,7 @@ public class ReportController {
 
     @PostMapping("/articles/{id}")
     public ResponseEntity<Void> reportArticle(
-            @PathVariable("id") final Long id,
+            @PathVariable final Long id,
             @RequestBody final ArticleReportRequest request,
             final HttpServletRequest servletRequest
     ) {
