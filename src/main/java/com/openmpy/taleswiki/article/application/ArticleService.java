@@ -127,7 +127,7 @@ public class ArticleService {
         final Article article = getArticle(id);
 
         articleHistoryService.saveByDelete(member, article, servletRequest);
-        articleRepository.delete(article);
+        article.delete();
     }
 
     @Transactional(readOnly = true)
