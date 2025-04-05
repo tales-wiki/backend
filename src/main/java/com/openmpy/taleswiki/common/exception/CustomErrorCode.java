@@ -24,7 +24,7 @@ public enum CustomErrorCode {
     INVALID_ARTICLE_TITLE_LENGTH("게시글 제목 길이가 올바르지 않습니다. (최대 12자)"),
     INVALID_ARTICLE_TITLE("올바르지 않은 게시글 제목입니다."),
     INVALID_ARTICLE_NICKNAME_LENGTH("게시글 작성자명 길이가 올바르지 않습니다. (최대 10자)"),
-    HIDING_ARTICLE("숨김 처리 된 게시글입니다"),
+    HIDING_ARTICLE("숨김 처리 된 게시글입니다."),
 
     // article service
     ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY("해당 카테고리에 이미 작성된 게시글입니다."),

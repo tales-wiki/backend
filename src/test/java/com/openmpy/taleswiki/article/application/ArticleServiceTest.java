@@ -1,6 +1,7 @@
 package com.openmpy.taleswiki.article.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.HIDING_ARTICLE;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -317,5 +318,26 @@ class ArticleServiceTest {
         assertThatThrownBy(() -> articleService.readByVersion(articleId, version))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(NOT_FOUND_ARTICLE_VERSION.getMessage());
+    }
+
+    @DisplayName("[예외] 숨김 처리 된 게시글은 조회할 수 없다.")
+    @Test
+    void 예외_article_service_test_04() {
+        // given
+        final Article article = Fixture.createArticleWithVersion();
+        final Article savedArticle = articleRepository.save(article);
+        final Long articleId = savedArticle.getId();
+        savedArticle.toggleHiding(true);
+
+        // when & then
+        assertThatThrownBy(() -> articleService.read(articleId))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(HIDING_ARTICLE.getMessage());
+        assertThatThrownBy(() -> articleService.readByVersion(articleId, 1))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(HIDING_ARTICLE.getMessage());
+        assertThatThrownBy(() -> articleService.readAllVersions(articleId))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(HIDING_ARTICLE.getMessage());
     }
 }
