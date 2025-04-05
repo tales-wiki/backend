@@ -17,7 +17,13 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     List<Article> findTop10ByOrderByUpdatedAtDesc();
 
-    List<Article> findAllByTitle_ValueContainingIgnoreCaseOrderByLatestVersionDesc(final String value);
+    @Query(
+            "SELECT a FROM Article a " +
+                    "WHERE LOWER(a.title.value) LIKE LOWER(CONCAT('%', :value, '%')) AND a.isHiding = false " +
+                    "ORDER BY a.latestVersion DESC"
+    )
+    List<Article> searchVisibleArticlesByTitle(@Param("value") String value);
+
 
     boolean existsByTitle_ValueAndCategory(final String value, final ArticleCategory category);
 }

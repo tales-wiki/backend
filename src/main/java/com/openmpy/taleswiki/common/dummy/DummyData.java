@@ -44,6 +44,9 @@ public class DummyData {
             final Article article = new Article(title, category, new ArrayList<>(), null);
             final ArticleVersion version = new ArticleVersion(nickname, content, 1, 10, article);
 
+            if (i % 3 == 0) {
+                article.toggleHiding(true);
+            }
             article.addVersion(version);
             articles.add(article);
         }

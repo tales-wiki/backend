@@ -7,6 +7,7 @@ public record ArticleReadRecentEditsResponse(
         Long id,
         String title,
         String category,
+        boolean isHiding,
         LocalDateTime createdAt
 ) {
 
@@ -15,6 +16,7 @@ public record ArticleReadRecentEditsResponse(
                 article.getId(),
                 article.getTitle(),
                 article.getCategory().name(),
+                article.isHiding(),
                 article.getLatestVersion().getCreatedAt()
         );
     }

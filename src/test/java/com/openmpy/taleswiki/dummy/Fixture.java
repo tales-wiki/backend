@@ -6,6 +6,7 @@ import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.MemberAuthority;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
+import com.openmpy.taleswiki.report.domain.ArticleReport;
 import jakarta.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,14 @@ public class Fixture {
             articles.add(article);
         }
         return articles;
+    }
+
+    public static Article createArticleWithReport() {
+        final Article article = new Article("제목", ArticleCategory.PERSON, new ArrayList<>(), null);
+        final ArticleReport articleReport = new ArticleReport("127.0.0.1", "신고 내용", article);
+
+        article.addReport(articleReport);
+        return article;
     }
 
     public static MockHttpServletRequest createMockServetRequest(int size) {

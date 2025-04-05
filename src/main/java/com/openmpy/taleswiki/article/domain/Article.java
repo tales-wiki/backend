@@ -1,6 +1,7 @@
 package com.openmpy.taleswiki.article.domain;
 
 import com.openmpy.taleswiki.common.domain.BaseEntity;
+import com.openmpy.taleswiki.report.domain.ArticleReport;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,6 +44,9 @@ public class Article extends BaseEntity {
     @Column(nullable = false)
     private ArticleCategory category;
 
+    @Column(nullable = false)
+    private boolean isHiding;
+
     @Column
     private LocalDateTime deletedAt;
 
@@ -56,6 +60,9 @@ public class Article extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "latest_version_id")
     private ArticleVersion latestVersion;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<ArticleReport> reports = new ArrayList<>();
 
     @Builder
     public Article(
@@ -84,8 +91,16 @@ public class Article extends BaseEntity {
         latestVersion = version;
     }
 
+    public void addReport(final ArticleReport report) {
+        reports.add(report);
+    }
+
     public void delete() {
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public void toggleHiding(boolean isHiding) {
+        this.isHiding = isHiding;
     }
 
     public String getTitle() {

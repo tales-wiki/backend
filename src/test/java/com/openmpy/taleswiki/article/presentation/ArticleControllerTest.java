@@ -276,8 +276,8 @@ class ArticleControllerTest extends ControllerTestSupport {
     @Test
     void article_controller_test_07() throws Exception {
         // given
-        final ArticleReadByCategoryResponse response01 = new ArticleReadByCategoryResponse(1L, "제목01");
-        final ArticleReadByCategoryResponse response02 = new ArticleReadByCategoryResponse(2L, "제목02");
+        final ArticleReadByCategoryResponse response01 = new ArticleReadByCategoryResponse(1L, "제목01", false);
+        final ArticleReadByCategoryResponse response02 = new ArticleReadByCategoryResponse(2L, "제목02", false);
         final List<ArticleReadByCategoryResponse> responses = List.of(response01, response02);
         final ArticleReadAllByCategoryResponse response = new ArticleReadAllByCategoryResponse(responses);
 
@@ -292,8 +292,10 @@ class ArticleControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.responses").isArray())
                 .andExpect(jsonPath("$.responses[0].id").value("1"))
                 .andExpect(jsonPath("$.responses[0].title").value("제목01"))
+                .andExpect(jsonPath("$.responses[0].isHiding").value(false))
                 .andExpect(jsonPath("$.responses[1].id").value("2"))
                 .andExpect(jsonPath("$.responses[1].title").value("제목02"))
+                .andExpect(jsonPath("$.responses[1].isHiding").value(false))
                 .andDo(print())
                 .andDo(
                         document("readArticlesByCategory",
@@ -314,7 +316,7 @@ class ArticleControllerTest extends ControllerTestSupport {
             final String title = String.format("제목%02d", i);
             final LocalDateTime dateTime = LocalDateTime.of(2025, 4, i, 12, 0, 1);
             final ArticleReadRecentEditsResponse response =
-                    new ArticleReadRecentEditsResponse((long) i, title, "PERSON", dateTime);
+                    new ArticleReadRecentEditsResponse((long) i, title, "PERSON", false, dateTime);
 
             list.add(response);
         }
@@ -335,6 +337,7 @@ class ArticleControllerTest extends ControllerTestSupport {
                     .andExpect(jsonPath("$.responses[" + i + "].id").value(list.get(i).id()))
                     .andExpect(jsonPath("$.responses[" + i + "].title").value(list.get(i).title()))
                     .andExpect(jsonPath("$.responses[" + i + "].category").value(list.get(i).category()))
+                    .andExpect(jsonPath("$.responses[" + i + "].isHiding").value(list.get(i).isHiding()))
                     .andExpect(jsonPath("$.responses[" + i + "].createdAt").value(list.get(i).createdAt().toString()));
         }
 
