@@ -33,7 +33,7 @@ public class ArticleNickname {
 
     private void validateLength(final String value) {
         if (value.length() > MAX_NICKNAME_LENGTH) {
-            throw new CustomException(INVALID_ARTICLE_NICKNAME_LENGTH, value.length());
+            throw new CustomException(INVALID_ARTICLE_NICKNAME_LENGTH);
         }
     }
 }

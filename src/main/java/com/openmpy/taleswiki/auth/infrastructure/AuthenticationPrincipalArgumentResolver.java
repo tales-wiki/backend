@@ -36,7 +36,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         final String accessToken = authenticationExtractor.extract(servletRequest, JwtTokenProvider.ACCESS_TOKEN);
 
         if (parameterAnnotation.isRequired() && accessToken == null) {
-            throw new AuthenticationException(NOT_FOUND_COOKIE, JwtTokenProvider.ACCESS_TOKEN);
+            throw new AuthenticationException(NOT_FOUND_COOKIE);
         }
         if (!parameterAnnotation.isRequired() && accessToken == null) {
             return null;

@@ -6,35 +6,35 @@ import lombok.Getter;
 public enum CustomErrorCode {
 
     // member domain
-    NOT_ALLOWED_MEMBER_EMAIL_NULL_AND_BLANK("이메일이 빈 값일 수 없습니다."),
-    INVALID_MEMBER_EMAIL("올바르지 않은 이메일입니다. [%s]"),
-    FAILED_KAKAO_LOGIN("카카오 로그인에 실패했습니다. [코드: %s]"),
-    FAILED_GOOGLE_LOGIN("구글 로그인에 실패했습니다. [코드: %s]"),
-    ALREADY_SIGNUP_MEMBER("이미 가입된 이메일입니다. [이메일: %s]"),
+    NOT_ALLOWED_MEMBER_EMAIL_NULL_AND_BLANK("회원 이메일이 빈 값일 수 없습니다."),
+    INVALID_MEMBER_EMAIL("올바르지 않은 회원 이메일입니다."),
+    FAILED_KAKAO_LOGIN("카카오 로그인에 실패했습니다."),
+    FAILED_GOOGLE_LOGIN("구글 로그인에 실패했습니다."),
+    ALREADY_SIGNUP_MEMBER("이미 가입된 회원 이메일입니다."),
 
     // member service
-    NOT_FOUND_MEMBER_ID("찾을 수 없는 회원 번호입니다. [ID: %d]"),
+    NOT_FOUND_MEMBER_ID("찾을 수 없는 회원 번호입니다."),
 
     // article domain
-    NOT_FOUND_ARTICLE_CATEGORY("찾을 수 없는 카테고리입니다. [%s]"),
-    NOT_ALLOWED_ARTICLE_NICKNAME_NULL_AND_BLANK("닉네임이 빈 값일 수 없습니다."),
-    NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE("크기 값이 음수일 수 없습니다. [%d]"),
-    NOT_ALLOWED_ARTICLE_TITLE_NULL_AND_BLANK("제목이 빈 값일 수 없습니다."),
-    NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE("버전 값이 0 또는 음수일 수 없습니다. [%d]"),
-    INVALID_ARTICLE_TITLE_LENGTH("게시글 제목 길이가 올바르지 않습니다. [길이: %d]"),
-    INVALID_ARTICLE_TITLE("올바르지 않은 게시글 제목입니다. [%s]"),
-    INVALID_ARTICLE_NICKNAME_LENGTH("게시글 닉네임 길이가 올바르지 않습니다. [길이: %d]"),
+    NOT_FOUND_ARTICLE_CATEGORY("찾을 수 없는 카테고리입니다."),
+    NOT_ALLOWED_ARTICLE_NICKNAME_NULL_AND_BLANK("게시글 작성자명이 빈 값일 수 없습니다."),
+    NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE("게시글 문서 크기가 음수일 수 없습니다."),
+    NOT_ALLOWED_ARTICLE_TITLE_NULL_AND_BLANK("게시글 제목이 빈 값일 수 없습니다."),
+    NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE("게시글 버전 값이 0 이하일 수 없습니다."),
+    INVALID_ARTICLE_TITLE_LENGTH("게시글 제목 길이가 올바르지 않습니다."),
+    INVALID_ARTICLE_TITLE("올바르지 않은 게시글 제목입니다."),
+    INVALID_ARTICLE_NICKNAME_LENGTH("게시글 작성자명 길이가 올바르지 않습니다."),
 
     // article service
-    ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY("해당 카테고리에 이미 작성된 글입니다. [카테고리: %s, 제목: %s]"),
-    NOT_FOUND_ARTICLE_VERSION("찾을 수 없는 버전의 게시글 번호입니다. [ID: %d, 버전: %d]"),
-    NOT_FOUND_ARTICLE_ID("찾을 수 없는 게시글 번호입니다. [ID: %d]"),
+    ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY("해당 카테고리에 이미 작성된 게시글입니다."),
+    NOT_FOUND_ARTICLE_VERSION("찾을 수 없는 게시글 버전입니다."),
+    NOT_FOUND_ARTICLE_ID("찾을 수 없는 게시글 번호입니다."),
 
     // other
-    NOT_FOUND_COOKIE("쿠키를 찾을 수 없습니다. [쿠키: %s]"),
-    INVALID_ACCESS_TOKEN("액세스 토큰이 올바르지 않습니다. [토큰: %s]"),
-    NOT_ALLOWED_IP_NULL_AND_BLANK("Ip가 빈 값일 수 없습니다."),
-    INVALID_IP("올바르지 않은 Ip 입니다."),
+    NOT_FOUND_COOKIE("찾을 수 없는 쿠키입니다."),
+    INVALID_ACCESS_TOKEN("올바르지 않은 액세스 토큰입니다."),
+    NOT_ALLOWED_IP_NULL_AND_BLANK("IP가 빈 값일 수 없습니다."),
+    INVALID_IP("올바르지 않은 IP 입니다."),
 
     // server
     REQUEST_METHOD_NOT_SUPPORTED("지원하지 않는 요청 메서드입니다."),

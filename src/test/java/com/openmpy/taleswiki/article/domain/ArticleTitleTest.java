@@ -43,11 +43,9 @@ class ArticleTitleTest {
         final String title = "1".repeat(13);
 
         // when & then
-        final String error = String.format(INVALID_ARTICLE_TITLE_LENGTH.getMessage(), 13);
-
         assertThatThrownBy(() -> new ArticleTitle(title))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(INVALID_ARTICLE_TITLE_LENGTH.getMessage());
     }
 
     @DisplayName("[예외] 게시글 제목에 공백 또는 특수문자가 포함된다.")
@@ -55,10 +53,8 @@ class ArticleTitleTest {
     @ValueSource(strings = {" 홍길동", "홍 길동", "홍길동 ", "_홍길동", "홍_길동", "홍길동_", "__", "*"})
     void 예외_article_title_test_03(final String value) {
         // when & then
-        final String error = String.format(INVALID_ARTICLE_TITLE.getMessage(), value);
-
         assertThatThrownBy(() -> new ArticleTitle(value))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(INVALID_ARTICLE_TITLE.getMessage());
     }
 }

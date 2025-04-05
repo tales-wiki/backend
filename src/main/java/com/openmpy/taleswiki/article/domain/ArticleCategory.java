@@ -23,6 +23,6 @@ public enum ArticleCategory {
         return Arrays.stream(values())
                 .filter(it -> it.value.equals(category))
                 .findFirst()
-                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_CATEGORY, category));
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_CATEGORY));
     }
 }

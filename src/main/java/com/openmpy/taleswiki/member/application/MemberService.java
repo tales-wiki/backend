@@ -39,7 +39,7 @@ public class MemberService {
     }
 
     public Member getMember(final Long id) {
-        return memberRepository.findById(id).orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ID, id));
+        return memberRepository.findById(id).orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ID));
     }
 
     public String generateToken(final MemberLoginResponse response) {

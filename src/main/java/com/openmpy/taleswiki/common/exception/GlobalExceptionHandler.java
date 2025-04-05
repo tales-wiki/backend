@@ -16,13 +16,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> customException(final CustomException e) {
         log.warn(e.getMessage(), e);
-        return ResponseEntity.badRequest().body(ErrorResponse.of(e.getErrorCode(), e.getMessage()));
+        return ResponseEntity.badRequest().body(ErrorResponse.of(e.getErrorCode()));
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> authenticationException(final AuthenticationException e) {
         log.warn(e.getMessage(), e);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.of(e.getErrorCode(), e.getMessage()));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.of(e.getErrorCode()));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

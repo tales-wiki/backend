@@ -31,7 +31,6 @@ import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.support.annotation.CustomServiceTest;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -180,8 +179,7 @@ class ArticleServiceTest {
         articleService.delete(member.getId(), savedArticle.getId(), Fixture.createMockServetRequest(10));
 
         // then
-        final Optional<Article> foundArticle = articleRepository.findById(savedArticle.getId());
-        assertThat(foundArticle).isEmpty();
+        assertThat(savedArticle.getDeletedAt()).isNotNull();
     }
 
     @DisplayName("[통과] 카테고리에 해당하는 게시글 목록을 조회한다.")
@@ -273,23 +271,20 @@ class ArticleServiceTest {
         articleRepository.save(article);
 
         // when & then
-        final String error = String.format(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY.getMessage(), "인물", "제목");
         final MockHttpServletRequest mockServetRequest = Fixture.createMockServetRequest(10);
 
         assertThatThrownBy(() -> articleService.create(null, request, mockServetRequest))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY.getMessage());
     }
 
     @DisplayName("[예외] 게시글 번호를 찾을 수 없다.")
     @Test
     void 예외_article_service_test_02() {
         // when & then
-        final String error = String.format(NOT_FOUND_ARTICLE_ID.getMessage(), 1L);
-
         assertThatThrownBy(() -> articleService.getArticle(1L))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(NOT_FOUND_ARTICLE_ID.getMessage());
     }
 
     @DisplayName("[예외] 게시글 버전을 조회할 수 없다.")
@@ -302,10 +297,8 @@ class ArticleServiceTest {
         final int version = 1;
 
         // when & then
-        final String error = String.format(NOT_FOUND_ARTICLE_VERSION.getMessage(), articleId, version);
-
         assertThatThrownBy(() -> articleService.readByVersion(articleId, version))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(error);
+                .hasMessage(NOT_FOUND_ARTICLE_VERSION.getMessage());
     }
 }

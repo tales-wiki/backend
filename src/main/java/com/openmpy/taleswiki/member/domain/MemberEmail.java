@@ -34,7 +34,7 @@ public class MemberEmail {
 
     private void validateEmail(final String value) {
         if (!isValidEmail(value)) {
-            throw new CustomException(INVALID_MEMBER_EMAIL, value);
+            throw new CustomException(INVALID_MEMBER_EMAIL);
         }
     }
 

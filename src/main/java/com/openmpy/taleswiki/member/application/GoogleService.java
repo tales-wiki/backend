@@ -51,7 +51,7 @@ public class GoogleService {
                     .retrieve()
                     .body(GoogleLoginResponse.class);
         } catch (final Exception e) {
-            throw new CustomException(CustomErrorCode.FAILED_GOOGLE_LOGIN, code);
+            throw new CustomException(CustomErrorCode.FAILED_GOOGLE_LOGIN);
         }
     }
 }

@@ -25,7 +25,7 @@ public class ArticleSize {
 
     private void validateSize(final int value) {
         if (value < INVALID_CONTENT_SIZE) {
-            throw new CustomException(NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE, value);
+            throw new CustomException(NOT_ALLOWED_ARTICLE_SIZE_NEGATIVE);
         }
     }
 }

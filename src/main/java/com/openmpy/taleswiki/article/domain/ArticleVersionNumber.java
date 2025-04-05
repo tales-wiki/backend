@@ -25,7 +25,7 @@ public class ArticleVersionNumber {
 
     private void validateVersionNumber(final int value) {
         if (value <= INVALID_VERSION_NUMBER) {
-            throw new CustomException(NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE, value);
+            throw new CustomException(NOT_ALLOWED_ARTICLE_VERSION_NUMBER_ZERO_OR_NEGATIVE);
         }
     }
 }
