@@ -44,6 +44,9 @@ public class Article extends BaseEntity {
     @Column(nullable = false)
     private ArticleCategory category;
 
+    @Column(nullable = false)
+    private boolean isHiding;
+
     @Column
     private LocalDateTime deletedAt;
 
@@ -94,6 +97,10 @@ public class Article extends BaseEntity {
 
     public void delete() {
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public void toggleHiding(boolean isHiding) {
+        this.isHiding = isHiding;
     }
 
     public String getTitle() {

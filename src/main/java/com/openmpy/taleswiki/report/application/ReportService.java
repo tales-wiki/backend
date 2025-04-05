@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReportService {
 
+    private static final int MAX_ARTICLE_REPORT_COUNT = 10;
+
     private final ArticleReportRepository articleReportRepository;
     private final ArticleRepository articleRepository;
     private final ArticleService articleService;
@@ -39,5 +41,10 @@ public class ReportService {
 
         article.addReport(articleReport);
         articleRepository.save(article);
+
+        // 숨김 처리
+        if (articleReportRepository.countByArticle(article) >= MAX_ARTICLE_REPORT_COUNT) {
+            article.toggleHiding(true);
+        }
     }
 }
