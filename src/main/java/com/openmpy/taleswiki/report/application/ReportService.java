@@ -33,7 +33,7 @@ public class ReportService {
         final Article article = articleService.getArticle(id);
         final String ip = IpAddressUtil.getClientIp(servletRequest);
 
-        if (articleReportRepository.existsByIp_Value(ip)) {
+        if (articleReportRepository.existsByArticleAndIp_Value(article, ip)) {
             throw new CustomException(CustomErrorCode.ALREADY_REPORT_IP);
         }
 

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleReportRepository extends JpaRepository<ArticleReport, Long> {
 
-    boolean existsByIp_Value(final String ip);
+    boolean existsByArticleAndIp_Value(final Article article, final String ip);
 
     Long countByArticle(final Article article);
 }
