@@ -49,6 +49,25 @@ class ReportServiceTest {
         assertThat(reports.getFirst().getArticle()).isEqualTo(savedArticle);
     }
 
+    @DisplayName("[통과] 게시글 신고 누적이 10회 이상일 경우 숨김 처리 된다.")
+    @Test
+    void report_service_test_02() {
+        // given
+        final Article article = Fixture.createArticle();
+        final Article savedArticle = articleRepository.save(article);
+        final ArticleReportRequest request = new ArticleReportRequest("신고 내용");
+
+        for (int i = 0; i < 9; i++) {
+            final ArticleReport articleReport = new ArticleReport("127.0.0.2", "신고 내용", article);
+            article.addReport(articleReport);
+        }
+
+        // when & then
+        assertThat(savedArticle.isHiding()).isFalse();
+        reportService.articleReport(savedArticle.getId(), request, Fixture.createMockServetRequest(10));
+        assertThat(savedArticle.isHiding()).isTrue();
+    }
+
     @DisplayName("[예외] 이미 신고한 게시물이다.")
     @Test
     void 예외_report_service_test_01() {
