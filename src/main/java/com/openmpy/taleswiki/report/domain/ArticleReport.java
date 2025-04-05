@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,13 +31,24 @@ public class ArticleReport extends BaseEntity {
     @AttributeOverride(name = "value", column = @Column(name = "ip", nullable = false))
     private ClientIp ip;
 
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "reason", nullable = false))
+    private ReportReason reportReason;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "reason", nullable = false))
-    private ReportReason reportReason;
+    @Builder
+    public ArticleReport(final String ip, final String reportReason, final Article article) {
+        this.ip = new ClientIp(ip);
+        this.reportReason = new ReportReason(reportReason);
+        this.article = article;
+    }
+
+    public static ArticleReport report(final String ip, final String reportReason, final Article article) {
+        return new ArticleReport(ip, reportReason, article);
+    }
 
     public String getIp() {
         return ip.getValue();

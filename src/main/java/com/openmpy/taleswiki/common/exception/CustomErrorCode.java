@@ -32,6 +32,7 @@ public enum CustomErrorCode {
 
     // report
     INVALID_REPORT_REASON_LENGTH("신고 사유 길이가 올바르지 않습니다. (최대 100자)"),
+    ALREADY_REPORT_IP("이미 신고한 게시글입니다."),
 
     // other
     NOT_FOUND_COOKIE("찾을 수 없는 쿠키입니다."),
