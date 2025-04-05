@@ -1,6 +1,7 @@
 package com.openmpy.taleswiki.article.domain;
 
 import com.openmpy.taleswiki.common.domain.BaseEntity;
+import com.openmpy.taleswiki.report.domain.ArticleReport;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -57,6 +58,9 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "latest_version_id")
     private ArticleVersion latestVersion;
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<ArticleReport> reports = new ArrayList<>();
+
     @Builder
     public Article(
             final String title,
@@ -82,6 +86,10 @@ public class Article extends BaseEntity {
     public void addVersion(final ArticleVersion version) {
         versions.add(version);
         latestVersion = version;
+    }
+
+    public void addReport(final ArticleReport report) {
+        reports.add(report);
     }
 
     public void delete() {
