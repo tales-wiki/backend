@@ -36,4 +36,20 @@ class DiscordServiceTest {
         // when
         discordService.sendWaringMessage(message);
     }
+
+    @DisplayName("[통과] Exception 발생 시 에러 메세지를 보낸다.")
+    @Test
+    void discord_service_test_03() {
+        // given
+        final String message = """
+                    ```
+                Error Message: 서버 오류가 발생했습니다.
+                Request Uri: GET /api/error500
+                Request Payload:
+                IP: 0:0:0:0:0:0:0:1
+                날짜: 2025년 04월 05일 14시 18분 16초```""";
+
+        // when
+        discordService.sendErrorMessage(message);
+    }
 }

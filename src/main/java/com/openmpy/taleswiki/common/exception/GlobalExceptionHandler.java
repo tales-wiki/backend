@@ -91,7 +91,21 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> exception(final Exception e) {
+    public ResponseEntity<ErrorResponse> exception(
+            final Exception e,
+            final HttpServletRequest servletRequest
+    ) {
+        final String message = String.format(
+                DiscordMessageType.ERROR_MESSAGE.getValue(),
+                e.getMessage(),
+                servletRequest.getMethod(),
+                servletRequest.getRequestURI(),
+                getRequestPayload(servletRequest),
+                IpAddressUtil.getClientIp(servletRequest),
+                DateFormatterUtil.convert(LocalDateTime.now())
+        );
+
+        discordService.sendErrorMessage(message);
         log.error(e.getMessage(), e);
         return ResponseEntity.internalServerError().body(ErrorResponse.of(CustomErrorCode.INTERNAL_SERVER_ERROR));
     }

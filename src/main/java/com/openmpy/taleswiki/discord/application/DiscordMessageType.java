@@ -23,6 +23,15 @@ public enum DiscordMessageType {
                     Request Payload: %s
                     IP: %s
                     날짜: %s```"""
+    ),
+    ERROR_MESSAGE(
+            """
+                    ```
+                    Error Message: %s
+                    Request Uri: %s %s
+                    Request Payload: %s
+                    IP: %s
+                    날짜: %s```"""
     );
 
     private final String value;

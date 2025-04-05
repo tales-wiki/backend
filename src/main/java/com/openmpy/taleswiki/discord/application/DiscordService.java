@@ -62,4 +62,21 @@ public class DiscordService {
             throw new CustomException(DISCORD_ERROR);
         }
     }
+
+    @Async
+    public void sendErrorMessage(final String content) {
+        final Map<String, String> params = new HashMap<>();
+        params.put(DISCORD_CONTENT, content);
+
+        try {
+            restClient.post()
+                    .uri(discordProperties.errorUrl())
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(params)
+                    .retrieve()
+                    .body(String.class);
+        } catch (final Exception e) {
+            throw new CustomException(DISCORD_ERROR);
+        }
+    }
 }
