@@ -1,7 +1,6 @@
 package com.openmpy.taleswiki.article.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
-import static com.openmpy.taleswiki.common.exception.CustomErrorCode.HIDING_ARTICLE_VERSION;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION;
 
@@ -71,8 +70,11 @@ public class ArticleService {
     public ArticleReadResponse read(final Long id) {
         final Article article = articleRepository.findByIdWithLastVersion(id)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID));
+        final ArticleVersion articleVersion = article.getLatestVersion();
 
-        checkArticleHiding(article.getLatestVersion());
+        if (articleVersion.isHiding()) {
+            return new ArticleReadResponse(article.getTitle(), null, articleVersion.getCreatedAt());
+        }
         return ArticleReadResponse.of(article);
     }
 
@@ -88,7 +90,14 @@ public class ArticleService {
         final ArticleVersion articleVersion = articleVersionRepository.findByArticleAndVersion_Value(article, version)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION));
 
-        checkArticleHiding(articleVersion);
+        if (articleVersion.isHiding()) {
+            return new ArticleReadByVersionResponse(
+                    articleVersion.getArticle().getTitle(),
+                    articleVersion.getNickname(),
+                    null,
+                    articleVersion.getCreatedAt()
+            );
+        }
         return ArticleReadByVersionResponse.of(articleVersion);
     }
 
@@ -149,11 +158,5 @@ public class ArticleService {
             return null;
         }
         return memberService.getMember(memberId);
-    }
-
-    private void checkArticleHiding(final ArticleVersion articleVersion) {
-        if (articleVersion.isHiding()) {
-            throw new CustomException(HIDING_ARTICLE_VERSION);
-        }
     }
 }

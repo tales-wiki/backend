@@ -11,8 +11,7 @@ public record ArticleReadAllByCategoryResponse(
         final List<ArticleReadByCategoryResponse> response = articles.stream()
                 .map(it -> new ArticleReadByCategoryResponse(
                         it.getId(),
-                        it.getTitle(),
-                        it.getLatestVersion().isHiding())
+                        it.getTitle())
                 )
                 .toList();
 
