@@ -95,7 +95,7 @@ class ArticleControllerTest extends ControllerTestSupport {
         // given
         final Long articleId = 1L;
         final LocalDateTime latestUpdatedAt = LocalDateTime.of(2025, 3, 30, 12, 0, 0);
-        final ArticleReadResponse response = new ArticleReadResponse("제목", "내용", false, latestUpdatedAt);
+        final ArticleReadResponse response = new ArticleReadResponse("제목", "내용", false, 1L, latestUpdatedAt);
 
         // stub
         when(articleService.read(anyLong())).thenReturn(response);
@@ -108,6 +108,7 @@ class ArticleControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.title").value("제목"))
                 .andExpect(jsonPath("$.content").value("내용"))
                 .andExpect(jsonPath("$.isHiding").value(false))
+                .andExpect(jsonPath("$.versionId").value("1"))
                 .andExpect(jsonPath("$.createdAt").value("2025-03-30T12:00:00"))
                 .andDo(print())
                 .andDo(
@@ -175,7 +176,7 @@ class ArticleControllerTest extends ControllerTestSupport {
 
         final LocalDateTime latestUpdatedAt = LocalDateTime.of(2025, 3, 30, 12, 0, 0);
         final ArticleReadByVersionResponse response =
-                new ArticleReadByVersionResponse("제목", "닉네임", "내용", false, latestUpdatedAt);
+                new ArticleReadByVersionResponse("제목", "닉네임", "내용", false, 1L, latestUpdatedAt);
 
         // stub
         when(articleService.readByVersion(anyLong(), anyInt())).thenReturn(response);
@@ -189,6 +190,7 @@ class ArticleControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.nickname").value("닉네임"))
                 .andExpect(jsonPath("$.content").value("내용"))
                 .andExpect(jsonPath("$.isHiding").value(false))
+                .andExpect(jsonPath("$.versionId").value("1"))
                 .andExpect(jsonPath("$.createdAt").value("2025-03-30T12:00:00"))
                 .andDo(print())
                 .andDo(

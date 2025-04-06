@@ -28,7 +28,7 @@ class ReportControllerTest extends ControllerTestSupport {
     @Test
     void report_controller_test_01() throws Exception {
         // given
-        final long articleId = 1L;
+        final long versionId = 1L;
         final ArticleReportRequest request = new ArticleReportRequest("신고 내용");
         final String body = objectMapper.writeValueAsString(request);
 
@@ -37,7 +37,7 @@ class ReportControllerTest extends ControllerTestSupport {
                 .articleReport(anyLong(), any(ArticleReportRequest.class), any(HttpServletRequest.class));
 
         // when & then
-        mockMvc.perform(post("/api/reports/articles/{id}", articleId)
+        mockMvc.perform(post("/api/reports/article-versions/{versionId}", versionId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
                 )
@@ -48,7 +48,7 @@ class ReportControllerTest extends ControllerTestSupport {
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
-                                        parameterWithName("id").description("게시글 ID")
+                                        parameterWithName("versionId").description("게시글 버전 ID")
                                 ),
                                 requestFields(
                                         fieldWithPath("reason").description("신고 사유")

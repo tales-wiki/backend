@@ -7,6 +7,7 @@ public record ArticleReadResponse(
         String title,
         String content,
         boolean isHiding,
+        Long versionId,
         LocalDateTime createdAt
 ) {
 
@@ -15,6 +16,7 @@ public record ArticleReadResponse(
                 article.getTitle(),
                 article.getLatestVersion().getContent(),
                 article.getLatestVersion().isHiding(),
+                article.getLatestVersion().getId(),
                 article.getLatestVersion().getCreatedAt()
         );
     }

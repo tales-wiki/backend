@@ -73,7 +73,13 @@ public class ArticleService {
         final ArticleVersion articleVersion = article.getLatestVersion();
 
         if (articleVersion.isHiding()) {
-            return new ArticleReadResponse(article.getTitle(), null, true, articleVersion.getCreatedAt());
+            return new ArticleReadResponse(
+                    article.getTitle(),
+                    null,
+                    true,
+                    articleVersion.getId(),
+                    articleVersion.getCreatedAt()
+            );
         }
         return ArticleReadResponse.of(article);
     }
@@ -96,6 +102,7 @@ public class ArticleService {
                     articleVersion.getNickname(),
                     null,
                     true,
+                    articleVersion.getId(),
                     articleVersion.getCreatedAt()
             );
         }

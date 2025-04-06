@@ -8,6 +8,7 @@ public record ArticleReadByVersionResponse(
         String nickname,
         String content,
         boolean isHiding,
+        Long versionId,
         LocalDateTime createdAt
 ) {
 
@@ -17,6 +18,7 @@ public record ArticleReadByVersionResponse(
                 articleVersion.getNickname(),
                 articleVersion.getContent(),
                 articleVersion.isHiding(),
+                articleVersion.getId(),
                 articleVersion.getCreatedAt()
         );
     }

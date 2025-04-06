@@ -26,11 +26,11 @@ public class ReportService {
 
     @Transactional
     public void articleReport(
-            final Long articleVersionId,
+            final Long versionId,
             final ArticleReportRequest request,
             final HttpServletRequest servletRequest
     ) {
-        final ArticleVersion articleVersion = articleVersionRepository.findById(articleVersionId)
+        final ArticleVersion articleVersion = articleVersionRepository.findById(versionId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_ARTICLE_VERSION));
         final String ip = IpAddressUtil.getClientIp(servletRequest);
 
