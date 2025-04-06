@@ -21,10 +21,9 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
             "SELECT a FROM Article a "
                     + "WHERE LOWER(a.title.value) "
                     + "LIKE LOWER(CONCAT('%', :value, '%')) "
-                    + "AND a.latestVersion.isHiding = false "
                     + "ORDER BY a.latestVersion DESC"
     )
-    List<Article> searchVisibleArticlesByTitle(@Param("value") final String value);
+    List<Article> searchArticlesByTitle(@Param("value") final String value);
 
 
     boolean existsByTitle_ValueAndCategory(final String value, final ArticleCategory category);

@@ -145,7 +145,7 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public ArticleSearchAllResponse search(final String title) {
-        final List<Article> articles = articleRepository.searchVisibleArticlesByTitle(title);
+        final List<Article> articles = articleRepository.searchArticlesByTitle(title);
         return ArticleSearchAllResponse.of(articles);
     }
 
