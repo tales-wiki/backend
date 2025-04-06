@@ -5,6 +5,7 @@ import static com.openmpy.taleswiki.discord.application.DiscordMessageType.ARTIC
 import static com.openmpy.taleswiki.discord.application.DiscordMessageType.SIGNUP_MESSAGE;
 
 import com.openmpy.taleswiki.article.domain.Article;
+import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.properties.DiscordProperties;
 import com.openmpy.taleswiki.common.util.DateFormatterUtil;
@@ -85,14 +86,15 @@ public class DiscordService {
     }
 
     @Async
-    public void sendArticleReportMessage(final Article article) {
+    public void sendArticleReportMessage(final ArticleVersion articleVersion) {
         final String now = DateFormatterUtil.convert(LocalDateTime.now());
+        final Article article = articleVersion.getArticle();
         final String message = String.format(
                 ARTICLE_REPORT_MESSAGE.getValue(),
                 article.getId(),
                 article.getTitle(),
                 article.getCategory().getValue(),
-                article.getReports().stream()
+                articleVersion.getArticleReports().stream()
                         .map(ArticleReport::getReportReason)
                         .collect(Collectors.joining(", ")),
                 now

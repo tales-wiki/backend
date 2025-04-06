@@ -1,6 +1,6 @@
 package com.openmpy.taleswiki.report.domain;
 
-import com.openmpy.taleswiki.article.domain.Article;
+import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.common.domain.BaseEntity;
 import com.openmpy.taleswiki.common.domain.ClientIp;
 import jakarta.persistence.AttributeOverride;
@@ -36,18 +36,22 @@ public class ArticleReport extends BaseEntity {
     private ReportReason reportReason;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
-    private Article article;
+    @JoinColumn(name = "article_version_id")
+    private ArticleVersion articleVersion;
 
     @Builder
-    public ArticleReport(final String ip, final String reportReason, final Article article) {
+    public ArticleReport(final String ip, final String reportReason, final ArticleVersion articleVersion) {
         this.ip = new ClientIp(ip);
         this.reportReason = new ReportReason(reportReason);
-        this.article = article;
+        this.articleVersion = articleVersion;
     }
 
-    public static ArticleReport report(final String ip, final String reportReason, final Article article) {
-        return new ArticleReport(ip, reportReason, article);
+    public static ArticleReport report(
+            final String ip,
+            final String reportReason,
+            final ArticleVersion articleVersion
+    ) {
+        return new ArticleReport(ip, reportReason, articleVersion);
     }
 
     public String getIp() {

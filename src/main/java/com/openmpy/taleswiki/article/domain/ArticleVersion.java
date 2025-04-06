@@ -1,7 +1,9 @@
 package com.openmpy.taleswiki.article.domain;
 
 import com.openmpy.taleswiki.common.domain.BaseEntity;
+import com.openmpy.taleswiki.report.domain.ArticleReport;
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -11,11 +13,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ArticleVersion extends BaseEntity {
@@ -42,10 +49,15 @@ public class ArticleVersion extends BaseEntity {
     @AttributeOverride(name = "value", column = @Column(name = "size", nullable = false))
     private ArticleSize size;
 
-    @Getter
+    @Column(nullable = false)
+    private boolean isHiding;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
+
+    @OneToMany(mappedBy = "articleVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<ArticleReport> articleReports = new ArrayList<>();
 
     @Builder
     public ArticleVersion(
@@ -93,12 +105,22 @@ public class ArticleVersion extends BaseEntity {
                 .build();
     }
 
+    public void addReport(final ArticleReport articleReport) {
+        articleReports.add(articleReport);
+    }
+
+    public void toggleHiding(final boolean isHiding) {
+        this.isHiding = isHiding;
+    }
+
     public String getNickname() {
         return nickname.getValue();
     }
 
     public String getContent() {
-        return content.getValue();
+        return Optional.ofNullable(content)
+                .map(ArticleContent::getValue)
+                .orElse("");
     }
 
     public int getVersion() {

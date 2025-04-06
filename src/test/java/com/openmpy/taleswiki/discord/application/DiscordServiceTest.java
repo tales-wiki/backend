@@ -1,6 +1,7 @@
 package com.openmpy.taleswiki.discord.application;
 
 import com.openmpy.taleswiki.article.domain.Article;
+import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.dummy.Fixture;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
 import com.openmpy.taleswiki.report.domain.ArticleReport;
@@ -59,14 +60,15 @@ class DiscordServiceTest {
     @DisplayName("[통과] 게시글 신고 누적으로 숨김 처리 당할 시 메세지를 보낸다.")
     @Test
     void discord_service_test_04() {
-        final Article article = Fixture.createArticle();
+        final Article article = Fixture.createArticleWithVersion();
+        final ArticleVersion articleVersion = article.getLatestVersion();
 
         for (int i = 0; i < 10; i++) {
-            final ArticleReport articleReport = new ArticleReport("127.0.0.1", "정지 사유" + i, article);
-            article.addReport(articleReport);
+            final ArticleReport articleReport = new ArticleReport("127.0.0.1", "정지 사유" + i, articleVersion);
+            articleVersion.addReport(articleReport);
         }
 
         // when
-        discordService.sendArticleReportMessage(article);
+        discordService.sendArticleReportMessage(articleVersion);
     }
 }

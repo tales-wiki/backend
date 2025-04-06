@@ -19,13 +19,13 @@ public class ReportController {
 
     private final ReportService reportService;
 
-    @PostMapping("/articles/{id}")
+    @PostMapping("/article-versions/{versionId}")
     public ResponseEntity<Void> reportArticle(
-            @PathVariable final Long id,
+            @PathVariable final Long versionId,
             @RequestBody final ArticleReportRequest request,
             final HttpServletRequest servletRequest
     ) {
-        reportService.articleReport(id, request, servletRequest);
+        reportService.articleReport(versionId, request, servletRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

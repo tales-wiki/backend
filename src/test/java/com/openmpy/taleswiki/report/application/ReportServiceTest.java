@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.openmpy.taleswiki.article.domain.Article;
+import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.dummy.Fixture;
@@ -33,12 +34,13 @@ class ReportServiceTest {
     @Test
     void report_service_test_01() {
         // given
-        final Article article = Fixture.createArticle();
+        final Article article = Fixture.createArticleWithVersions();
         final Article savedArticle = articleRepository.save(article);
         final ArticleReportRequest request = new ArticleReportRequest("신고 내용");
+        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
 
         // when
-        reportService.articleReport(savedArticle.getId(), request, Fixture.createMockServetRequest(10));
+        reportService.articleReport(articleVersion.getId(), request, Fixture.createMockServetRequest(10));
 
         // then
         final List<ArticleReport> reports = articleReportRepository.findAll();
@@ -46,26 +48,27 @@ class ReportServiceTest {
         assertThat(reports).hasSize(1);
         assertThat(reports.getFirst().getIp()).isEqualTo("127.0.0.1");
         assertThat(reports.getFirst().getReportReason()).isEqualTo("신고 내용");
-        assertThat(reports.getFirst().getArticle()).isEqualTo(savedArticle);
+        assertThat(reports.getFirst().getArticleVersion()).isEqualTo(articleVersion);
     }
 
     @DisplayName("[통과] 게시글 신고 누적이 10회 이상일 경우 숨김 처리 된다.")
     @Test
     void report_service_test_02() {
         // given
-        final Article article = Fixture.createArticle();
+        final Article article = Fixture.createArticleWithVersion();
         final Article savedArticle = articleRepository.save(article);
         final ArticleReportRequest request = new ArticleReportRequest("신고 내용");
+        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
 
         for (int i = 0; i < 9; i++) {
-            final ArticleReport articleReport = new ArticleReport("127.0.0.2", "신고 내용", article);
-            article.addReport(articleReport);
+            final ArticleReport articleReport = new ArticleReport("127.0.0.2", "신고 내용", articleVersion);
+            articleVersion.addReport(articleReport);
         }
 
         // when & then
-        assertThat(savedArticle.isHiding()).isFalse();
-        reportService.articleReport(savedArticle.getId(), request, Fixture.createMockServetRequest(10));
-        assertThat(savedArticle.isHiding()).isTrue();
+        assertThat(articleVersion.isHiding()).isFalse();
+        reportService.articleReport(articleVersion.getId(), request, Fixture.createMockServetRequest(10));
+        assertThat(articleVersion.isHiding()).isTrue();
     }
 
     @DisplayName("[예외] 이미 신고한 게시물이다.")
@@ -74,11 +77,12 @@ class ReportServiceTest {
         // given
         final Article article = Fixture.createArticleWithReport();
         final Article savedArticle = articleRepository.save(article);
+        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
         final ArticleReportRequest request = new ArticleReportRequest("신고 내용");
 
         // when & then
         assertThatThrownBy(() ->
-                reportService.articleReport(savedArticle.getId(), request, Fixture.createMockServetRequest(10)))
+                reportService.articleReport(articleVersion.getId(), request, Fixture.createMockServetRequest(10)))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ALREADY_REPORT_IP.getMessage());
     }
