@@ -52,8 +52,8 @@ public class DummyData {
                 final Article customArticle = new Article("테스트", category, new ArrayList<>(), null);
 
                 final ArticleVersion articleVersion1 = new ArticleVersion(nickname, content, 1, 10, customArticle);
-                final ArticleVersion articleVersion2 = new ArticleVersion(nickname, content, 1, 10, customArticle);
-                final ArticleVersion articleVersion3 = new ArticleVersion(nickname, content, 1, 10, customArticle);
+                final ArticleVersion articleVersion2 = new ArticleVersion(nickname, content, 2, 10, customArticle);
+                final ArticleVersion articleVersion3 = new ArticleVersion(nickname, content, 3, 10, customArticle);
 
                 articleVersion1.toggleHiding(false);
                 articleVersion2.toggleHiding(false);

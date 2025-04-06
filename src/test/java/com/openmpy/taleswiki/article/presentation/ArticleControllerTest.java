@@ -95,7 +95,7 @@ class ArticleControllerTest extends ControllerTestSupport {
         // given
         final Long articleId = 1L;
         final LocalDateTime latestUpdatedAt = LocalDateTime.of(2025, 3, 30, 12, 0, 0);
-        final ArticleReadResponse response = new ArticleReadResponse("제목", "내용", latestUpdatedAt);
+        final ArticleReadResponse response = new ArticleReadResponse("제목", "내용", false, latestUpdatedAt);
 
         // stub
         when(articleService.read(anyLong())).thenReturn(response);
@@ -107,6 +107,7 @@ class ArticleControllerTest extends ControllerTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("제목"))
                 .andExpect(jsonPath("$.content").value("내용"))
+                .andExpect(jsonPath("$.isHiding").value(false))
                 .andExpect(jsonPath("$.createdAt").value("2025-03-30T12:00:00"))
                 .andDo(print())
                 .andDo(
@@ -174,7 +175,7 @@ class ArticleControllerTest extends ControllerTestSupport {
 
         final LocalDateTime latestUpdatedAt = LocalDateTime.of(2025, 3, 30, 12, 0, 0);
         final ArticleReadByVersionResponse response =
-                new ArticleReadByVersionResponse("제목", "닉네임", "내용", latestUpdatedAt);
+                new ArticleReadByVersionResponse("제목", "닉네임", "내용", false, latestUpdatedAt);
 
         // stub
         when(articleService.readByVersion(anyLong(), anyInt())).thenReturn(response);
@@ -187,6 +188,7 @@ class ArticleControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.title").value("제목"))
                 .andExpect(jsonPath("$.nickname").value("닉네임"))
                 .andExpect(jsonPath("$.content").value("내용"))
+                .andExpect(jsonPath("$.isHiding").value(false))
                 .andExpect(jsonPath("$.createdAt").value("2025-03-30T12:00:00"))
                 .andDo(print())
                 .andDo(
@@ -278,8 +280,8 @@ class ArticleControllerTest extends ControllerTestSupport {
     @Test
     void article_controller_test_07() throws Exception {
         // given
-        final ArticleReadByCategoryResponse response01 = new ArticleReadByCategoryResponse(1L, "제목01", false);
-        final ArticleReadByCategoryResponse response02 = new ArticleReadByCategoryResponse(2L, "제목02", false);
+        final ArticleReadByCategoryResponse response01 = new ArticleReadByCategoryResponse(1L, "제목01");
+        final ArticleReadByCategoryResponse response02 = new ArticleReadByCategoryResponse(2L, "제목02");
         final List<ArticleReadByCategoryResponse> responses = List.of(response01, response02);
         final ArticleReadAllByCategoryResponse response = new ArticleReadAllByCategoryResponse(responses);
 
@@ -294,10 +296,8 @@ class ArticleControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.responses").isArray())
                 .andExpect(jsonPath("$.responses[0].id").value("1"))
                 .andExpect(jsonPath("$.responses[0].title").value("제목01"))
-                .andExpect(jsonPath("$.responses[0].isHiding").value(false))
                 .andExpect(jsonPath("$.responses[1].id").value("2"))
                 .andExpect(jsonPath("$.responses[1].title").value("제목02"))
-                .andExpect(jsonPath("$.responses[1].isHiding").value(false))
                 .andDo(print())
                 .andDo(
                         document("readArticlesByCategory",

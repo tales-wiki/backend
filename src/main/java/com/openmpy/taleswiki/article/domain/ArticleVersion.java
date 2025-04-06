@@ -16,6 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -117,7 +118,9 @@ public class ArticleVersion extends BaseEntity {
     }
 
     public String getContent() {
-        return content.getValue();
+        return Optional.ofNullable(content)
+                .map(ArticleContent::getValue)
+                .orElse("");
     }
 
     public int getVersion() {

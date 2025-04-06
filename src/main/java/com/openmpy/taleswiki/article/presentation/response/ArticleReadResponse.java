@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 public record ArticleReadResponse(
         String title,
         String content,
+        boolean isHiding,
         LocalDateTime createdAt
 ) {
 
@@ -13,6 +14,7 @@ public record ArticleReadResponse(
         return new ArticleReadResponse(
                 article.getTitle(),
                 article.getLatestVersion().getContent(),
+                article.getLatestVersion().isHiding(),
                 article.getLatestVersion().getCreatedAt()
         );
     }

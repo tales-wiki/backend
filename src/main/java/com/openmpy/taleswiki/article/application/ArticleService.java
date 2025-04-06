@@ -73,7 +73,7 @@ public class ArticleService {
         final ArticleVersion articleVersion = article.getLatestVersion();
 
         if (articleVersion.isHiding()) {
-            return new ArticleReadResponse(article.getTitle(), null, articleVersion.getCreatedAt());
+            return new ArticleReadResponse(article.getTitle(), null, true, articleVersion.getCreatedAt());
         }
         return ArticleReadResponse.of(article);
     }
@@ -89,15 +89,6 @@ public class ArticleService {
         final Article article = getArticle(id);
         final ArticleVersion articleVersion = articleVersionRepository.findByArticleAndVersion_Value(article, version)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION));
-
-        if (articleVersion.isHiding()) {
-            return new ArticleReadByVersionResponse(
-                    articleVersion.getArticle().getTitle(),
-                    articleVersion.getNickname(),
-                    null,
-                    articleVersion.getCreatedAt()
-            );
-        }
         return ArticleReadByVersionResponse.of(articleVersion);
     }
 

@@ -1,7 +1,6 @@
 package com.openmpy.taleswiki.article.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
-import static com.openmpy.taleswiki.common.exception.CustomErrorCode.HIDING_ARTICLE_VERSION;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -280,6 +279,23 @@ class ArticleServiceTest {
         assertThat(response.version()).isEqualTo(1);
     }
 
+    @DisplayName("[통과] 숨김 처리된 게시글을 조회 시 내용이 null 값이 나온다.")
+    @Test
+    void article_service_test_13() {
+        // given
+        final Article article = Fixture.createArticleWithVersion();
+        final Article savedArticle = articleRepository.save(article);
+        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
+        final Long articleId = savedArticle.getId();
+        articleVersion.toggleHiding(true);
+
+        // when
+        final ArticleReadResponse response = articleService.read(articleId);
+
+        // then
+        assertThat(response.content()).isNull();
+    }
+
     @DisplayName("[예외] 해당 카테고리에 이미 작성된 게시글이 존재한다.")
     @Test
     void 예외_article_service_test_01() {
@@ -319,24 +335,5 @@ class ArticleServiceTest {
         assertThatThrownBy(() -> articleService.readByVersion(articleId, version))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(NOT_FOUND_ARTICLE_VERSION.getMessage());
-    }
-
-    @DisplayName("[예외] 숨김 처리 된 게시글 버전을 조회할 수 없다.")
-    @Test
-    void 예외_article_service_test_04() {
-        // given
-        final Article article = Fixture.createArticleWithVersion();
-        final Article savedArticle = articleRepository.save(article);
-        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
-        final Long articleId = savedArticle.getId();
-        articleVersion.toggleHiding(true);
-
-        // when & then
-        assertThatThrownBy(() -> articleService.read(articleId))
-                .isInstanceOf(CustomException.class)
-                .hasMessage(HIDING_ARTICLE_VERSION.getMessage());
-        assertThatThrownBy(() -> articleService.readByVersion(articleId, 1))
-                .isInstanceOf(CustomException.class)
-                .hasMessage(HIDING_ARTICLE_VERSION.getMessage());
     }
 }
