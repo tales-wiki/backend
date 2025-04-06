@@ -126,9 +126,9 @@ class ArticleControllerTest extends ControllerTestSupport {
         // given
         final Long articleId = 1L;
         final ArticleReadVersionResponse response01 =
-                new ArticleReadVersionResponse("초원", 1, 10, LocalDateTime.of(2025, 3, 29, 12, 0, 0));
+                new ArticleReadVersionResponse("초원", 1, 10, false, LocalDateTime.of(2025, 3, 29, 12, 0, 0));
         final ArticleReadVersionResponse response02 =
-                new ArticleReadVersionResponse("밍밍", 2, 20, LocalDateTime.of(2025, 3, 30, 12, 0, 0));
+                new ArticleReadVersionResponse("밍밍", 2, 20, false, LocalDateTime.of(2025, 3, 30, 12, 0, 0));
         final ArticleReadAllVersionsResponse response =
                 new ArticleReadAllVersionsResponse("제목입니다.", List.of(response01, response02));
 
@@ -145,10 +145,12 @@ class ArticleControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.responses[0].nickname").value("초원"))
                 .andExpect(jsonPath("$.responses[0].version").value("1"))
                 .andExpect(jsonPath("$.responses[0].size").value("10"))
+                .andExpect(jsonPath("$.responses[0].isHiding").value(false))
                 .andExpect(jsonPath("$.responses[0].createdAt").value("2025-03-29T12:00:00"))
                 .andExpect(jsonPath("$.responses[1].nickname").value("밍밍"))
                 .andExpect(jsonPath("$.responses[1].version").value("2"))
                 .andExpect(jsonPath("$.responses[1].size").value("20"))
+                .andExpect(jsonPath("$.responses[0].isHiding").value(false))
                 .andExpect(jsonPath("$.responses[1].createdAt").value("2025-03-30T12:00:00"))
                 .andDo(print())
                 .andDo(

@@ -1,7 +1,7 @@
 package com.openmpy.taleswiki.article.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
-import static com.openmpy.taleswiki.common.exception.CustomErrorCode.HIDING_ARTICLE;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.HIDING_ARTICLE_VERSION;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
+import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
@@ -320,24 +321,22 @@ class ArticleServiceTest {
                 .hasMessage(NOT_FOUND_ARTICLE_VERSION.getMessage());
     }
 
-    @DisplayName("[예외] 숨김 처리 된 게시글은 조회할 수 없다.")
+    @DisplayName("[예외] 숨김 처리 된 게시글 버전을 조회할 수 없다.")
     @Test
     void 예외_article_service_test_04() {
         // given
         final Article article = Fixture.createArticleWithVersion();
         final Article savedArticle = articleRepository.save(article);
+        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
         final Long articleId = savedArticle.getId();
-        savedArticle.toggleHiding(true);
+        articleVersion.toggleHiding(true);
 
         // when & then
         assertThatThrownBy(() -> articleService.read(articleId))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(HIDING_ARTICLE.getMessage());
+                .hasMessage(HIDING_ARTICLE_VERSION.getMessage());
         assertThatThrownBy(() -> articleService.readByVersion(articleId, 1))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(HIDING_ARTICLE.getMessage());
-        assertThatThrownBy(() -> articleService.readAllVersions(articleId))
-                .isInstanceOf(CustomException.class)
-                .hasMessage(HIDING_ARTICLE.getMessage());
+                .hasMessage(HIDING_ARTICLE_VERSION.getMessage());
     }
 }

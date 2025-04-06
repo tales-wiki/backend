@@ -16,7 +16,7 @@ public record ArticleReadRecentEditsResponse(
                 article.getId(),
                 article.getTitle(),
                 article.getCategory().name(),
-                article.isHiding(),
+                article.getLatestVersion().isHiding(),
                 article.getLatestVersion().getCreatedAt()
         );
     }

@@ -9,7 +9,11 @@ public record ArticleReadAllByCategoryResponse(
 
     public static ArticleReadAllByCategoryResponse of(final List<Article> articles) {
         final List<ArticleReadByCategoryResponse> response = articles.stream()
-                .map(it -> new ArticleReadByCategoryResponse(it.getId(), it.getTitle(), it.isHiding()))
+                .map(it -> new ArticleReadByCategoryResponse(
+                        it.getId(),
+                        it.getTitle(),
+                        it.getLatestVersion().isHiding())
+                )
                 .toList();
 
         return new ArticleReadAllByCategoryResponse(response);

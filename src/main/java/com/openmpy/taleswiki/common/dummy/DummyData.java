@@ -42,12 +42,13 @@ public class DummyData {
             final String content = faker.animal().name();
 
             final Article article = new Article(title, category, new ArrayList<>(), null);
-            final ArticleVersion version = new ArticleVersion(nickname, content, 1, 10, article);
+            final ArticleVersion articleVersion = new ArticleVersion(nickname, content, 1, 10, article);
 
             if (i % 3 == 0) {
-                article.toggleHiding(true);
+                articleVersion.toggleHiding(true);
             }
-            article.addVersion(version);
+
+            article.addVersion(articleVersion);
             articles.add(article);
         }
         articleRepository.saveAll(articles);

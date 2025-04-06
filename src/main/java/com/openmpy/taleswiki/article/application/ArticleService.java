@@ -1,7 +1,7 @@
 package com.openmpy.taleswiki.article.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
-import static com.openmpy.taleswiki.common.exception.CustomErrorCode.HIDING_ARTICLE;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.HIDING_ARTICLE_VERSION;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION;
 
@@ -72,15 +72,13 @@ public class ArticleService {
         final Article article = articleRepository.findByIdWithLastVersion(id)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID));
 
-        checkArticleHiding(article);
+        checkArticleHiding(article.getLatestVersion());
         return ArticleReadResponse.of(article);
     }
 
     @Transactional(readOnly = true)
     public ArticleReadAllVersionsResponse readAllVersions(final Long id) {
         final Article article = getArticle(id);
-
-        checkArticleHiding(article);
         return ArticleReadAllVersionsResponse.of(article);
     }
 
@@ -90,7 +88,7 @@ public class ArticleService {
         final ArticleVersion articleVersion = articleVersionRepository.findByArticleAndVersion_Value(article, version)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION));
 
-        checkArticleHiding(article);
+        checkArticleHiding(articleVersion);
         return ArticleReadByVersionResponse.of(articleVersion);
     }
 
@@ -153,9 +151,9 @@ public class ArticleService {
         return memberService.getMember(memberId);
     }
 
-    private void checkArticleHiding(final Article article) {
-        if (article.isHiding()) {
-            throw new CustomException(HIDING_ARTICLE);
+    private void checkArticleHiding(final ArticleVersion articleVersion) {
+        if (articleVersion.isHiding()) {
+            throw new CustomException(HIDING_ARTICLE_VERSION);
         }
     }
 }
