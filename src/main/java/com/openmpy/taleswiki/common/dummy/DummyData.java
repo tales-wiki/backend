@@ -48,6 +48,23 @@ public class DummyData {
                 articleVersion.toggleHiding(true);
             }
 
+            if (i == 10) {
+                final Article customArticle = new Article("테스트", category, new ArrayList<>(), null);
+
+                final ArticleVersion articleVersion1 = new ArticleVersion(nickname, content, 1, 10, customArticle);
+                final ArticleVersion articleVersion2 = new ArticleVersion(nickname, content, 1, 10, customArticle);
+                final ArticleVersion articleVersion3 = new ArticleVersion(nickname, content, 1, 10, customArticle);
+
+                articleVersion1.toggleHiding(false);
+                articleVersion2.toggleHiding(false);
+                articleVersion3.toggleHiding(true);
+
+                customArticle.addVersion(articleVersion1);
+                customArticle.addVersion(articleVersion2);
+                customArticle.addVersion(articleVersion3);
+                articles.add(customArticle);
+            }
+
             article.addVersion(articleVersion);
             articles.add(article);
         }
