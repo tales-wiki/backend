@@ -89,6 +89,16 @@ public class ArticleService {
         final Article article = getArticle(id);
         final ArticleVersion articleVersion = articleVersionRepository.findByArticleAndVersion_Value(article, version)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION));
+
+        if (articleVersion.isHiding()) {
+            return new ArticleReadByVersionResponse(
+                    article.getTitle(),
+                    articleVersion.getNickname(),
+                    null,
+                    true,
+                    articleVersion.getCreatedAt()
+            );
+        }
         return ArticleReadByVersionResponse.of(articleVersion);
     }
 
