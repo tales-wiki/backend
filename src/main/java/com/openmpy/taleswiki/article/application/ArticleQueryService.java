@@ -5,6 +5,7 @@ import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponses;
 import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.common.exception.CustomException;
@@ -38,5 +39,13 @@ public class ArticleQueryService {
                 .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_ARTICLE_ID));
 
         return ArticleVersionReadArticleResponses.of(article);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleSearchResponses searchArticleByTitle(final String title) {
+        final List<Article> articles =
+                articleRepository.findAllByTitle_ValueContainingIgnoreCaseOrderByUpdatedAtDesc(title);
+
+        return ArticleSearchResponses.of(articles);
     }
 }

@@ -10,6 +10,8 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryRe
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponses;
 import com.openmpy.taleswiki.support.CustomServiceTest;
@@ -134,5 +136,42 @@ class ArticleQueryServiceTest {
         assertThat(payload.getLast().size()).isEqualTo(10);
         assertThat(payload.getFirst().isHiding()).isFalse();
         assertThat(payload.getLast().createdAt()).isNotNull();
+    }
+
+    @DisplayName("[통과] 제목으로 게시글을 검색한다.")
+    @Test
+    void article_query_service_test_04() {
+        // given
+        for (int i = 0; i < 10; i++) {
+            ArticleCategory category;
+            Article article;
+
+            if (i % 2 == 0) {
+                category = ArticleCategory.GUILD;
+                article = Article.create("제목" + i, category);
+            } else {
+                category = ArticleCategory.PERSON;
+                article = Article.create("목제" + i, category);
+            }
+
+            final ArticleVersion articleVersion = ArticleVersion.create("닉네임" + i, "내용" + i, 10, "127.0.0.1", article);
+
+            article.addVersion(articleVersion);
+            articleRepository.save(article);
+        }
+
+        // when
+        final ArticleSearchResponses responses = articleQueryService.searchArticleByTitle("제목");
+
+        // then
+        final List<ArticleSearchResponse> payload = responses.payload();
+
+        assertThat(payload).hasSize(5);
+        assertThat(payload.getFirst().articleVersionId()).isNotNull();
+        assertThat(payload.getFirst().title()).isEqualTo("제목8");
+        assertThat(payload.getFirst().category()).isEqualTo("길드");
+        assertThat(payload.getLast().articleVersionId()).isNotNull();
+        assertThat(payload.getLast().title()).isEqualTo("제목0");
+        assertThat(payload.getLast().category()).isEqualTo("길드");
     }
 }

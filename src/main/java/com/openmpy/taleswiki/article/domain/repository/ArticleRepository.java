@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
+    List<Article> findAllByTitle_ValueContainingIgnoreCaseOrderByUpdatedAtDesc(final String title);
+
     List<Article> findAllByCategory(final ArticleCategory category);
 
     List<Article> findTop10ByOrderByUpdatedAtDesc();
