@@ -1,9 +1,6 @@
 package com.openmpy.taleswiki.article.domain;
 
-import com.openmpy.taleswiki.common.domain.BaseEntity;
-import com.openmpy.taleswiki.report.domain.ArticleReport;
 import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -13,19 +10,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class ArticleVersion extends BaseEntity {
+public class ArticleVersion {
 
     private static final int DEFAULT_ARTICLE_VERSION = 1;
 
@@ -42,8 +37,8 @@ public class ArticleVersion extends BaseEntity {
     private ArticleContent content;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "version", nullable = false))
-    private ArticleVersionNumber version;
+    @AttributeOverride(name = "value", column = @Column(name = "version_number", nullable = false))
+    private ArticleVersionNumber versionNumber;
 
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "size", nullable = false))
@@ -52,25 +47,50 @@ public class ArticleVersion extends BaseEntity {
     @Column(nullable = false)
     private boolean isHiding;
 
+    @Column(updatable = false)
+    @CreatedDate
+    private LocalDateTime createdAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @OneToMany(mappedBy = "articleVersion", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<ArticleReport> articleReports = new ArrayList<>();
+    public ArticleVersion(
+            final Long id,
+            final String nickname,
+            final String content,
+            final int versionNumber,
+            final int size,
+            final boolean isHiding,
+            final LocalDateTime createdAt,
+            final Article article
+    ) {
+        this.id = id;
+        this.nickname = new ArticleNickname(nickname);
+        this.content = new ArticleContent(content);
+        this.versionNumber = new ArticleVersionNumber(versionNumber);
+        this.size = new ArticleSize(size);
+        this.isHiding = isHiding;
+        this.createdAt = createdAt;
+        this.article = article;
+    }
 
     @Builder
     public ArticleVersion(
             final String nickname,
             final String content,
-            final int version,
+            final int versionNumber,
             final int size,
+            final boolean isHiding,
+            final LocalDateTime createdAt,
             final Article article
     ) {
         this.nickname = new ArticleNickname(nickname);
         this.content = new ArticleContent(content);
-        this.version = new ArticleVersionNumber(version);
+        this.versionNumber = new ArticleVersionNumber(versionNumber);
         this.size = new ArticleSize(size);
+        this.isHiding = isHiding;
+        this.createdAt = createdAt;
         this.article = article;
     }
 
@@ -83,34 +103,12 @@ public class ArticleVersion extends BaseEntity {
         return ArticleVersion.builder()
                 .nickname(nickname)
                 .content(content)
-                .version(DEFAULT_ARTICLE_VERSION)
-                .article(article)
+                .versionNumber(DEFAULT_ARTICLE_VERSION)
                 .size(size)
-                .build();
-    }
-
-    public static ArticleVersion update(
-            final String nickname,
-            final String content,
-            final int version,
-            final int size,
-            final Article article
-    ) {
-        return ArticleVersion.builder()
-                .nickname(nickname)
-                .content(content)
-                .version(version)
-                .size(size)
+                .isHiding(false)
+                .createdAt(LocalDateTime.now())
                 .article(article)
                 .build();
-    }
-
-    public void addReport(final ArticleReport articleReport) {
-        articleReports.add(articleReport);
-    }
-
-    public void toggleHiding(final boolean isHiding) {
-        this.isHiding = isHiding;
     }
 
     public String getNickname() {
@@ -118,13 +116,11 @@ public class ArticleVersion extends BaseEntity {
     }
 
     public String getContent() {
-        return Optional.ofNullable(content)
-                .map(ArticleContent::getValue)
-                .orElse("");
+        return content.getValue();
     }
 
-    public int getVersion() {
-        return version.getValue();
+    public int getVersionNumber() {
+        return versionNumber.getValue();
     }
 
     public int getSize() {
