@@ -44,7 +44,7 @@ class ArticleCommandServiceTest {
         assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
         assertThat(article.isNoEditing()).isFalse();
         assertThat(article.getCreatedAt()).isNotNull();
-        assertThat(article.getUpdatedAt()).isNull();
+        assertThat(article.getUpdatedAt()).isNotNull();
         assertThat(article.getDeletedAt()).isNull();
         assertThat(article.getLatestVersion()).isEqualTo(articleVersion);
         assertThat(article.getVersions()).hasSize(1);

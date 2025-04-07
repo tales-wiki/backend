@@ -40,7 +40,7 @@ class ArticleQueryServiceTest {
         }
 
         // when
-        final ArticleReadCategoryResponses responses = articleQueryService.readAllByCategory("인물");
+        final ArticleReadCategoryResponses responses = articleQueryService.readAllArticleByCategory("인물");
 
         // then
         final List<ArticleReadCategoryResponse> payload = responses.payload();
@@ -66,7 +66,7 @@ class ArticleQueryServiceTest {
         }
 
         // when
-        final ArticleReadLatestUpdateResponses responses = articleQueryService.readAllByLatestUpdate();
+        final ArticleReadLatestUpdateResponses responses = articleQueryService.readAllArticleByLatestUpdate();
 
         // then
         final List<ArticleReadLatestUpdateResponse> payload = responses.payload();

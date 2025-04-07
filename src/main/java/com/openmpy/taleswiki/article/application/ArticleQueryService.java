@@ -17,14 +17,14 @@ public class ArticleQueryService {
     private final ArticleRepository articleRepository;
 
     @Transactional(readOnly = true)
-    public ArticleReadCategoryResponses readAllByCategory(final String category) {
+    public ArticleReadCategoryResponses readAllArticleByCategory(final String category) {
         final ArticleCategory articleCategory = ArticleCategory.of(category);
         final List<Article> articles = articleRepository.findAllByCategory(articleCategory);
         return ArticleReadCategoryResponses.of(articles);
     }
 
     @Transactional(readOnly = true)
-    public ArticleReadLatestUpdateResponses readAllByLatestUpdate() {
+    public ArticleReadLatestUpdateResponses readAllArticleByLatestUpdate() {
         final List<Article> articles = articleRepository.findTop10ByOrderByUpdatedAtDesc();
         return ArticleReadLatestUpdateResponses.of(articles);
     }
