@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponse;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponses;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByLatestUpdateResponse;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByLatestUpdateResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
 import com.openmpy.taleswiki.support.CustomServiceTest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -40,10 +40,10 @@ class ArticleQueryServiceTest {
         }
 
         // when
-        final ArticleReadAllByCategoryResponses responses = articleQueryService.readAllByCategory("인물");
+        final ArticleReadCategoryResponses responses = articleQueryService.readAllByCategory("인물");
 
         // then
-        final List<ArticleReadAllByCategoryResponse> payload = responses.payload();
+        final List<ArticleReadCategoryResponse> payload = responses.payload();
 
         assertThat(payload).hasSize(5);
         assertThat(payload.getFirst().title()).isEqualTo("제목1");
@@ -66,10 +66,10 @@ class ArticleQueryServiceTest {
         }
 
         // when
-        final ArticleReadAllByLatestUpdateResponses responses = articleQueryService.readAllByLatestUpdate();
+        final ArticleReadLatestUpdateResponses responses = articleQueryService.readAllByLatestUpdate();
 
         // then
-        final List<ArticleReadAllByLatestUpdateResponse> payload = responses.payload();
+        final List<ArticleReadLatestUpdateResponse> payload = responses.payload();
 
         assertThat(payload).hasSize(10);
         assertThat(payload.getFirst().title()).isEqualTo("제목19");

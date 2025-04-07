@@ -1,6 +1,6 @@
 package com.openmpy.taleswiki.article.presentation.response;
 
-public record ArticleReadAllByCategoryResponse(
+public record ArticleReadCategoryResponse(
         Long articleId,
         String title
 ) {

@@ -3,8 +3,8 @@ package com.openmpy.taleswiki.article.application;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponses;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByLatestUpdateResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,15 +17,15 @@ public class ArticleQueryService {
     private final ArticleRepository articleRepository;
 
     @Transactional(readOnly = true)
-    public ArticleReadAllByCategoryResponses readAllByCategory(final String category) {
+    public ArticleReadCategoryResponses readAllByCategory(final String category) {
         final ArticleCategory articleCategory = ArticleCategory.of(category);
         final List<Article> articles = articleRepository.findAllByCategory(articleCategory);
-        return ArticleReadAllByCategoryResponses.of(articles);
+        return ArticleReadCategoryResponses.of(articles);
     }
 
     @Transactional(readOnly = true)
-    public ArticleReadAllByLatestUpdateResponses readAllByLatestUpdate() {
+    public ArticleReadLatestUpdateResponses readAllByLatestUpdate() {
         final List<Article> articles = articleRepository.findTop10ByOrderByUpdatedAtDesc();
-        return ArticleReadAllByLatestUpdateResponses.of(articles);
+        return ArticleReadLatestUpdateResponses.of(articles);
     }
 }
