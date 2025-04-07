@@ -62,13 +62,21 @@ public class Article extends BaseEntity {
 
     @Builder
     public Article(
+            final Long id,
             final String title,
             final ArticleCategory category,
+            final boolean isNoEditing,
+            final LocalDateTime deletedAt,
+            final LocalDateTime updatedAt,
             final List<ArticleVersion> versions,
             final ArticleVersion latestVersion
     ) {
+        this.id = id;
         this.title = new ArticleTitle(title);
         this.category = category;
+        this.isNoEditing = isNoEditing;
+        this.deletedAt = deletedAt;
+        this.updatedAt = updatedAt;
         this.versions = versions;
         this.latestVersion = latestVersion;
     }
@@ -77,6 +85,9 @@ public class Article extends BaseEntity {
         return Article.builder()
                 .title(title)
                 .category(ArticleCategory.of(category))
+                .isNoEditing(false)
+                .deletedAt(null)
+                .updatedAt(null)
                 .versions(new ArrayList<>())
                 .latestVersion(null)
                 .build();
