@@ -1,6 +1,5 @@
 package com.openmpy.taleswiki.article.domain;
 
-import com.openmpy.taleswiki.common.domain.BaseEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,13 +22,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at is null")
 @Entity
-public class Article extends BaseEntity {
+public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,64 +46,59 @@ public class Article extends BaseEntity {
     @Column
     private boolean isNoEditing;
 
-    @Column
-    private LocalDateTime deletedAt;
+    @Column(updatable = false)
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     @Column(insertable = false)
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ArticleVersion> versions = new ArrayList<>();
+    @Column
+    private LocalDateTime deletedAt;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "latest_version_id")
     private ArticleVersion latestVersion;
 
-    @Builder
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<ArticleVersion> versions = new ArrayList<>();
+
     public Article(
             final Long id,
             final String title,
             final ArticleCategory category,
             final boolean isNoEditing,
-            final LocalDateTime deletedAt,
+            final LocalDateTime createdAt,
             final LocalDateTime updatedAt,
-            final List<ArticleVersion> versions,
-            final ArticleVersion latestVersion
+            final LocalDateTime deletedAt
     ) {
         this.id = id;
         this.title = new ArticleTitle(title);
         this.category = category;
         this.isNoEditing = isNoEditing;
-        this.deletedAt = deletedAt;
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.versions = versions;
-        this.latestVersion = latestVersion;
+        this.deletedAt = deletedAt;
     }
 
-    public static Article create(final String title, final String category) {
-        return Article.builder()
-                .title(title)
-                .category(ArticleCategory.of(category))
-                .isNoEditing(false)
-                .deletedAt(null)
-                .updatedAt(null)
-                .versions(new ArrayList<>())
-                .latestVersion(null)
-                .build();
-    }
-
-    public void addVersion(final ArticleVersion version) {
-        versions.add(version);
-        latestVersion = version;
-    }
-
-    public void delete() {
-        this.deletedAt = LocalDateTime.now();
-    }
-
-    public void toggleNoEditing(boolean isNoEditing) {
+    @Builder
+    public Article(
+            final String title,
+            final ArticleCategory category,
+            final boolean isNoEditing,
+            final LocalDateTime createdAt,
+            final LocalDateTime updatedAt,
+            final LocalDateTime deletedAt,
+            final ArticleVersion latestVersion
+    ) {
+        this.title = new ArticleTitle(title);
+        this.category = category;
         this.isNoEditing = isNoEditing;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.latestVersion = latestVersion;
     }
 
     public String getTitle() {
