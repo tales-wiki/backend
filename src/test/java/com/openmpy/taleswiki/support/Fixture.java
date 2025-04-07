@@ -3,10 +3,13 @@ package com.openmpy.taleswiki.support;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
+import jakarta.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 public class Fixture {
+
+    public static final Cookie MEMBER_COOKIE = new Cookie("access-token", "token");
 
     public static Article article01 = new Article(
             1L,
