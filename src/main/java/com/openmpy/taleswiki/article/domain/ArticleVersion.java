@@ -122,6 +122,10 @@ public class ArticleVersion {
                 .build();
     }
 
+    public void updateVersionNumber(final int versionNumber) {
+        this.versionNumber = new ArticleVersionNumber(versionNumber);
+    }
+
     public String getNickname() {
         return nickname.getValue();
     }
