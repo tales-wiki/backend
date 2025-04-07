@@ -16,10 +16,10 @@ public record ArticleVersionReadArticleResponses(
                 .sorted(Comparator.comparingInt(ArticleVersion::getVersionNumber).reversed())
                 .map(it -> new ArticleVersionReadArticleResponse(
                         it.getId(),
+                        it.getNickname(),
                         it.getVersionNumber(),
-                        it.getCreatedAt(),
                         it.getSize(),
-                        it.getNickname())
+                        it.getCreatedAt())
                 )
                 .toList();
 

@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public record ArticleVersionReadArticleResponse(
         Long versionId,
+        String nickname,
         int versionNumber,
-        LocalDateTime createdAt,
         int size,
-        String nickname
+        LocalDateTime createdAt
 ) {
 }
