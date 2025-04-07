@@ -15,7 +15,7 @@ public record ArticleCreateResponse(
                 article.getId(),
                 article.getTitle(),
                 article.getLatestVersion().getNickname(),
-                article.getCategory().getValue(),
+                article.getCategory().toString(),
                 article.getLatestVersion().getVersion()
         );
     }

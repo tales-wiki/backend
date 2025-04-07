@@ -23,7 +23,7 @@ public record DiscordArticleReportRequest(
                 Optional.ofNullable(article.getId()).map(Object::toString).orElse(""),
                 Optional.ofNullable(articleVersion.getId()).map(Object::toString).orElse(""),
                 article.getTitle(),
-                article.getCategory().getValue(),
+                article.getCategory().toString(),
                 reasons
         );
     }
