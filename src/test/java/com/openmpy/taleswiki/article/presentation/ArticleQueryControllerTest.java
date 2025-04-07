@@ -45,7 +45,7 @@ class ArticleQueryControllerTest extends ControllerTestSupport {
         when(articleQueryService.readArticleByArticleVersion(anyLong())).thenReturn(response);
 
         // when & then
-        mockMvc.perform(get("/api/articles/{articleVersionId}", articleVersionId)
+        mockMvc.perform(get("/api/articles/versions/{articleVersionId}", articleVersionId)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())

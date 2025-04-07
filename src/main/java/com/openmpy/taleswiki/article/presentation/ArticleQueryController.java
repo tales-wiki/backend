@@ -21,7 +21,7 @@ public class ArticleQueryController {
 
     private final ArticleQueryService articleQueryService;
 
-    @GetMapping("/{articleVersionId}")
+    @GetMapping("/versions/{articleVersionId}")
     public ResponseEntity<ArticleReadResponse> readArticleByArticleVersion(@PathVariable final Long articleVersionId) {
         final ArticleReadResponse response = articleQueryService.readArticleByArticleVersion(articleVersionId);
         return ResponseEntity.ok(response);

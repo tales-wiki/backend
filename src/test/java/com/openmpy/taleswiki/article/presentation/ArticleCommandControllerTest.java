@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
+import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -85,6 +86,33 @@ class ArticleCommandControllerTest extends ControllerTestSupport {
                                         fieldWithPath("nickname").description("작성자"),
                                         fieldWithPath("content").description("내용")
                                 )
+                        )
+                );
+    }
+
+    @DisplayName("[통과] 게시글을 신고한다.")
+    @Test
+    void article_command_controller_test_03() throws Exception {
+        // given
+        final Long articleVersionId = 1L;
+        final ArticleVersionReportRequest request = new ArticleVersionReportRequest("신고 내용");
+        final String payload = objectMapper.writeValueAsString(request);
+
+        // stub
+        doNothing().when(articleCommandService)
+                .reportArticleVersion(anyLong(), any(ArticleVersionReportRequest.class), any(HttpServletRequest.class));
+
+        // when & then
+        mockMvc.perform(post("/api/articles/versions/{articleVersionId}/report", articleVersionId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload)
+                )
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(
+                        document("reportArticleVersion",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
                         )
                 );
     }

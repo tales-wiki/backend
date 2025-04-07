@@ -1,5 +1,6 @@
 package com.openmpy.taleswiki.article.application;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_ARTICLE_REPORT_VERSION_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION_ID;
@@ -15,7 +16,6 @@ import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
-import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
 import com.openmpy.taleswiki.member.application.MemberService;
@@ -94,7 +94,7 @@ public class ArticleCommandService {
         final String ip = IpAddressUtil.getClientIp(servletRequest);
 
         if (articleVersionReportRepository.existsByIp_ValueAndArticleVersion(ip, articleVersion)) {
-            throw new CustomException(CustomErrorCode.ALREADY_ARTICLE_REPORT_VERSION_ID);
+            throw new CustomException(ALREADY_ARTICLE_REPORT_VERSION_ID);
         }
 
         final ArticleVersionReport articleVersionReport =

@@ -3,6 +3,7 @@ package com.openmpy.taleswiki.article.presentation;
 import com.openmpy.taleswiki.article.application.ArticleCommandService;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
+import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
 import com.openmpy.taleswiki.auth.annotation.Login;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -41,5 +42,15 @@ public class ArticleCommandController {
     ) {
         articleCommandService.updateArticle(memberId, articleId, request, servletRequest);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/versions/{articleVersionId}/report")
+    public ResponseEntity<Void> reportArticleVersion(
+            @PathVariable final Long articleVersionId,
+            @RequestBody @Valid final ArticleVersionReportRequest request,
+            final HttpServletRequest servletRequest
+    ) {
+        articleCommandService.reportArticleVersion(articleVersionId, request, servletRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
