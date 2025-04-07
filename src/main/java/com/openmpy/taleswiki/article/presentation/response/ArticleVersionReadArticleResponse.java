@@ -7,6 +7,7 @@ public record ArticleVersionReadArticleResponse(
         String nickname,
         int versionNumber,
         int size,
+        boolean isHiding,
         LocalDateTime createdAt
 ) {
 }

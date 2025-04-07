@@ -19,6 +19,7 @@ public record ArticleVersionReadArticleResponses(
                         it.getNickname(),
                         it.getVersionNumber(),
                         it.getSize(),
+                        it.isHiding(),
                         it.getCreatedAt())
                 )
                 .toList();
