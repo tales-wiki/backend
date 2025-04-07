@@ -4,6 +4,7 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import java.time.LocalDateTime;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 public class Fixture {
 
@@ -28,4 +29,20 @@ public class Fixture {
             LocalDateTime.of(2025, 1, 1, 1, 1, 1),
             null
     );
+
+    public static Article createArticleWithVersion(final String title, final ArticleCategory category) {
+        final Article article = Article.create(title, category);
+        final ArticleVersion articleVersion = ArticleVersion.create("작성자", "내용", 10, article);
+
+        article.addVersion(articleVersion);
+        return article;
+    }
+
+    public static MockHttpServletRequest mockServerHttpRequest() {
+        final MockHttpServletRequest servletRequest = new MockHttpServletRequest();
+        final byte[] content = new byte[10];
+
+        servletRequest.setContent(content);
+        return servletRequest;
+    }
 }

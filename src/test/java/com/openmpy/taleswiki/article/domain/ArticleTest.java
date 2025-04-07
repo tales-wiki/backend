@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.openmpy.taleswiki.support.Fixture;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +44,7 @@ class ArticleTest {
         final ArticleCategory category = ArticleCategory.PERSON;
 
         // when
-        final Article article = Article.create(title, category, Fixture.articleVersion01);
+        final Article article = Article.create(title, category);
 
         // then
         assertThat(article.getId()).isNull();
@@ -53,6 +54,25 @@ class ArticleTest {
         assertThat(article.getCreatedAt()).isNotNull();
         assertThat(article.getUpdatedAt()).isNull();
         assertThat(article.getDeletedAt()).isNull();
-        assertThat(article.getLatestVersion()).isNotNull();
+        assertThat(article.getLatestVersion()).isNull();
+    }
+
+    @DisplayName("[통과] 게시글 객체에 게시글 버전 객체를 추가한다.")
+    @Test
+    void article_test_03() {
+        // given
+        final Article article = Fixture.article01;
+        final ArticleVersion articleVersion = ArticleVersion.create("작성자", "내용", 10, article);
+
+        // when
+        article.addVersion(articleVersion);
+
+        // then
+        assertThat(article.getLatestVersion()).isEqualTo(articleVersion);
+
+        final List<ArticleVersion> versions = article.getVersions();
+
+        assertThat(versions).hasSize(1);
+        assertThat(versions.getFirst().getArticle()).isEqualTo(article);
     }
 }

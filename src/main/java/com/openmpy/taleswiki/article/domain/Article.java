@@ -105,8 +105,7 @@ public class Article {
 
     public static Article create(
             final String title,
-            final ArticleCategory category,
-            final ArticleVersion latestVersion
+            final ArticleCategory category
     ) {
         return Article.builder()
                 .title(title)
@@ -115,8 +114,12 @@ public class Article {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(null)
                 .deletedAt(null)
-                .latestVersion(latestVersion)
                 .build();
+    }
+
+    public void addVersion(final ArticleVersion articleVersion) {
+        this.versions.add(articleVersion);
+        this.latestVersion = articleVersion;
     }
 
     public String getTitle() {
