@@ -3,7 +3,7 @@ package com.openmpy.taleswiki.article.presentation.response;
 import java.time.LocalDateTime;
 
 public record ArticleVersionReadArticleResponse(
-        Long versionId,
+        Long articleVersionId,
         String nickname,
         int versionNumber,
         int size,

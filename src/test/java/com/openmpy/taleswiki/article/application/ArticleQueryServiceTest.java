@@ -124,14 +124,14 @@ class ArticleQueryServiceTest {
         final List<ArticleVersionReadArticleResponse> payload = responses.payload();
 
         assertThat(payload).hasSize(10);
-        assertThat(payload.getFirst().versionId()).isNotNull();
+        assertThat(payload.getFirst().articleVersionId()).isNotNull();
         assertThat(payload.getFirst().nickname()).isEqualTo("닉네임9");
         assertThat(payload.getFirst().versionNumber()).isEqualTo(10);
         assertThat(payload.getFirst().size()).isEqualTo(10);
         assertThat(payload.getFirst().isHiding()).isFalse();
         assertThat(payload.getFirst().createdAt()).isNotNull();
 
-        assertThat(payload.getLast().versionId()).isNotNull();
+        assertThat(payload.getLast().articleVersionId()).isNotNull();
         assertThat(payload.getLast().nickname()).isEqualTo("닉네임0");
         assertThat(payload.getLast().versionNumber()).isEqualTo(1);
         assertThat(payload.getLast().size()).isEqualTo(10);

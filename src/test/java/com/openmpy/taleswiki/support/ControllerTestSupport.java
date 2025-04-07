@@ -2,7 +2,9 @@ package com.openmpy.taleswiki.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openmpy.taleswiki.article.application.ArticleCommandService;
+import com.openmpy.taleswiki.article.application.ArticleQueryService;
 import com.openmpy.taleswiki.article.presentation.ArticleCommandController;
+import com.openmpy.taleswiki.article.presentation.ArticleQueryController;
 import com.openmpy.taleswiki.common.properties.CookieProperties;
 import com.openmpy.taleswiki.member.application.GoogleService;
 import com.openmpy.taleswiki.member.application.KakaoService;
@@ -19,7 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @AutoConfigureRestDocs
 @WebMvcTest(
-        controllers = {MemberController.class, ArticleCommandController.class},
+        controllers = {MemberController.class, ArticleCommandController.class, ArticleQueryController.class},
         excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {WebMvcConfigurer.class})}
 )
 public class ControllerTestSupport {
@@ -45,4 +47,6 @@ public class ControllerTestSupport {
     @MockitoBean
     protected ArticleCommandService articleCommandService;
 
+    @MockitoBean
+    protected ArticleQueryService articleQueryService;
 }
