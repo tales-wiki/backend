@@ -62,7 +62,7 @@ class ArticleTest {
     void article_test_03() {
         // given
         final Article article = Fixture.article01;
-        final ArticleVersion articleVersion = ArticleVersion.create("작성자", "내용", 10, article);
+        final ArticleVersion articleVersion = ArticleVersion.create("작성자", "내용", 10, "127.0.0.1", article);
 
         // when
         article.addVersion(articleVersion);

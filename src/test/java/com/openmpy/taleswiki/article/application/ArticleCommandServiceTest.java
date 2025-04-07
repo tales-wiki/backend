@@ -53,6 +53,7 @@ class ArticleCommandServiceTest {
         assertThat(articleVersion.getContent()).isEqualTo("내용");
         assertThat(articleVersion.getVersionNumber()).isEqualTo(1);
         assertThat(articleVersion.getSize()).isEqualTo(10);
+        assertThat(articleVersion.getIp()).isEqualTo("127.0.0.1");
         assertThat(articleVersion.isHiding()).isFalse();
         assertThat(articleVersion.getCreatedAt()).isNotNull();
         assertThat(articleVersion.getArticle()).isEqualTo(article);

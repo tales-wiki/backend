@@ -25,6 +25,7 @@ public class Fixture {
             "내용",
             1,
             10,
+            "127.0.0.1",
             false,
             LocalDateTime.of(2025, 1, 1, 1, 1, 1),
             null
@@ -32,7 +33,7 @@ public class Fixture {
 
     public static Article createArticleWithVersion(final String title, final ArticleCategory category) {
         final Article article = Article.create(title, category);
-        final ArticleVersion articleVersion = ArticleVersion.create("작성자", "내용", 10, article);
+        final ArticleVersion articleVersion = ArticleVersion.create("작성자", "내용", 10, "127.0.0.1", article);
 
         article.addVersion(articleVersion);
         return article;
@@ -43,6 +44,7 @@ public class Fixture {
         final byte[] content = new byte[10];
 
         servletRequest.setContent(content);
+        servletRequest.setRemoteAddr("127.0.0.1");
         return servletRequest;
     }
 }

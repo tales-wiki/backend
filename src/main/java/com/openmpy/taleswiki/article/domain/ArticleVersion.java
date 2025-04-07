@@ -1,5 +1,6 @@
 package com.openmpy.taleswiki.article.domain;
 
+import com.openmpy.taleswiki.common.domain.ClientIp;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -44,6 +45,10 @@ public class ArticleVersion {
     @AttributeOverride(name = "value", column = @Column(name = "size", nullable = false))
     private ArticleSize size;
 
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "client_ip", nullable = false))
+    private ClientIp ip;
+
     @Column(nullable = false)
     private boolean isHiding;
 
@@ -61,6 +66,7 @@ public class ArticleVersion {
             final String content,
             final int versionNumber,
             final int size,
+            final String ip,
             final boolean isHiding,
             final LocalDateTime createdAt,
             final Article article
@@ -70,6 +76,7 @@ public class ArticleVersion {
         this.content = new ArticleContent(content);
         this.versionNumber = new ArticleVersionNumber(versionNumber);
         this.size = new ArticleSize(size);
+        this.ip = new ClientIp(ip);
         this.isHiding = isHiding;
         this.createdAt = createdAt;
         this.article = article;
@@ -81,6 +88,7 @@ public class ArticleVersion {
             final String content,
             final int versionNumber,
             final int size,
+            final String ip,
             final boolean isHiding,
             final LocalDateTime createdAt,
             final Article article
@@ -89,6 +97,7 @@ public class ArticleVersion {
         this.content = new ArticleContent(content);
         this.versionNumber = new ArticleVersionNumber(versionNumber);
         this.size = new ArticleSize(size);
+        this.ip = new ClientIp(ip);
         this.isHiding = isHiding;
         this.createdAt = createdAt;
         this.article = article;
@@ -98,6 +107,7 @@ public class ArticleVersion {
             final String nickname,
             final String content,
             final int size,
+            final String ip,
             final Article article
     ) {
         return ArticleVersion.builder()
@@ -105,6 +115,7 @@ public class ArticleVersion {
                 .content(content)
                 .versionNumber(DEFAULT_ARTICLE_VERSION)
                 .size(size)
+                .ip(ip)
                 .isHiding(false)
                 .createdAt(LocalDateTime.now())
                 .article(article)
@@ -125,5 +136,9 @@ public class ArticleVersion {
 
     public int getSize() {
         return size.getValue();
+    }
+
+    public String getIp() {
+        return ip.getValue();
     }
 }

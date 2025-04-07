@@ -7,6 +7,7 @@ import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.common.exception.CustomException;
+import com.openmpy.taleswiki.common.util.IpAddressUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,11 @@ public class ArticleCommandService {
         }
 
         final int contentLength = servletRequest.getContentLength();
+        final String ip = IpAddressUtil.getClientIp(servletRequest);
+
         final Article article = Article.create(request.title(), category);
         final ArticleVersion articleVersion =
-                ArticleVersion.create(request.nickname(), request.content(), contentLength, article);
+                ArticleVersion.create(request.nickname(), request.content(), contentLength, ip, article);
 
         article.addVersion(articleVersion);
         articleRepository.save(article);

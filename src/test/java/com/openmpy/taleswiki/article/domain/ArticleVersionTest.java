@@ -16,12 +16,13 @@ class ArticleVersionTest {
         final String content = "내용";
         final int versionNumber = 1;
         final int size = 10;
+        final String ip = "127.0.0.1";
         final boolean isHiding = false;
         final LocalDateTime createdAt = LocalDateTime.of(2025, 1, 1, 1, 1, 1);
 
         // when
         final ArticleVersion articleVersion =
-                new ArticleVersion(1L, nickname, content, versionNumber, size, isHiding, createdAt, null);
+                new ArticleVersion(1L, nickname, content, versionNumber, size, ip, isHiding, createdAt, null);
 
         // then
         assertThat(articleVersion.getId()).isEqualTo(1L);
@@ -29,6 +30,7 @@ class ArticleVersionTest {
         assertThat(articleVersion.getContent()).isEqualTo("내용");
         assertThat(articleVersion.getVersionNumber()).isEqualTo(1);
         assertThat(articleVersion.getSize()).isEqualTo(10);
+        assertThat(articleVersion.getIp()).isEqualTo("127.0.0.1");
         assertThat(articleVersion.isHiding()).isFalse();
         assertThat(articleVersion.getCreatedAt()).isEqualTo(LocalDateTime.of(2025, 1, 1, 1, 1, 1));
         assertThat(articleVersion.getArticle()).isNull();
@@ -41,9 +43,10 @@ class ArticleVersionTest {
         final String nickname = "작성자";
         final String content = "내용";
         final int size = 10;
+        final String ip = "127.0.0.1";
 
         // when
-        final ArticleVersion articleVersion = ArticleVersion.create(nickname, content, size, null);
+        final ArticleVersion articleVersion = ArticleVersion.create(nickname, content, size, ip, null);
 
         // then
         assertThat(articleVersion.getId()).isNull();
@@ -51,6 +54,7 @@ class ArticleVersionTest {
         assertThat(articleVersion.getContent()).isEqualTo("내용");
         assertThat(articleVersion.getVersionNumber()).isEqualTo(1);
         assertThat(articleVersion.getSize()).isEqualTo(10);
+        assertThat(articleVersion.getIp()).isEqualTo("127.0.0.1");
         assertThat(articleVersion.isHiding()).isFalse();
         assertThat(articleVersion.getCreatedAt()).isNotNull();
         assertThat(articleVersion.getArticle()).isNull();
