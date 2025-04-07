@@ -59,4 +59,16 @@ class ArticleVersionTest {
         assertThat(articleVersion.getCreatedAt()).isNotNull();
         assertThat(articleVersion.getArticle()).isNull();
     }
+
+    @DisplayName("[통과] 게시글 버전 숨김 상태를 수정한다.")
+    @Test
+    void article_version_test_03() {
+        // given
+        final ArticleVersion articleVersion = ArticleVersion.create("작성자", "내용", 10, "127.0.0.1", null);
+
+        // when & then
+        assertThat(articleVersion.isHiding()).isFalse();
+        articleVersion.toggleHiding(true);
+        assertThat(articleVersion.isHiding()).isTrue();
+    }
 }

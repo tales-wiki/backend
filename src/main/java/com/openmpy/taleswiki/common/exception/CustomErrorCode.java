@@ -33,6 +33,7 @@ public enum CustomErrorCode {
     NOT_FOUND_ARTICLE_VERSION_ID("찾을 수 없는 게시글 버전 번호입니다."),
     NOT_FOUND_ARTICLE_ID("찾을 수 없는 게시글 번호입니다."),
     NO_EDITING_ARTICLE("편집 할 수 없는 게시글입니다."),
+    ALREADY_ARTICLE_REPORT_VERSION_ID("이미 신고한 게시글 버전 번호입니다."),
 
     // other
     NOT_FOUND_COOKIE("찾을 수 없는 쿠키입니다."),

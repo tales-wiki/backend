@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-class ArticleReportReasonTest {
+class ArticleVersionReportReasonTest {
 
     @DisplayName("[통과] 게시글 신고 내용 객체를 생성한다.")
     @Test

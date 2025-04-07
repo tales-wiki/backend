@@ -24,7 +24,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class ArticleReport {
+public class ArticleVersionReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class ArticleReport {
     @JoinColumn(name = "article_version_id")
     private ArticleVersion articleVersion;
 
-    public ArticleReport(
+    public ArticleVersionReport(
             final Long id,
             final String reportReason,
             final String ip,
@@ -61,7 +61,7 @@ public class ArticleReport {
     }
 
     @Builder
-    public ArticleReport(
+    public ArticleVersionReport(
             final String reportReason,
             final String ip,
             final LocalDateTime createdAt,
@@ -73,12 +73,12 @@ public class ArticleReport {
         this.articleVersion = articleVersion;
     }
 
-    public static ArticleReport create(
+    public static ArticleVersionReport create(
             final String reportReason,
             final String ip,
             final ArticleVersion articleVersion
     ) {
-        return ArticleReport.builder()
+        return ArticleVersionReport.builder()
                 .reportReason(reportReason)
                 .ip(ip)
                 .createdAt(LocalDateTime.now())

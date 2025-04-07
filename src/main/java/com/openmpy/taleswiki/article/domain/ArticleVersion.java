@@ -129,6 +129,10 @@ public class ArticleVersion {
         this.versionNumber = new ArticleVersionNumber(versionNumber);
     }
 
+    public void toggleHiding(final boolean isHiding) {
+        this.isHiding = isHiding;
+    }
+
     public String getNickname() {
         return nickname.getValue();
     }
