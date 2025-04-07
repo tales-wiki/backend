@@ -2,9 +2,12 @@ package com.openmpy.taleswiki.article.application;
 
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
+import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
+import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponses;
 import com.openmpy.taleswiki.common.exception.CustomErrorCode;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleQueryService {
 
     private final ArticleRepository articleRepository;
+    private final ArticleVersionRepository articleVersionRepository;
 
     @Transactional(readOnly = true)
     public ArticleReadCategoryResponses readAllArticleByCategory(final String category) {
@@ -47,5 +51,13 @@ public class ArticleQueryService {
                 articleRepository.findAllByTitle_ValueContainingIgnoreCaseOrderByUpdatedAtDesc(title);
 
         return ArticleSearchResponses.of(articles);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleReadResponse readArticleByArticleVersion(final Long articleVersionId) {
+        final ArticleVersion articleVersion = articleVersionRepository.findById(articleVersionId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_ARTICLE_VERSION_ID));
+
+        return ArticleReadResponse.of(articleVersion);
     }
 }

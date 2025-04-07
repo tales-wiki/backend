@@ -10,6 +10,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryRe
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponse;
@@ -173,5 +174,29 @@ class ArticleQueryServiceTest {
         assertThat(payload.getLast().articleVersionId()).isNotNull();
         assertThat(payload.getLast().title()).isEqualTo("제목0");
         assertThat(payload.getLast().category()).isEqualTo("길드");
+    }
+
+    @DisplayName("[통과] 게시글 버전 ID로 게시글을 조회한다.")
+    @Test
+    void article_query_service_test_05() {
+        // given
+        final Article article = Article.create("제목", ArticleCategory.PERSON);
+        final ArticleVersion articleVersion = ArticleVersion.create("닉네임", "내용", 10, "127.0.0.1", article);
+
+        article.addVersion(articleVersion);
+        final Article savedArticle = articleRepository.save(article);
+
+        // when
+        final ArticleReadResponse response =
+                articleQueryService.readArticleByArticleVersion(savedArticle.getLatestVersion().getId());
+
+        // then
+        assertThat(response.articleId()).isEqualTo(savedArticle.getId());
+        assertThat(response.articleVersionId()).isEqualTo(savedArticle.getLatestVersion().getId());
+        assertThat(response.title()).isEqualTo("제목");
+        assertThat(response.content()).isEqualTo("내용");
+        assertThat(response.isNoEditing()).isFalse();
+        assertThat(response.isHiding()).isFalse();
+        assertThat(response.createdAt()).isNotNull();
     }
 }
