@@ -42,7 +42,7 @@ class ArticleCommandServiceTest {
         final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "인물", "내용");
 
         // when
-        articleCommandService.create(request, Fixture.mockServerHttpRequest());
+        articleCommandService.createArticle(request, Fixture.mockServerHttpRequest());
 
         // then
         final Article article = articleRepository.findAll().getFirst();
@@ -109,7 +109,7 @@ class ArticleCommandServiceTest {
         articleRepository.save(article);
 
         // when & then
-        assertThatThrownBy(() -> articleCommandService.create(request, Fixture.mockServerHttpRequest()))
+        assertThatThrownBy(() -> articleCommandService.createArticle(request, Fixture.mockServerHttpRequest()))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY.getMessage());
     }

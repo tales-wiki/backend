@@ -27,7 +27,7 @@ public class ArticleCommandService {
     private final MemberService memberService;
 
     @Transactional
-    public void create(final ArticleCreateRequest request, final HttpServletRequest servletRequest) {
+    public void createArticle(final ArticleCreateRequest request, final HttpServletRequest servletRequest) {
         final ArticleCategory category = ArticleCategory.of(request.category());
 
         if (articleRepository.existsByTitle_ValueAndCategory(request.title(), category)) {
