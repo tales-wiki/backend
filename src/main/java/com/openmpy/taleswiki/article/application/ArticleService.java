@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ArticleService {
 
-    private static final int PLUS_VERSION_NUMBER = 1;
+    private static final int PLUS_VERSION_NUMBER = 10;
 
     private final ArticleRepository articleRepository;
     private final ArticleVersionRepository articleVersionRepository;

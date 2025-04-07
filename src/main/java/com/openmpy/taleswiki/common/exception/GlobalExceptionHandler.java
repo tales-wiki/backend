@@ -1,14 +1,12 @@
 package com.openmpy.taleswiki.common.exception;
 
-import com.openmpy.taleswiki.common.util.DateFormatterUtil;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
-import com.openmpy.taleswiki.discord.application.DiscordMessageType;
 import com.openmpy.taleswiki.discord.application.DiscordService;
+import com.openmpy.taleswiki.discord.application.request.DiscordExceptionRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,18 +31,15 @@ public class GlobalExceptionHandler {
             final CustomException e,
             final HttpServletRequest servletRequest
     ) {
-        final String message = String.format(
-                DiscordMessageType.WARNING_MESSAGE.getValue(),
-                e.getErrorCode(),
+        final DiscordExceptionRequest request = new DiscordExceptionRequest(
+                e.getErrorCode().name(),
                 e.getMessage(),
-                servletRequest.getMethod(),
-                servletRequest.getRequestURI(),
+                servletRequest.getMethod() + " " + servletRequest.getRequestURI(),
                 getRequestPayload(servletRequest),
-                IpAddressUtil.getClientIp(servletRequest),
-                DateFormatterUtil.convert(LocalDateTime.now())
+                IpAddressUtil.getClientIp(servletRequest)
         );
 
-        discordService.sendWaringMessage(message);
+        discordService.sendWaringMessage(request);
         log.warn(e.getMessage(), e);
         return ResponseEntity.badRequest().body(ErrorResponse.of(e.getErrorCode()));
     }
@@ -54,18 +49,15 @@ public class GlobalExceptionHandler {
             final AuthenticationException e,
             final HttpServletRequest servletRequest
     ) {
-        final String message = String.format(
-                DiscordMessageType.WARNING_MESSAGE.getValue(),
-                e.getErrorCode(),
+        final DiscordExceptionRequest request = new DiscordExceptionRequest(
+                e.getErrorCode().name(),
                 e.getMessage(),
-                servletRequest.getMethod(),
-                servletRequest.getRequestURI(),
+                servletRequest.getMethod() + " " + servletRequest.getRequestURI(),
                 getRequestPayloadWithLogin(servletRequest),
-                IpAddressUtil.getClientIp(servletRequest),
-                DateFormatterUtil.convert(LocalDateTime.now())
+                IpAddressUtil.getClientIp(servletRequest)
         );
 
-        discordService.sendWaringMessage(message);
+        discordService.sendWaringMessage(request);
         log.warn(e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.of(e.getErrorCode()));
     }
@@ -95,17 +87,15 @@ public class GlobalExceptionHandler {
             final Exception e,
             final HttpServletRequest servletRequest
     ) {
-        final String message = String.format(
-                DiscordMessageType.ERROR_MESSAGE.getValue(),
+        final DiscordExceptionRequest request = new DiscordExceptionRequest(
+                "NONE",
                 e.getMessage(),
-                servletRequest.getMethod(),
-                servletRequest.getRequestURI(),
+                servletRequest.getMethod() + " " + servletRequest.getRequestURI(),
                 getRequestPayload(servletRequest),
-                IpAddressUtil.getClientIp(servletRequest),
-                DateFormatterUtil.convert(LocalDateTime.now())
+                IpAddressUtil.getClientIp(servletRequest)
         );
 
-        discordService.sendErrorMessage(message);
+        discordService.sendErrorMessage(request);
         log.error(e.getMessage(), e);
         return ResponseEntity.internalServerError().body(ErrorResponse.of(CustomErrorCode.INTERNAL_SERVER_ERROR));
     }

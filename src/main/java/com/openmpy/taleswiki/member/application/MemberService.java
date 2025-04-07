@@ -7,6 +7,7 @@ import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_M
 import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.discord.application.DiscordService;
+import com.openmpy.taleswiki.discord.application.request.DiscordSignupRequest;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.MemberEmail;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
@@ -38,7 +39,8 @@ public class MemberService {
         final Member newMember = Member.create(email, social);
         final Member savedMember = memberRepository.save(newMember);
 
-        discordService.sendSignupMessage(savedMember.getId(), email, social);
+        final DiscordSignupRequest request = DiscordSignupRequest.of(savedMember);
+        discordService.sendSignupMessage(request);
         return MemberLoginResponse.of(savedMember);
     }
 

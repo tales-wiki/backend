@@ -6,6 +6,7 @@ import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
 import com.openmpy.taleswiki.discord.application.DiscordService;
+import com.openmpy.taleswiki.discord.application.request.DiscordArticleReportRequest;
 import com.openmpy.taleswiki.report.domain.ArticleReport;
 import com.openmpy.taleswiki.report.domain.repository.ArticleReportRepository;
 import com.openmpy.taleswiki.report.presentation.request.ArticleReportRequest;
@@ -18,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReportService {
 
-    private static final int MAX_ARTICLE_REPORT_COUNT = 10;
+    private static final int MAX_ARTICLE_REPORT_COUNT = 1;
 
     private final ArticleReportRepository articleReportRepository;
     private final ArticleVersionRepository articleVersionRepository;
@@ -45,7 +46,8 @@ public class ReportService {
 
         // 숨김 처리
         if (articleReportRepository.countByArticleVersion(articleVersion) >= MAX_ARTICLE_REPORT_COUNT) {
-            discordService.sendArticleReportMessage(articleVersion);
+            final DiscordArticleReportRequest reportRequest = DiscordArticleReportRequest.of(articleVersion);
+            discordService.sendArticleReportMessage(reportRequest);
             articleVersion.toggleHiding(true);
         }
     }
