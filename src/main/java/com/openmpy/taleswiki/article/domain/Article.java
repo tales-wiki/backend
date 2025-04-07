@@ -125,6 +125,10 @@ public class Article {
         this.latestVersion = articleVersion;
     }
 
+    public void toggleNoEditing(final boolean isNoEditing) {
+        this.isNoEditing = isNoEditing;
+    }
+
     public String getTitle() {
         return title.getValue();
     }

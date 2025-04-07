@@ -101,4 +101,21 @@ class ArticleCommandServiceTest {
                 .isInstanceOf(CustomException.class)
                 .hasMessage(CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY.getMessage());
     }
+
+    @DisplayName("[예외] 게시글의 편집 모드가 금지일 경우 편집할 수 없다.")
+    @Test
+    void 예외_article_command_service_test_02() {
+        // given
+        final ArticleUpdateRequest request = new ArticleUpdateRequest("작성자2", "내용2");
+        final Article article = Fixture.createArticleWithVersion("제목", ArticleCategory.PERSON);
+
+        article.toggleNoEditing(true);
+        final Article savedArticle = articleRepository.save(article);
+
+        // when & then
+        assertThatThrownBy(() ->
+                articleCommandService.update(savedArticle.getId(), request, Fixture.mockServerHttpRequest()))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(CustomErrorCode.NO_EDITING_ARTICLE.getMessage());
+    }
 }

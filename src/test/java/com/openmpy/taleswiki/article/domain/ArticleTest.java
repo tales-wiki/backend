@@ -75,4 +75,16 @@ class ArticleTest {
         assertThat(versions).hasSize(1);
         assertThat(versions.getFirst().getArticle()).isEqualTo(article);
     }
+
+    @DisplayName("[통과] 게시글 객체 편집 모드를 수정한다.")
+    @Test
+    void article_test_04() {
+        // given
+        final Article article = Fixture.article01;
+
+        // when & then
+        assertThat(article.isNoEditing()).isFalse();
+        article.toggleNoEditing(true);
+        assertThat(article.isNoEditing()).isTrue();
+    }
 }

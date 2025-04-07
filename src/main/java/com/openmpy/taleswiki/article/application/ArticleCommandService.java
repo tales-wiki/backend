@@ -1,12 +1,15 @@
 package com.openmpy.taleswiki.article.application;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NO_EDITING_ARTICLE;
+
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
-import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +28,7 @@ public class ArticleCommandService {
         final ArticleCategory category = ArticleCategory.of(request.category());
 
         if (articleRepository.existsByTitle_ValueAndCategory(request.title(), category)) {
-            throw new CustomException(CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY);
+            throw new CustomException(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY);
         }
 
         final int contentLength = servletRequest.getContentLength();
@@ -46,7 +49,11 @@ public class ArticleCommandService {
             final HttpServletRequest servletRequest
     ) {
         final Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_ARTICLE_ID));
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID));
+
+        if (article.isNoEditing()) {
+            throw new CustomException(NO_EDITING_ARTICLE);
+        }
 
         final int contentLength = servletRequest.getContentLength();
         final String ip = IpAddressUtil.getClientIp(servletRequest);
