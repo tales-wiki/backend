@@ -5,6 +5,9 @@ import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponses;
+import com.openmpy.taleswiki.common.exception.CustomErrorCode;
+import com.openmpy.taleswiki.common.exception.CustomException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,5 +30,13 @@ public class ArticleQueryService {
     public ArticleReadLatestUpdateResponses readAllArticleByLatestUpdate() {
         final List<Article> articles = articleRepository.findTop10ByOrderByUpdatedAtDesc();
         return ArticleReadLatestUpdateResponses.of(articles);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleVersionReadArticleResponses readAllArticleVersionByArticle(final Long articleId) {
+        final Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_ARTICLE_ID));
+
+        return ArticleVersionReadArticleResponses.of(article);
     }
 }
