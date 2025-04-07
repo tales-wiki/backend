@@ -19,6 +19,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadByVersionR
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchAllResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleUpdateResponse;
+import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.history.application.ArticleHistoryService;
 import com.openmpy.taleswiki.member.application.MemberService;
@@ -130,6 +131,11 @@ public class ArticleService {
     ) {
         final Member member = memberService.getMember(memberId);
         final Article article = getArticle(id);
+
+        if (article.isNoEditing()) {
+            throw new CustomException(CustomErrorCode.NO_EDITING_ARTICLE);
+        }
+
         final int newVersion = article.getVersions().size() + PLUS_VERSION_NUMBER;
         final int size = servletRequest.getContentLength();
         final ArticleVersion articleVersion =
