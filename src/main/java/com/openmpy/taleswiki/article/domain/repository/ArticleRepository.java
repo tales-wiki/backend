@@ -9,5 +9,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     List<Article> findAllByCategory(final ArticleCategory category);
 
+    List<Article> findTop10ByOrderByUpdatedAtDesc();
+
     boolean existsByTitle_ValueAndCategory(final String title, final ArticleCategory category);
 }

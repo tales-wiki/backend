@@ -79,6 +79,7 @@ class ArticleCommandServiceTest {
         assertThat(savedArticle.getTitle()).isEqualTo("제목");
         assertThat(savedArticle.getLatestVersion()).isEqualTo(articleVersion);
         assertThat(savedArticle.getVersions()).hasSize(2);
+        assertThat(savedArticle.getUpdatedAt()).isNotNull();
 
         assertThat(articleVersion.getNickname()).isEqualTo("작성자2");
         assertThat(articleVersion.getContent()).isEqualTo("내용2");

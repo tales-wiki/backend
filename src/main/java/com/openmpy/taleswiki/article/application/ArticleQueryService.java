@@ -4,6 +4,7 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByCategoryResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadAllByLatestUpdateResponses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,11 @@ public class ArticleQueryService {
         final ArticleCategory articleCategory = ArticleCategory.of(category);
         final List<Article> articles = articleRepository.findAllByCategory(articleCategory);
         return ArticleReadAllByCategoryResponses.of(articles);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleReadAllByLatestUpdateResponses readAllByLatestUpdate() {
+        final List<Article> articles = articleRepository.findTop10ByOrderByUpdatedAtDesc();
+        return ArticleReadAllByLatestUpdateResponses.of(articles);
     }
 }
