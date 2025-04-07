@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReportService {
 
-    private static final int MAX_ARTICLE_REPORT_COUNT = 1;
+    private static final int MAX_ARTICLE_REPORT_COUNT = 10;
 
     private final ArticleReportRepository articleReportRepository;
     private final ArticleVersionRepository articleVersionRepository;
