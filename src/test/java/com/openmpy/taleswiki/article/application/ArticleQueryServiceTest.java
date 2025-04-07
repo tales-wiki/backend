@@ -39,6 +39,9 @@ class ArticleQueryServiceTest {
             }
 
             final Article article = Article.create("제목" + i, category);
+            final ArticleVersion articleVersion = ArticleVersion.create("닉네임" + i, "내용" + i, 10, "127.0.0.1", article);
+
+            article.addVersion(articleVersion);
             articleRepository.save(article);
         }
 
@@ -49,7 +52,9 @@ class ArticleQueryServiceTest {
         final List<ArticleReadCategoryResponse> payload = responses.payload();
 
         assertThat(payload).hasSize(5);
+        assertThat(payload.getFirst().articleVersionId()).isNotNull();
         assertThat(payload.getFirst().title()).isEqualTo("제목1");
+        assertThat(payload.getLast().articleVersionId()).isNotNull();
         assertThat(payload.getLast().title()).isEqualTo("제목9");
     }
 
@@ -65,6 +70,9 @@ class ArticleQueryServiceTest {
             }
 
             final Article article = Article.create("제목" + i, category);
+            final ArticleVersion articleVersion = ArticleVersion.create("닉네임" + i, "내용" + i, 10, "127.0.0.1", article);
+
+            article.addVersion(articleVersion);
             articleRepository.save(article);
         }
 
@@ -75,8 +83,10 @@ class ArticleQueryServiceTest {
         final List<ArticleReadLatestUpdateResponse> payload = responses.payload();
 
         assertThat(payload).hasSize(10);
+        assertThat(payload.getFirst().articleVersionId()).isNotNull();
         assertThat(payload.getFirst().title()).isEqualTo("제목19");
         assertThat(payload.getFirst().category()).isEqualTo("인물");
+        assertThat(payload.getLast().articleVersionId()).isNotNull();
         assertThat(payload.getLast().title()).isEqualTo("제목10");
         assertThat(payload.getLast().category()).isEqualTo("길드");
     }
