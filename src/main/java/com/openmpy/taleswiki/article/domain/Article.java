@@ -71,7 +71,8 @@ public class Article {
             final boolean isNoEditing,
             final LocalDateTime createdAt,
             final LocalDateTime updatedAt,
-            final LocalDateTime deletedAt
+            final LocalDateTime deletedAt,
+            final ArticleVersion latestVersion
     ) {
         this.id = id;
         this.title = new ArticleTitle(title);
@@ -80,6 +81,7 @@ public class Article {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
+        this.latestVersion = latestVersion;
     }
 
     @Builder
@@ -99,6 +101,22 @@ public class Article {
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
         this.latestVersion = latestVersion;
+    }
+
+    public static Article create(
+            final String title,
+            final ArticleCategory category,
+            final ArticleVersion latestVersion
+    ) {
+        return Article.builder()
+                .title(title)
+                .category(category)
+                .isNoEditing(false)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(null)
+                .deletedAt(null)
+                .latestVersion(latestVersion)
+                .build();
     }
 
     public String getTitle() {

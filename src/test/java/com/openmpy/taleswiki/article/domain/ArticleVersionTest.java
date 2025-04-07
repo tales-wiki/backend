@@ -2,7 +2,6 @@ package com.openmpy.taleswiki.article.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.openmpy.taleswiki.support.Fixture;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ class ArticleVersionTest {
 
         // when
         final ArticleVersion articleVersion =
-                new ArticleVersion(1L, nickname, content, versionNumber, size, isHiding, createdAt, Fixture.article01);
+                new ArticleVersion(1L, nickname, content, versionNumber, size, isHiding, createdAt, null);
 
         // then
         assertThat(articleVersion.getId()).isEqualTo(1L);
@@ -32,16 +31,7 @@ class ArticleVersionTest {
         assertThat(articleVersion.getSize()).isEqualTo(10);
         assertThat(articleVersion.isHiding()).isFalse();
         assertThat(articleVersion.getCreatedAt()).isEqualTo(LocalDateTime.of(2025, 1, 1, 1, 1, 1));
-
-        final Article article = articleVersion.getArticle();
-
-        assertThat(article.getId()).isEqualTo(1L);
-        assertThat(article.getTitle()).isEqualTo("제목");
-        assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
-        assertThat(article.isNoEditing()).isFalse();
-        assertThat(article.getCreatedAt()).isEqualTo(LocalDateTime.of(2025, 1, 1, 1, 1, 1));
-        assertThat(article.getUpdatedAt()).isEqualTo(LocalDateTime.of(2025, 1, 1, 1, 1, 2));
-        assertThat(article.getDeletedAt()).isEqualTo(LocalDateTime.of(2025, 1, 1, 1, 1, 3));
+        assertThat(articleVersion.getArticle()).isNull();
     }
 
     @DisplayName("[통과] 게시글 버전 객체를 생성한다.")
@@ -53,7 +43,7 @@ class ArticleVersionTest {
         final int size = 10;
 
         // when
-        final ArticleVersion articleVersion = ArticleVersion.create(nickname, content, size, Fixture.article01);
+        final ArticleVersion articleVersion = ArticleVersion.create(nickname, content, size, null);
 
         // then
         assertThat(articleVersion.getId()).isNull();
@@ -63,15 +53,6 @@ class ArticleVersionTest {
         assertThat(articleVersion.getSize()).isEqualTo(10);
         assertThat(articleVersion.isHiding()).isFalse();
         assertThat(articleVersion.getCreatedAt()).isNotNull();
-
-        final Article article = articleVersion.getArticle();
-
-        assertThat(article.getId()).isEqualTo(1L);
-        assertThat(article.getTitle()).isEqualTo("제목");
-        assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
-        assertThat(article.isNoEditing()).isFalse();
-        assertThat(article.getCreatedAt()).isEqualTo(LocalDateTime.of(2025, 1, 1, 1, 1, 1));
-        assertThat(article.getUpdatedAt()).isEqualTo(LocalDateTime.of(2025, 1, 1, 1, 1, 2));
-        assertThat(article.getDeletedAt()).isEqualTo(LocalDateTime.of(2025, 1, 1, 1, 1, 3));
+        assertThat(articleVersion.getArticle()).isNull();
     }
 }

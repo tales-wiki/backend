@@ -2,6 +2,7 @@ package com.openmpy.taleswiki.support;
 
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
+import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import java.time.LocalDateTime;
 
 public class Fixture {
@@ -13,6 +14,18 @@ public class Fixture {
             false,
             LocalDateTime.of(2025, 1, 1, 1, 1, 1),
             LocalDateTime.of(2025, 1, 1, 1, 1, 2),
-            LocalDateTime.of(2025, 1, 1, 1, 1, 3)
+            LocalDateTime.of(2025, 1, 1, 1, 1, 3),
+            null
+    );
+
+    public static ArticleVersion articleVersion01 = new ArticleVersion(
+            1L,
+            "작성자",
+            "내용",
+            1,
+            10,
+            false,
+            LocalDateTime.of(2025, 1, 1, 1, 1, 1),
+            null
     );
 }
