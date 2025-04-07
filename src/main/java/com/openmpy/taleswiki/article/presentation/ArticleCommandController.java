@@ -39,7 +39,7 @@ public class ArticleCommandController {
             @RequestBody @Valid final ArticleUpdateRequest request,
             final HttpServletRequest servletRequest
     ) {
-        articleCommandService.update(memberId, articleId, request, servletRequest);
+        articleCommandService.updateArticle(memberId, articleId, request, servletRequest);
         return ResponseEntity.noContent().build();
     }
 }

@@ -46,7 +46,7 @@ public class ArticleCommandService {
     }
 
     @Transactional
-    public void update(
+    public void updateArticle(
             final Long memberId,
             final Long articleId,
             final ArticleUpdateRequest request,

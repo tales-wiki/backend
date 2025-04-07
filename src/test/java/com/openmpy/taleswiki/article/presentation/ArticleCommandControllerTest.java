@@ -67,7 +67,7 @@ class ArticleCommandControllerTest extends ControllerTestSupport {
 
         // stub
         doNothing().when(articleCommandService)
-                .update(anyLong(), anyLong(), any(ArticleUpdateRequest.class), any(HttpServletRequest.class));
+                .updateArticle(anyLong(), anyLong(), any(ArticleUpdateRequest.class), any(HttpServletRequest.class));
 
         // when & then
         mockMvc.perform(put("/api/articles/{articleId}", articleId)

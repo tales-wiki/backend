@@ -82,7 +82,7 @@ class ArticleCommandServiceTest {
         when(memberService.getMember(anyLong())).thenReturn(any(Member.class));
 
         // when
-        articleCommandService.update(1L, article.getId(), request, Fixture.mockServerHttpRequest());
+        articleCommandService.updateArticle(1L, article.getId(), request, Fixture.mockServerHttpRequest());
 
         // then
         final Article savedArticle = articleRepository.findAll().getFirst();
@@ -129,7 +129,7 @@ class ArticleCommandServiceTest {
 
         // when & then
         assertThatThrownBy(() ->
-                articleCommandService.update(1L, savedArticle.getId(), request, Fixture.mockServerHttpRequest()))
+                articleCommandService.updateArticle(1L, savedArticle.getId(), request, Fixture.mockServerHttpRequest()))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(CustomErrorCode.NO_EDITING_ARTICLE.getMessage());
     }
