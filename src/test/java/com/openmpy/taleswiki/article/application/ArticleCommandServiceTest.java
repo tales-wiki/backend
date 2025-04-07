@@ -2,6 +2,9 @@ package com.openmpy.taleswiki.article.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
@@ -11,11 +14,14 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.common.exception.CustomException;
+import com.openmpy.taleswiki.member.application.MemberService;
+import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.support.CustomServiceTest;
 import com.openmpy.taleswiki.support.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @CustomServiceTest
 class ArticleCommandServiceTest {
@@ -25,6 +31,9 @@ class ArticleCommandServiceTest {
 
     @Autowired
     private ArticleRepository articleRepository;
+
+    @MockitoBean
+    private MemberService memberService;
 
     @DisplayName("[통과] 게시글을 생성한다.")
     @Test
@@ -69,8 +78,11 @@ class ArticleCommandServiceTest {
         final Article article = Fixture.createArticleWithVersion("제목", ArticleCategory.PERSON);
         articleRepository.save(article);
 
+        // stub
+        when(memberService.getMember(anyLong())).thenReturn(any(Member.class));
+
         // when
-        articleCommandService.update(article.getId(), request, Fixture.mockServerHttpRequest());
+        articleCommandService.update(1L, article.getId(), request, Fixture.mockServerHttpRequest());
 
         // then
         final Article savedArticle = articleRepository.findAll().getFirst();
@@ -112,9 +124,12 @@ class ArticleCommandServiceTest {
         article.toggleNoEditing(true);
         final Article savedArticle = articleRepository.save(article);
 
+        // stub
+        when(memberService.getMember(anyLong())).thenReturn(any(Member.class));
+
         // when & then
         assertThatThrownBy(() ->
-                articleCommandService.update(savedArticle.getId(), request, Fixture.mockServerHttpRequest()))
+                articleCommandService.update(1L, savedArticle.getId(), request, Fixture.mockServerHttpRequest()))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(CustomErrorCode.NO_EDITING_ARTICLE.getMessage());
     }

@@ -12,6 +12,8 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
+import com.openmpy.taleswiki.member.application.MemberService;
+import com.openmpy.taleswiki.member.domain.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleCommandService {
 
     private final ArticleRepository articleRepository;
+    private final MemberService memberService;
 
     @Transactional
     public void create(final ArticleCreateRequest request, final HttpServletRequest servletRequest) {
@@ -44,10 +47,12 @@ public class ArticleCommandService {
 
     @Transactional
     public void update(
+            final Long memberId,
             final Long articleId,
             final ArticleUpdateRequest request,
             final HttpServletRequest servletRequest
     ) {
+        final Member member = memberService.getMember(memberId);
         final Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID));
 
@@ -64,5 +69,7 @@ public class ArticleCommandService {
         articleVersion.updateVersionNumber(article.getLatestVersion().getVersionNumber() + 1);
         article.addVersion(articleVersion);
         articleRepository.save(article);
+
+        // TODO: 수정 기록
     }
 }
