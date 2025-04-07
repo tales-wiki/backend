@@ -44,6 +44,9 @@ public class Article extends BaseEntity {
     private ArticleCategory category;
 
     @Column
+    private boolean isNoEditing;
+
+    @Column
     private LocalDateTime deletedAt;
 
     @Column(insertable = false)
@@ -86,6 +89,10 @@ public class Article extends BaseEntity {
 
     public void delete() {
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public void toggleNoEditing(boolean isNoEditing) {
+        this.isNoEditing = isNoEditing;
     }
 
     public String getTitle() {

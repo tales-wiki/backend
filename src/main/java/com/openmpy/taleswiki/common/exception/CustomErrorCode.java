@@ -30,6 +30,7 @@ public enum CustomErrorCode {
     ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY("해당 카테고리에 이미 작성된 게시글입니다."),
     NOT_FOUND_ARTICLE_VERSION("찾을 수 없는 게시글 버전입니다."),
     NOT_FOUND_ARTICLE_ID("찾을 수 없는 게시글 번호입니다."),
+    NO_EDITING_ARTICLE("편집 할 수 없는 게시글입니다."),
 
     // report
     INVALID_REPORT_REASON_LENGTH("신고 사유 길이가 올바르지 않습니다. (최대 100자)"),
