@@ -1,6 +1,5 @@
 package com.openmpy.taleswiki.common.dummy;
 
-import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -13,9 +12,7 @@ public class DummyData {
 
     @Profile("test")
     @Bean
-    private CommandLineRunner init(
-            final ArticleRepository articleRepository
-    ) {
+    private CommandLineRunner init() {
         return null;
     }
 }
