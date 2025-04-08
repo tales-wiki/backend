@@ -67,7 +67,7 @@ class AdminCommandControllerTest extends ControllerTestSupport {
                 );
     }
 
-    @DisplayName("[통과] 게시글 편집 모드를 수정한다.")
+    @DisplayName("[통과] 게시글 버전 숨김 모드를 수정한다.")
     @Test
     void admin_command_controller_test_03() throws Exception {
         // given

@@ -112,7 +112,10 @@ class ArticleCommandControllerTest extends ControllerTestSupport {
                 .andDo(
                         document("reportArticleVersion",
                                 preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint())
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("reportReason").description("신고 사유")
+                                )
                         )
                 );
     }

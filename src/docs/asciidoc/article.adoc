@@ -4,34 +4,30 @@
 
 operation::createArticle[snippets="http-request,request-body,request-fields,http-response"]
 
-=== 조회
-
-operation::readArticle[snippets="path-parameters,http-request,http-response"]
-
-=== 버전 목록 조회
-
-operation::readArticleWithVersion[snippets="path-parameters,http-request,http-response"]
-
-=== 해당 버전 조회
-
-operation::readArticleByVersion[snippets="path-parameters,http-request,http-response"]
-
-=== 카테고리별 전체 조회
-
-operation::readArticlesByCategory[snippets="http-request,http-response"]
-
-=== 최근 편집
-
-operation::readArticlesOrderByRecentEdits[snippets="http-request,http-response"]
-
 === 수정
 
-operation::updateArticle[snippets="path-parameters,http-request,request-body,request-fields,http-response"]
+operation::updateArticle[snippets="http-request,request-body,request-fields,http-response"]
 
-=== 삭제
+=== 신고
 
-operation::deleteArticle[snippets="path-parameters,http-request,http-response"]
+operation::reportArticleVersion[snippets="http-request,request-body,request-fields,http-response"]
 
-=== 검색
+=== 조회
+
+operation::readArticleByArticleVersion[snippets="path-parameters,http-request,http-response"]
+
+=== 카테고리별 게시글 목록 조회
+
+operation::readAllArticleByCategory[snippets="path-parameters,http-request,http-response"]
+
+=== 최근 수정된 게시글 10개 조회
+
+operation::readAllArticleByLatestUpdate[snippets="http-request,http-response"]
+
+=== 게시글 버전 목록 조회
+
+operation::readAllArticleVersionByArticle[snippets="path-parameters,http-request,http-response"]
+
+=== 게시글 제목으로 검색
 
 operation::searchArticleByTitle[snippets="http-request,http-response"]

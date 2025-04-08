@@ -1,4 +1,4 @@
-= Tales Wiki
+= 테일즈위키 API 문서
 :doctype: book
 :source-highlighter: highlightjs
 :toc: left
@@ -7,4 +7,4 @@
 
 include::article.adoc[]
 include::member.adoc[]
-include::exception.adoc[]
+include::admin.adoc[]
