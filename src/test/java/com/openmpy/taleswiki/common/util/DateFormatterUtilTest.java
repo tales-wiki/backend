@@ -8,16 +8,16 @@ import org.junit.jupiter.api.Test;
 
 class DateFormatterUtilTest {
 
-    @DisplayName("[통과] LocalDateTime을 년, 월, 일, 시, 분, 초의 문자열로 리턴한다.")
+    @DisplayName("[통과] LocalDateTime 객체를 년, 월, 일, 시, 분, 초 형식의 문자열로 반환한다.")
     @Test
     void date_formatter_util_test_01() {
         // given
-        final LocalDateTime dateTime = LocalDateTime.of(2025, 4, 5, 12, 0, 0);
+        final LocalDateTime value = LocalDateTime.of(2025, 1, 1, 1, 1, 1);
 
         // when
-        final String result = DateFormatterUtil.convert(dateTime);
+        final String result = DateFormatterUtil.convert(value);
 
         // then
-        assertThat(result).isEqualTo("2025년 04월 05일 12시 00분 00초");
+        assertThat(result).isEqualTo("2025년 01월 01일 01시 01분 01초");
     }
 }

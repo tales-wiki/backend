@@ -1,23 +1,30 @@
 package com.openmpy.taleswiki.article.presentation.response;
 
 import com.openmpy.taleswiki.article.domain.Article;
+import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import java.time.LocalDateTime;
 
 public record ArticleReadResponse(
+        Long articleId,
+        Long articleVersionId,
         String title,
         String content,
+        boolean isNoEditing,
         boolean isHiding,
-        Long versionId,
         LocalDateTime createdAt
 ) {
 
-    public static ArticleReadResponse of(final Article article) {
+    public static ArticleReadResponse of(final ArticleVersion articleVersion) {
+        final Article article = articleVersion.getArticle();
+
         return new ArticleReadResponse(
+                article.getId(),
+                articleVersion.getId(),
                 article.getTitle(),
-                article.getLatestVersion().getContent(),
-                article.getLatestVersion().isHiding(),
-                article.getLatestVersion().getId(),
-                article.getLatestVersion().getCreatedAt()
+                articleVersion.getContent(),
+                article.isNoEditing(),
+                articleVersion.isHiding(),
+                articleVersion.getCreatedAt()
         );
     }
 }

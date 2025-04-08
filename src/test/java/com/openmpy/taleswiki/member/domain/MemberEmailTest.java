@@ -14,20 +14,20 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class MemberEmailTest {
 
-    @DisplayName("[통과] 회원 이메일 객체가 정상적으로 생성된다.")
+    @DisplayName("[통과] 회원 이메일 객체를 생성한다.")
     @Test
     void member_email_test_01() {
         // given
         final String value = "test@test.com";
 
         // when
-        final MemberEmail email = new MemberEmail(value);
+        final MemberEmail memberEmail = new MemberEmail(value);
 
         // then
-        assertThat(email.getValue()).isEqualTo("test@test.com");
+        assertThat(memberEmail.getValue()).isEqualTo("test@test.com");
     }
 
-    @DisplayName("[예외] 이메일이 null 또는 빈 값일 수 없다.")
+    @DisplayName("[예외] 회원 이메일이 null 또는 빈 값일 수 없다.")
     @ParameterizedTest(name = "값: {0}")
     @NullAndEmptySource
     void 예외_member_email_test_01(final String value) {
@@ -37,7 +37,7 @@ class MemberEmailTest {
                 .hasMessage(NOT_ALLOWED_MEMBER_EMAIL_NULL_AND_BLANK.getMessage());
     }
 
-    @DisplayName("[예외] 이메일 형식이 아니다.")
+    @DisplayName("[예외] 회원 이메일이 유효하지 않다.")
     @ParameterizedTest(name = "값: {0}")
     @ValueSource(strings = {"test", "test@", "test@test"})
     void 예외_member_email_test_02(final String value) {

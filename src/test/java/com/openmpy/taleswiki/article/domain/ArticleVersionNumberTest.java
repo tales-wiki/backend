@@ -12,20 +12,20 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class ArticleVersionNumberTest {
 
-    @DisplayName("[통과] 게시글 버전 값 객체가 정상적으로 생성된다.")
+    @DisplayName("[통과] 게시글 버전 숫자 객체를 생성한다.")
     @Test
     void article_version_number_test_01() {
         // given
-        final int value = 123;
+        final int value = 1;
 
         // when
         final ArticleVersionNumber versionNumber = new ArticleVersionNumber(value);
 
         // then
-        assertThat(versionNumber.getValue()).isEqualTo(123);
+        assertThat(versionNumber.getValue()).isEqualTo(1);
     }
 
-    @DisplayName("[예외] 게시글 버전 값이 0 또는 음수일 수 없다.")
+    @DisplayName("[예외] 게시글 버전 숫자가 0 이하이다.")
     @ParameterizedTest(name = "값: {0}")
     @ValueSource(ints = {-1, 0})
     void 예외_article_version_number_test_01(final int value) {

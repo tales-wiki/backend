@@ -1,11 +1,11 @@
 package com.openmpy.taleswiki.article.domain;
 
-import com.openmpy.taleswiki.common.domain.BaseEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -23,13 +23,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @SQLRestriction("deleted_at is null")
 @Entity
-public class Article extends BaseEntity {
+public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,52 +49,83 @@ public class Article extends BaseEntity {
     @Column
     private boolean isNoEditing;
 
-    @Column
-    private LocalDateTime deletedAt;
+    @Column(updatable = false)
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     @Column(insertable = false)
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ArticleVersion> versions = new ArrayList<>();
+    @Column
+    private LocalDateTime deletedAt;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "latest_version_id")
     private ArticleVersion latestVersion;
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<ArticleVersion> versions = new ArrayList<>();
+
+    public Article(
+            final Long id,
+            final String title,
+            final ArticleCategory category,
+            final boolean isNoEditing,
+            final LocalDateTime createdAt,
+            final LocalDateTime updatedAt,
+            final LocalDateTime deletedAt,
+            final ArticleVersion latestVersion
+    ) {
+        this.id = id;
+        this.title = new ArticleTitle(title);
+        this.category = category;
+        this.isNoEditing = isNoEditing;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.latestVersion = latestVersion;
+    }
+
     @Builder
     public Article(
             final String title,
             final ArticleCategory category,
-            final List<ArticleVersion> versions,
+            final boolean isNoEditing,
+            final LocalDateTime createdAt,
+            final LocalDateTime updatedAt,
+            final LocalDateTime deletedAt,
             final ArticleVersion latestVersion
     ) {
         this.title = new ArticleTitle(title);
         this.category = category;
-        this.versions = versions;
+        this.isNoEditing = isNoEditing;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
         this.latestVersion = latestVersion;
     }
 
-    public static Article create(final String title, final String category) {
+    public static Article create(
+            final String title,
+            final ArticleCategory category
+    ) {
         return Article.builder()
                 .title(title)
-                .category(ArticleCategory.of(category))
-                .versions(new ArrayList<>())
-                .latestVersion(null)
+                .category(category)
+                .isNoEditing(false)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(null)
+                .deletedAt(null)
                 .build();
     }
 
-    public void addVersion(final ArticleVersion version) {
-        versions.add(version);
-        latestVersion = version;
+    public void addVersion(final ArticleVersion articleVersion) {
+        this.versions.add(articleVersion);
+        this.latestVersion = articleVersion;
     }
 
-    public void delete() {
-        this.deletedAt = LocalDateTime.now();
-    }
-
-    public void toggleNoEditing(boolean isNoEditing) {
+    public void toggleNoEditing(final boolean isNoEditing) {
         this.isNoEditing = isNoEditing;
     }
 

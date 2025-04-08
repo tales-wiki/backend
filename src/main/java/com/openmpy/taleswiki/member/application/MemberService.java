@@ -6,10 +6,7 @@ import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_M
 
 import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
 import com.openmpy.taleswiki.common.exception.CustomException;
-import com.openmpy.taleswiki.discord.application.DiscordService;
-import com.openmpy.taleswiki.discord.application.request.DiscordSignupRequest;
 import com.openmpy.taleswiki.member.domain.Member;
-import com.openmpy.taleswiki.member.domain.MemberEmail;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
 import com.openmpy.taleswiki.member.presentation.response.MemberLoginResponse;
@@ -25,12 +22,10 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final DiscordService discordService;
 
     @Transactional
     public MemberLoginResponse join(final String email, final MemberSocial social) {
-        final MemberEmail memberEmail = new MemberEmail(email);
-        final Optional<Member> member = memberRepository.findByEmail(memberEmail);
+        final Optional<Member> member = memberRepository.findByEmail_Value(email);
 
         if (member.isPresent()) {
             return MemberLoginResponse.of(member.get());
@@ -38,9 +33,6 @@ public class MemberService {
 
         final Member newMember = Member.create(email, social);
         final Member savedMember = memberRepository.save(newMember);
-
-        final DiscordSignupRequest request = DiscordSignupRequest.of(savedMember);
-        discordService.sendSignupMessage(request);
         return MemberLoginResponse.of(savedMember);
     }
 

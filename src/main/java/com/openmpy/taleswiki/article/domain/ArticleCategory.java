@@ -4,9 +4,7 @@ import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_A
 
 import com.openmpy.taleswiki.common.exception.CustomException;
 import java.util.Arrays;
-import lombok.Getter;
 
-@Getter
 public enum ArticleCategory {
 
     PERSON("인물"),
@@ -24,5 +22,10 @@ public enum ArticleCategory {
                 .filter(it -> it.value.equals(category))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_CATEGORY));
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 }

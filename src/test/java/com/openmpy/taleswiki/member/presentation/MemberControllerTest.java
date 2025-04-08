@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
 import com.openmpy.taleswiki.member.presentation.response.MemberLoginResponse;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import java.time.Duration;
@@ -27,11 +28,6 @@ class MemberControllerTest extends ControllerTestSupport {
 
     @BeforeEach
     void setUp() {
-        when(cookieProperties.httpOnly()).thenReturn(true);
-        when(cookieProperties.secure()).thenReturn(true);
-        when(cookieProperties.domain()).thenReturn("localhost");
-        when(cookieProperties.path()).thenReturn("/");
-        when(cookieProperties.sameSite()).thenReturn("none");
         when(cookieProperties.maxAge()).thenReturn(Duration.ofDays(10L));
     }
 
@@ -40,8 +36,8 @@ class MemberControllerTest extends ControllerTestSupport {
     void member_controller_test_01() throws Exception {
         // given
         final MemberLoginResponse response = new MemberLoginResponse(1L, "test@test.com", MEMBER.name());
-        final String token = "access-token";
-        final ResponseCookie cookie = createCookie(token);
+        final String token = "test-token";
+        final ResponseCookie cookie = createCookie();
 
         // stub
         when(kakaoService.login(anyString())).thenReturn(response);
@@ -68,8 +64,8 @@ class MemberControllerTest extends ControllerTestSupport {
     void member_controller_test_02() throws Exception {
         // given
         final MemberLoginResponse response = new MemberLoginResponse(1L, "test@test.com", MEMBER.name());
-        final String token = "access-token";
-        final ResponseCookie cookie = createCookie(token);
+        final String token = "test-token";
+        final ResponseCookie cookie = createCookie();
 
         // stub
         when(googleService.login(anyString())).thenReturn(response);
@@ -91,8 +87,8 @@ class MemberControllerTest extends ControllerTestSupport {
                 );
     }
 
-    private ResponseCookie createCookie(final String token) {
-        return ResponseCookie.from("access-token", token)
+    private ResponseCookie createCookie() {
+        return ResponseCookie.from(JwtTokenProvider.ACCESS_TOKEN, "test-token")
                 .httpOnly(cookieProperties.httpOnly())
                 .secure(cookieProperties.secure())
                 .domain(cookieProperties.domain())

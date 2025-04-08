@@ -4,15 +4,13 @@ import static com.openmpy.taleswiki.member.domain.MemberAuthority.MEMBER;
 import static com.openmpy.taleswiki.member.domain.MemberSocial.KAKAO;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.openmpy.taleswiki.discord.application.DiscordService;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
 import com.openmpy.taleswiki.member.presentation.response.MemberLoginResponse;
-import com.openmpy.taleswiki.support.annotation.CustomServiceTest;
+import com.openmpy.taleswiki.support.CustomServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @CustomServiceTest
 class MemberServiceTest {
@@ -22,9 +20,6 @@ class MemberServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    @MockitoBean
-    private DiscordService discordService;
 
     @DisplayName("[통과] 회원가입을 한다.")
     @Test
@@ -68,6 +63,5 @@ class MemberServiceTest {
 
         // then
         assertThat(token).isNotNull();
-        System.out.println("token = " + token);
     }
 }

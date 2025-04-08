@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class ArticleContentTest {
 
-    @DisplayName("[통과] 게시글 내용 객체가 정상적으로 생성된다.")
+    @DisplayName("[통과] 게시글 내용 객체를 생성한다.")
     @Test
     void article_content_test_01() {
         // given

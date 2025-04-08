@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record ArticleUpdateRequest(
 
-        @NotBlank(message = "닉네임이 빈 값일 수 없습니다.")
+        @NotBlank(message = "작성자명을 입력해주시길 바랍니다.")
         String nickname,
 
         String content

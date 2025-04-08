@@ -15,18 +15,20 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class ArticleTitleTest {
 
-    @DisplayName("[통과] 게시글 제목 객체가 정상적으로 생성된다.")
-    @ParameterizedTest(name = "값: {0}")
-    @ValueSource(strings = {"a", "AB", "가나다", "0", "12", "a1", "가1"})
-    void article_title_test_01(final String value) {
+    @DisplayName("[통과] 게시글 제목 객체를 생성한다.")
+    @Test
+    void article_title_test_01() {
+        // given
+        final String value = "제목";
+
         // when
         final ArticleTitle title = new ArticleTitle(value);
 
         // then
-        assertThat(title.getValue()).isEqualTo(value);
+        assertThat(title.getValue()).isEqualTo("제목");
     }
 
-    @DisplayName("[예외] 게시글 제목 객체가 빈 값일 수 없다.")
+    @DisplayName("[예외] 게시글 제목이 null 또는 빈 값이다.")
     @ParameterizedTest(name = "값: {0}")
     @NullAndEmptySource
     void 예외_article_title_test_01(final String value) {
@@ -36,21 +38,21 @@ class ArticleTitleTest {
                 .hasMessage(NOT_ALLOWED_ARTICLE_TITLE_NULL_AND_BLANK.getMessage());
     }
 
-    @DisplayName("[예외] 게시글 제목 길이가 12자를 넘어간다.")
+    @DisplayName("[예외] 게시글 제목 길이가 12자를 초과한다.")
     @Test
     void 예외_article_title_test_02() {
         // given
-        final String title = "1".repeat(13);
+        final String value = "a".repeat(13);
 
         // when & then
-        assertThatThrownBy(() -> new ArticleTitle(title))
+        assertThatThrownBy(() -> new ArticleTitle(value))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(INVALID_ARTICLE_TITLE_LENGTH.getMessage());
     }
 
-    @DisplayName("[예외] 게시글 제목에 공백 또는 특수문자가 포함된다.")
+    @DisplayName("[예외] 게시글 제목에 특수문자, 공백, 모음, 자음이 들어간다.")
     @ParameterizedTest(name = "값: {0}")
-    @ValueSource(strings = {" 홍길동", "홍 길동", "홍길동 ", "_홍길동", "홍_길동", "홍길동_", "__", "*"})
+    @ValueSource(strings = {"제 목", "제@목", "제ㄱ목", "제ㅏ목"})
     void 예외_article_title_test_03(final String value) {
         // when & then
         assertThatThrownBy(() -> new ArticleTitle(value))

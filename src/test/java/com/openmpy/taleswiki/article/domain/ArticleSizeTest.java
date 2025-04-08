@@ -10,22 +10,22 @@ import org.junit.jupiter.api.Test;
 
 class ArticleSizeTest {
 
-    @DisplayName("[통과] 게시글 사이즈 객체가 정상적으로 생성된다.")
+    @DisplayName("[통과] 게시글 사이즈 객체를 생성한다.")
     @Test
     void article_size_test_01() {
         // given
-        final int value = 100;
+        final int value = 10;
 
         // when
         final ArticleSize size = new ArticleSize(value);
 
         // then
-        assertThat(size.getValue()).isEqualTo(100);
+        assertThat(size.getValue()).isEqualTo(10);
     }
 
-    @DisplayName("[예외] 게시글 사이즈가 음수일 수 없다.")
+    @DisplayName("[예외] 게시글 사이즈가 0 미만이다.")
     @Test
-    void 예외_name_test_() {
+    void 예외_article_size_test_01() {
         // given
         final int value = -1;
 

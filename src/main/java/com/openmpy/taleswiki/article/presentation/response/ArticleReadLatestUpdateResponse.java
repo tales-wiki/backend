@@ -1,6 +1,6 @@
 package com.openmpy.taleswiki.article.presentation.response;
 
-public record ArticleSearchResponse(
+public record ArticleReadLatestUpdateResponse(
         Long articleVersionId,
         String title,
         String category
