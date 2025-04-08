@@ -19,7 +19,6 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRe
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
 import com.openmpy.taleswiki.member.application.MemberService;
-import com.openmpy.taleswiki.member.domain.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -62,7 +61,7 @@ public class ArticleCommandService {
             final ArticleUpdateRequest request,
             final HttpServletRequest servletRequest
     ) {
-        final Member member = memberService.getMember(memberId);
+        memberService.getMember(memberId);
         final Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID));
 
@@ -79,8 +78,6 @@ public class ArticleCommandService {
         articleVersion.updateVersionNumber(article.getLatestVersion().getVersionNumber() + 1);
         article.addVersion(articleVersion);
         articleRepository.save(article);
-
-        // TODO: 수정 기록
     }
 
     @Transactional

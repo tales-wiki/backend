@@ -129,6 +129,10 @@ public class Article {
         this.isNoEditing = isNoEditing;
     }
 
+    public void delete(final LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
     public String getTitle() {
         return title.getValue();
     }

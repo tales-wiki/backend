@@ -2,7 +2,9 @@ package com.openmpy.taleswiki.member.application;
 
 import static com.openmpy.taleswiki.auth.jwt.JwtTokenProvider.ID_KEY;
 import static com.openmpy.taleswiki.auth.jwt.JwtTokenProvider.ROLE_KEY;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.INVALID_MEMBER_AUTHORITY;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_MEMBER_ID;
+import static com.openmpy.taleswiki.member.domain.MemberAuthority.ADMIN;
 
 import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
 import com.openmpy.taleswiki.common.exception.CustomException;
@@ -38,6 +40,14 @@ public class MemberService {
 
     public Member getMember(final Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ID));
+    }
+
+    public void checkAdminMember(final Long memberId) {
+        final Member member = getMember(memberId);
+
+        if (!member.getAuthority().equals(ADMIN)) {
+            throw new CustomException(INVALID_MEMBER_AUTHORITY);
+        }
     }
 
     public String generateToken(final MemberLoginResponse response) {

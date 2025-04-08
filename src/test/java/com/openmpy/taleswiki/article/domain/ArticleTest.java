@@ -61,7 +61,7 @@ class ArticleTest {
     @Test
     void article_test_03() {
         // given
-        final Article article = Fixture.article01;
+        final Article article = Fixture.ARTICLE_01;
         final ArticleVersion articleVersion = ArticleVersion.create("작성자", "내용", 10, "127.0.0.1", article);
 
         // when
@@ -80,11 +80,25 @@ class ArticleTest {
     @Test
     void article_test_04() {
         // given
-        final Article article = Fixture.article01;
+        final Article article = Fixture.ARTICLE_01;
 
         // when & then
         assertThat(article.isNoEditing()).isFalse();
         article.toggleNoEditing(true);
         assertThat(article.isNoEditing()).isTrue();
+    }
+
+    @DisplayName("[통과] 게시글을 삭제한다.")
+    @Test
+    void article_test_05() {
+        // given
+        final Article article = Fixture.ARTICLE_01;
+        final LocalDateTime deletedAt = LocalDateTime.of(2025, 1, 1, 1, 1, 1);
+
+        // when
+        article.delete(deletedAt);
+
+        // then
+        assertThat(article.getDeletedAt()).isEqualTo(deletedAt);
     }
 }
