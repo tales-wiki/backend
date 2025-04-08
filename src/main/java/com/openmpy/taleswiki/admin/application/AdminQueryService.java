@@ -1,8 +1,5 @@
 package com.openmpy.taleswiki.admin.application;
 
-import static com.openmpy.taleswiki.common.exception.CustomErrorCode.INVALID_MEMBER_AUTHORITY;
-import static com.openmpy.taleswiki.member.domain.MemberAuthority.ADMIN;
-
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponses;
@@ -10,7 +7,6 @@ import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.ArticleVersionReport;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionReportRepository;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
-import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
@@ -32,7 +28,7 @@ public class AdminQueryService {
 
     @Transactional(readOnly = true)
     public AdminReadAllMemberResponses readAllMember(final Long memberId, final int page, final int size) {
-        checkAdminMember(memberId);
+        memberService.checkAdminMember(memberId);
 
         final PageRequest pageRequest = PageRequest.of(page, size);
         final Page<Member> memberPage = memberRepository.findAll(pageRequest);
@@ -47,7 +43,7 @@ public class AdminQueryService {
             final int page,
             final int size
     ) {
-        checkAdminMember(memberId);
+        memberService.checkAdminMember(memberId);
 
         final PageRequest pageRequest = PageRequest.of(page, size);
         final Page<ArticleVersion> articleVersionPage = articleVersionRepository.findAll(pageRequest);
@@ -62,20 +58,12 @@ public class AdminQueryService {
             final int page,
             final int size
     ) {
-        checkAdminMember(memberId);
+        memberService.checkAdminMember(memberId);
 
         final PageRequest pageRequest = PageRequest.of(page, size);
         final Page<ArticleVersionReport> articleVersionReportPage = articleVersionReportRepository.findAll(pageRequest);
         final List<ArticleVersionReport> articleVersionReports = articleVersionReportPage.getContent();
 
         return AdminReadAllArticleVersionReportResponses.of(articleVersionReports);
-    }
-
-    private void checkAdminMember(final Long memberId) {
-        final Member member = memberService.getMember(memberId);
-
-        if (!member.getAuthority().equals(ADMIN)) {
-            throw new CustomException(INVALID_MEMBER_AUTHORITY);
-        }
     }
 }

@@ -87,4 +87,18 @@ class ArticleTest {
         article.toggleNoEditing(true);
         assertThat(article.isNoEditing()).isTrue();
     }
+
+    @DisplayName("[통과] 게시글을 삭제한다.")
+    @Test
+    void article_test_05() {
+        // given
+        final Article article = Fixture.ARTICLE_01;
+        final LocalDateTime deletedAt = LocalDateTime.of(2025, 1, 1, 1, 1, 1);
+
+        // when
+        article.delete(deletedAt);
+
+        // then
+        assertThat(article.getDeletedAt()).isEqualTo(deletedAt);
+    }
 }

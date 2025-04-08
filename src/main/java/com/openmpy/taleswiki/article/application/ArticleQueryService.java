@@ -1,5 +1,8 @@
 package com.openmpy.taleswiki.article.application;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION_ID;
+
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
@@ -56,8 +59,13 @@ public class ArticleQueryService {
     @Transactional(readOnly = true)
     public ArticleReadResponse readArticleByArticleVersion(final Long articleVersionId) {
         final ArticleVersion articleVersion = articleVersionRepository.findById(articleVersionId)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_ARTICLE_VERSION_ID));
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION_ID));
 
         return ArticleReadResponse.of(articleVersion);
+    }
+
+    public Article getArticle(final Long articleId) {
+        return articleRepository.findById(articleId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID));
     }
 }
