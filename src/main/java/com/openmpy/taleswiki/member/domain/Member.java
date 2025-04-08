@@ -36,6 +36,13 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private MemberAuthority authority;
 
+    public Member(final Long id, final String email, final MemberSocial social, final MemberAuthority authority) {
+        this.id = id;
+        this.email = new MemberEmail(email);
+        this.social = social;
+        this.authority = authority;
+    }
+
     @Builder
     public Member(final String email, final MemberSocial social, final MemberAuthority authority) {
         this.email = new MemberEmail(email);
