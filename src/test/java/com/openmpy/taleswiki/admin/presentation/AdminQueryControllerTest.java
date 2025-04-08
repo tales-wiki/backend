@@ -17,6 +17,8 @@ import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVers
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponse;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponses;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
@@ -200,6 +202,42 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 .andDo(print())
                 .andDo(
                         document("readAllArticleVersionReport",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );
+    }
+
+    @DisplayName("[통과] 정지된 아이피 목록을 조회한다.")
+    @Test
+    void article_query_controller_test_07() throws Exception {
+        // given
+        final LocalDateTime dateTime01 = LocalDateTime.of(2025, 1, 1, 1, 1, 1);
+        final LocalDateTime dateTime02 = LocalDateTime.of(2025, 1, 1, 1, 1, 2);
+
+        final AdminReadAllBlockedIpResponse response01 =
+                new AdminReadAllBlockedIpResponse(1L, "127.0.0.1", dateTime01);
+        final AdminReadAllBlockedIpResponse response02 =
+                new AdminReadAllBlockedIpResponse(2L, "127.0.0.2", dateTime02);
+        final AdminReadAllBlockedIpResponses responses =
+                new AdminReadAllBlockedIpResponses(List.of(response01, response02));
+
+        // stub
+        when(adminQueryService.readAllBlockedIp(anyLong(), anyInt(), anyInt())).thenReturn(responses);
+
+        // when & then
+        mockMvc.perform(get("/api/admin/ip-block"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.payload").isArray())
+                .andExpect(jsonPath("$.payload[0].blockedIpId").value(1))
+                .andExpect(jsonPath("$.payload[0].ip").value("127.0.0.1"))
+                .andExpect(jsonPath("$.payload[0].createdAt").value(dateTime01.toString()))
+                .andExpect(jsonPath("$.payload[1].blockedIpId").value(2))
+                .andExpect(jsonPath("$.payload[1].ip").value("127.0.0.2"))
+                .andExpect(jsonPath("$.payload[1].createdAt").value(dateTime02.toString()))
+                .andDo(print())
+                .andDo(
+                        document("readAllBlockedIp",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint())
                         )

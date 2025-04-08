@@ -6,10 +6,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import com.openmpy.taleswiki.admin.domain.BlockedIp;
+import com.openmpy.taleswiki.admin.domain.repository.BlockedIpRepository;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponse;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponses;
 import com.openmpy.taleswiki.article.domain.Article;
@@ -43,6 +47,9 @@ class AdminQueryServiceTest {
 
     @Autowired
     private ArticleVersionReportRepository articleVersionReportRepository;
+
+    @Autowired
+    private BlockedIpRepository blockedIpRepository;
 
     @MockitoBean
     private MemberService memberService;
@@ -135,5 +142,27 @@ class AdminQueryServiceTest {
         assertThat(payload.getFirst().reportReason()).isEqualTo("내용".repeat(5));
         assertThat(payload.getLast().ip()).isEqualTo("127.0.0.9");
         assertThat(payload.getLast().reportReason()).isEqualTo("내용".repeat(14));
+    }
+
+    @DisplayName("[통과] 정지된 IP 목록을 페이지 형식으로 조회한다.")
+    @Test
+    void admin_query_service_test_04() {
+        // given
+        for (int i = 0; i < 20; i++) {
+            final BlockedIp blockedIp = BlockedIp.create("127.0.0." + i);
+            blockedIpRepository.save(blockedIp);
+        }
+
+        // stub
+        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
+
+        // when
+        final AdminReadAllBlockedIpResponses responses = adminQueryService.readAllBlockedIp(1L, 0, 10);
+
+        // then
+        final List<AdminReadAllBlockedIpResponse> payload = responses.payload();
+
+        assertThat(payload.getFirst().ip()).isEqualTo("127.0.0.0");
+        assertThat(payload.getLast().ip()).isEqualTo("127.0.0.9");
     }
 }

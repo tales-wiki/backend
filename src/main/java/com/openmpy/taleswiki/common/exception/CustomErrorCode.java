@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum CustomErrorCode {
 
     // member
-    x("회원 이메일이 빈 값일 수 없습니다."),
+    NOT_ALLOWED_MEMBER_EMAIL_NULL_AND_BLANK("회원 이메일이 빈 값일 수 없습니다."),
     INVALID_MEMBER_EMAIL("올바르지 않은 회원 이메일입니다."),
     FAILED_KAKAO_LOGIN("카카오 로그인에 실패했습니다."),
     FAILED_GOOGLE_LOGIN("구글 로그인에 실패했습니다."),
@@ -31,12 +31,14 @@ public enum CustomErrorCode {
 
     // admin
     INVALID_MEMBER_AUTHORITY("올바르지 않은 회원 권한입니다."),
+    ALREADY_BLOCKED_IP("이미 정지 된 IP 주소입니다."),
+    NOT_FOUND_BLOCKED_IP("찾을 수 없는 IP 주소입니다."),
 
     // other
     NOT_FOUND_COOKIE("찾을 수 없는 쿠키입니다."),
     INVALID_ACCESS_TOKEN("올바르지 않은 액세스 토큰입니다."),
     NOT_ALLOWED_IP_NULL_AND_BLANK("IP가 빈 값일 수 없습니다."),
-    INVALID_IP("올바르지 않은 IP 입니다."),
+    INVALID_IP("올바르지 않은 IP 주소입니다."),
 
     // server
     REQUEST_METHOD_NOT_SUPPORTED("지원하지 않는 요청 메서드입니다."),

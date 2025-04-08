@@ -1,17 +1,22 @@
 package com.openmpy.taleswiki.admin.presentation;
 
 import static com.openmpy.taleswiki.support.Fixture.MEMBER_COOKIE;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.openmpy.taleswiki.admin.presentation.request.AdminBlockedIpRequest;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -87,6 +92,64 @@ class AdminCommandControllerTest extends ControllerTestSupport {
                         document("toggleArticleVersionHideMode",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint())
+                        )
+                );
+    }
+
+    @DisplayName("[통과] 아이피 주소를 정지시킨다.")
+    @Test
+    void admin_command_controller_test_04() throws Exception {
+        // given
+        final AdminBlockedIpRequest request = new AdminBlockedIpRequest("127.0.0.1");
+        final String payload = objectMapper.writeValueAsString(request);
+
+        // stub
+        doNothing().when(adminCommandService).addBlockedIp(anyLong(), any(AdminBlockedIpRequest.class));
+
+        // when & then
+        mockMvc.perform(post("/api/admin/ip-block")
+                        .cookie(MEMBER_COOKIE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload)
+                )
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(
+                        document("addBlockedIp",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("ip").description("아이피")
+                                )
+                        )
+                );
+    }
+
+    @DisplayName("[통과] 아이피 주소 정지를 해제한다.")
+    @Test
+    void admin_command_controller_test_05() throws Exception {
+        // given
+        final AdminBlockedIpRequest request = new AdminBlockedIpRequest("127.0.0.1");
+        final String payload = objectMapper.writeValueAsString(request);
+
+        // stub
+        doNothing().when(adminCommandService).deleteBlockedIp(anyLong(), any(AdminBlockedIpRequest.class));
+
+        // when & then
+        mockMvc.perform(delete("/api/admin/ip-block")
+                        .cookie(MEMBER_COOKIE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload)
+                )
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(
+                        document("deleteBlockedIp",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("ip").description("아이피")
+                                )
                         )
                 );
     }

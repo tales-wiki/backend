@@ -3,6 +3,7 @@ package com.openmpy.taleswiki.admin.presentation;
 import com.openmpy.taleswiki.admin.application.AdminQueryService;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponses;
 import com.openmpy.taleswiki.auth.annotation.Login;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,16 @@ public class AdminQueryController {
     ) {
         final AdminReadAllArticleVersionReportResponses responses =
                 adminQueryService.readAllArticleVersionReport(memberId, page, size);
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/ip-block")
+    public ResponseEntity<AdminReadAllBlockedIpResponses> readAllBlockedIp(
+            @Login final Long memberId,
+            @RequestParam(defaultValue = "0") final int page,
+            @RequestParam(defaultValue = "10") final int size
+    ) {
+        final AdminReadAllBlockedIpResponses responses = adminQueryService.readAllBlockedIp(memberId, page, size);
         return ResponseEntity.ok(responses);
     }
 }
