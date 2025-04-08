@@ -12,7 +12,8 @@ public record ArticleReadLatestUpdateResponses(
                 .map(it -> new ArticleReadLatestUpdateResponse(
                         it.getLatestVersion().getId(),
                         it.getTitle(),
-                        it.getCategory().toString())
+                        it.getCategory().toString(),
+                        it.getUpdatedAt())
                 )
                 .toList();
 

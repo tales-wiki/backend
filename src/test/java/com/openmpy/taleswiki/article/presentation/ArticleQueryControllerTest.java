@@ -108,12 +108,15 @@ class ArticleQueryControllerTest extends ControllerTestSupport {
     @Test
     void article_query_controller_test_03() throws Exception {
         // given
+        final LocalDateTime dateTime01 = LocalDateTime.of(2025, 1, 1, 1, 1, 1);
+        final LocalDateTime dateTime02 = LocalDateTime.of(2025, 1, 1, 1, 1, 2);
+
         final ArticleReadLatestUpdateResponse response01 =
-                new ArticleReadLatestUpdateResponse(1L, "제목1", "인물");
+                new ArticleReadLatestUpdateResponse(1L, "제목1", "인물", dateTime01);
         final ArticleReadLatestUpdateResponse response02 =
-                new ArticleReadLatestUpdateResponse(2L, "제목2", "길드");
+                new ArticleReadLatestUpdateResponse(2L, "제목2", "길드", dateTime02);
         final ArticleReadLatestUpdateResponses responses =
-                new ArticleReadLatestUpdateResponses(List.of(response01, response02));
+                new ArticleReadLatestUpdateResponses(List.of(response02, response01));
 
         // stub
         when(articleQueryService.readAllArticleByLatestUpdate()).thenReturn(responses);
@@ -124,12 +127,14 @@ class ArticleQueryControllerTest extends ControllerTestSupport {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.payload").isArray())
-                .andExpect(jsonPath("$.payload[0].articleVersionId").value(1))
-                .andExpect(jsonPath("$.payload[0].title").value("제목1"))
-                .andExpect(jsonPath("$.payload[0].category").value("인물"))
-                .andExpect(jsonPath("$.payload[1].articleVersionId").value(2))
-                .andExpect(jsonPath("$.payload[1].title").value("제목2"))
-                .andExpect(jsonPath("$.payload[1].category").value("길드"))
+                .andExpect(jsonPath("$.payload[0].articleVersionId").value(2))
+                .andExpect(jsonPath("$.payload[0].title").value("제목2"))
+                .andExpect(jsonPath("$.payload[0].category").value("길드"))
+                .andExpect(jsonPath("$.payload[0].updatedAt").value(dateTime02.toString()))
+                .andExpect(jsonPath("$.payload[1].articleVersionId").value(1))
+                .andExpect(jsonPath("$.payload[1].title").value("제목1"))
+                .andExpect(jsonPath("$.payload[1].category").value("인물"))
+                .andExpect(jsonPath("$.payload[1].updatedAt").value(dateTime01.toString()))
                 .andDo(print())
                 .andDo(
                         document("readAllArticleByLatestUpdate",
