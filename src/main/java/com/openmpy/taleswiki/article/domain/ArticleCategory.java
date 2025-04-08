@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public enum ArticleCategory {
 
-    PERSON("인물"),
+    RUNNER("런너"),
     GUILD("길드"),
     ;
 

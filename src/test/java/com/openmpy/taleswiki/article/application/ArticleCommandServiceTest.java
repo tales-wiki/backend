@@ -51,7 +51,7 @@ class ArticleCommandServiceTest {
     @Test
     void article_command_service_test_01() {
         // given
-        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "인물", "내용");
+        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "런너", "내용");
 
         // when
         articleCommandService.createArticle(request, mockServerHttpRequest());
@@ -62,7 +62,7 @@ class ArticleCommandServiceTest {
 
         assertThat(article.getId()).isNotNull();
         assertThat(article.getTitle()).isEqualTo("제목");
-        assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
+        assertThat(article.getCategory()).isEqualTo(ArticleCategory.RUNNER);
         assertThat(article.isNoEditing()).isFalse();
         assertThat(article.getCreatedAt()).isNotNull();
         assertThat(article.getUpdatedAt()).isNotNull();
@@ -87,7 +87,7 @@ class ArticleCommandServiceTest {
         // given
         final ArticleUpdateRequest request = new ArticleUpdateRequest("작성자2", "내용2");
 
-        final Article article = createArticleWithVersion("제목", ArticleCategory.PERSON);
+        final Article article = createArticleWithVersion("제목", ArticleCategory.RUNNER);
         articleRepository.save(article);
 
         // stub
@@ -115,7 +115,7 @@ class ArticleCommandServiceTest {
     @Test
     void article_command_service_test_03() {
         // given
-        final Article article = createArticleWithVersion("제목", ArticleCategory.PERSON);
+        final Article article = createArticleWithVersion("제목", ArticleCategory.RUNNER);
         final Article savedArticle = articleRepository.save(article);
         final ArticleVersion articleVersion = savedArticle.getLatestVersion();
 
@@ -139,7 +139,7 @@ class ArticleCommandServiceTest {
     @Test
     void article_command_service_test_04() {
         // given
-        final Article article = createArticleWithVersion("제목", ArticleCategory.PERSON);
+        final Article article = createArticleWithVersion("제목", ArticleCategory.RUNNER);
         final Article savedArticle = articleRepository.save(article);
         final ArticleVersion articleVersion = savedArticle.getLatestVersion();
 
@@ -165,7 +165,7 @@ class ArticleCommandServiceTest {
         // given
         final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "인물", "내용");
 
-        final Article article = createArticleWithVersion("제목", ArticleCategory.PERSON);
+        final Article article = createArticleWithVersion("제목", ArticleCategory.RUNNER);
         articleRepository.save(article);
 
         // when & then
@@ -179,7 +179,7 @@ class ArticleCommandServiceTest {
     void 예외_article_command_service_test_02() {
         // given
         final ArticleUpdateRequest request = new ArticleUpdateRequest("작성자2", "내용2");
-        final Article article = createArticleWithVersion("제목", ArticleCategory.PERSON);
+        final Article article = createArticleWithVersion("제목", ArticleCategory.RUNNER);
 
         article.toggleNoEditing(true);
         final Article savedArticle = articleRepository.save(article);
@@ -198,7 +198,7 @@ class ArticleCommandServiceTest {
     @Test
     void 예외_article_command_service_test_03() {
         // given
-        final Article article = createArticleWithVersion("제목", ArticleCategory.PERSON);
+        final Article article = createArticleWithVersion("제목", ArticleCategory.RUNNER);
         final Article savedArticle = articleRepository.save(article);
         final ArticleVersion articleVersion = savedArticle.getLatestVersion();
 

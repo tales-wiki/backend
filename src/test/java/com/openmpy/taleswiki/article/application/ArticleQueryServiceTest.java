@@ -35,7 +35,7 @@ class ArticleQueryServiceTest {
     void article_query_service_test_01() {
         // given
         for (int i = 0; i < 10; i++) {
-            ArticleCategory category = ArticleCategory.PERSON;
+            ArticleCategory category = ArticleCategory.RUNNER;
 
             if (i % 2 == 0) {
                 category = ArticleCategory.GUILD;
@@ -49,7 +49,7 @@ class ArticleQueryServiceTest {
         }
 
         // when
-        final ArticleReadCategoryResponses responses = articleQueryService.readAllArticleByCategory("인물");
+        final ArticleReadCategoryResponses responses = articleQueryService.readAllArticleByCategory("런너");
 
         // then
         final List<ArticleReadCategoryResponse> payload = responses.payload();
@@ -66,7 +66,7 @@ class ArticleQueryServiceTest {
     void article_query_service_test_02() {
         // given
         for (int i = 0; i < 20; i++) {
-            ArticleCategory category = ArticleCategory.PERSON;
+            ArticleCategory category = ArticleCategory.RUNNER;
 
             if (i % 2 == 0) {
                 category = ArticleCategory.GUILD;
@@ -88,7 +88,7 @@ class ArticleQueryServiceTest {
         assertThat(payload).hasSize(10);
         assertThat(payload.getFirst().articleVersionId()).isNotNull();
         assertThat(payload.getFirst().title()).isEqualTo("제목19");
-        assertThat(payload.getFirst().category()).isEqualTo("인물");
+        assertThat(payload.getFirst().category()).isEqualTo("런너");
         assertThat(payload.getLast().articleVersionId()).isNotNull();
         assertThat(payload.getLast().title()).isEqualTo("제목10");
         assertThat(payload.getLast().category()).isEqualTo("길드");
@@ -98,7 +98,7 @@ class ArticleQueryServiceTest {
     @Test
     void article_query_service_test_03() {
         // given
-        final Article article = Article.create("제목", ArticleCategory.PERSON);
+        final Article article = Article.create("제목", ArticleCategory.RUNNER);
         final ArticleVersion articleVersion = ArticleVersion.create("닉네임0", "내용0", 10, "127.0.0.1", article);
 
         article.addVersion(articleVersion);
@@ -151,7 +151,7 @@ class ArticleQueryServiceTest {
                 category = ArticleCategory.GUILD;
                 article = Article.create("제목" + i, category);
             } else {
-                category = ArticleCategory.PERSON;
+                category = ArticleCategory.RUNNER;
                 article = Article.create("목제" + i, category);
             }
 
@@ -180,7 +180,7 @@ class ArticleQueryServiceTest {
     @Test
     void article_query_service_test_05() {
         // given
-        final Article article = Article.create("제목", ArticleCategory.PERSON);
+        final Article article = Article.create("제목", ArticleCategory.RUNNER);
         final ArticleVersion articleVersion = ArticleVersion.create("닉네임", "내용", 10, "127.0.0.1", article);
 
         article.addVersion(articleVersion);

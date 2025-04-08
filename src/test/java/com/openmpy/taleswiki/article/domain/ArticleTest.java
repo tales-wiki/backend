@@ -16,7 +16,7 @@ class ArticleTest {
         // given
         final long id = 1L;
         final String title = "제목";
-        final ArticleCategory category = ArticleCategory.PERSON;
+        final ArticleCategory category = ArticleCategory.RUNNER;
         final boolean isNoEditing = false;
         final LocalDateTime createdAt = LocalDateTime.of(2025, 1, 1, 1, 1, 1);
         final LocalDateTime updatedAt = LocalDateTime.of(2025, 1, 1, 1, 1, 2);
@@ -28,7 +28,7 @@ class ArticleTest {
         // then
         assertThat(article.getId()).isEqualTo(1L);
         assertThat(article.getTitle()).isEqualTo("제목");
-        assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
+        assertThat(article.getCategory()).isEqualTo(ArticleCategory.RUNNER);
         assertThat(article.isNoEditing()).isFalse();
         assertThat(article.getCreatedAt()).isEqualTo(LocalDateTime.of(2025, 1, 1, 1, 1, 1));
         assertThat(article.getUpdatedAt()).isEqualTo(LocalDateTime.of(2025, 1, 1, 1, 1, 2));
@@ -41,7 +41,7 @@ class ArticleTest {
     void article_test_02() {
         // given
         final String title = "제목";
-        final ArticleCategory category = ArticleCategory.PERSON;
+        final ArticleCategory category = ArticleCategory.RUNNER;
 
         // when
         final Article article = Article.create(title, category);
@@ -49,7 +49,7 @@ class ArticleTest {
         // then
         assertThat(article.getId()).isNull();
         assertThat(article.getTitle()).isEqualTo("제목");
-        assertThat(article.getCategory()).isEqualTo(ArticleCategory.PERSON);
+        assertThat(article.getCategory()).isEqualTo(ArticleCategory.RUNNER);
         assertThat(article.isNoEditing()).isFalse();
         assertThat(article.getCreatedAt()).isNotNull();
         assertThat(article.getUpdatedAt()).isNull();

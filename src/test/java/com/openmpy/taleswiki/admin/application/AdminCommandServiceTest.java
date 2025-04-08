@@ -1,6 +1,6 @@
 package com.openmpy.taleswiki.admin.application;
 
-import static com.openmpy.taleswiki.article.domain.ArticleCategory.PERSON;
+import static com.openmpy.taleswiki.article.domain.ArticleCategory.RUNNER;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_BLOCKED_IP;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_BLOCKED_IP;
 import static com.openmpy.taleswiki.support.Fixture.ADMIN_MEMBER;
@@ -43,7 +43,7 @@ class AdminCommandServiceTest {
     @Test
     void admin_command_service_test_01() {
         // given
-        final Article article = Fixture.createArticle("제목", PERSON);
+        final Article article = Fixture.createArticle("제목", RUNNER);
         final Article savedArticle = articleRepository.save(article);
 
         // stub
@@ -62,7 +62,7 @@ class AdminCommandServiceTest {
     @Test
     void admin_command_service_test_02() {
         // given
-        final Article article = Fixture.createArticle("제목", PERSON);
+        final Article article = Fixture.createArticle("제목", RUNNER);
         final Article savedArticle = articleRepository.save(article);
 
         // stub
@@ -79,7 +79,7 @@ class AdminCommandServiceTest {
     @Test
     void admin_command_service_test_03() {
         // given
-        final Article article = Fixture.createArticleWithVersion("제목", PERSON);
+        final Article article = Fixture.createArticleWithVersion("제목", RUNNER);
         final Article savedArticle = articleRepository.save(article);
         final ArticleVersion articleVersion = savedArticle.getLatestVersion();
 

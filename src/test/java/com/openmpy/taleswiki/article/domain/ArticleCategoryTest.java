@@ -14,23 +14,23 @@ class ArticleCategoryTest {
     @Test
     void article_category_test_01() {
         // given
-        final String category = ArticleCategory.PERSON.toString();
+        final String category = ArticleCategory.RUNNER.toString();
 
         // then
-        assertThat(category).isEqualTo("인물");
+        assertThat(category).isEqualTo("런너");
     }
 
     @DisplayName("[통과] 게시글 카테고리가 존재하면 타입을 리턴한다.")
     @Test
     void article_category_test_02() {
         // given
-        final String value = "인물";
+        final String value = "런너";
 
         // when
         final ArticleCategory category = ArticleCategory.of(value);
 
         // then
-        assertThat(category).isEqualTo(ArticleCategory.PERSON);
+        assertThat(category).isEqualTo(ArticleCategory.RUNNER);
     }
 
     @DisplayName("[예외] 게시글 카테고리가 존재하지 않는다.")

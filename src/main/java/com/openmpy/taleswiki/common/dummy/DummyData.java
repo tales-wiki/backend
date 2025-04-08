@@ -50,7 +50,7 @@ public class DummyData {
         final Faker faker = new Faker(new Locale("ko"));
 
         for (int i = 0; i < 1000; i++) {
-            ArticleCategory category = ArticleCategory.PERSON;
+            ArticleCategory category = ArticleCategory.RUNNER;
 
             if (i % 2 == 0) {
                 category = ArticleCategory.GUILD;

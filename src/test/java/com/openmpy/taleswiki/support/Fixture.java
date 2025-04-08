@@ -20,7 +20,7 @@ public class Fixture {
     public static final Article ARTICLE_01 = new Article(
             1L,
             "제목",
-            ArticleCategory.PERSON,
+            ArticleCategory.RUNNER,
             false,
             LocalDateTime.of(2025, 1, 1, 1, 1, 1),
             LocalDateTime.of(2025, 1, 1, 1, 1, 2),

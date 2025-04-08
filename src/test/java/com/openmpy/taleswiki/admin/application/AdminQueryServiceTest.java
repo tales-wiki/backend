@@ -1,6 +1,6 @@
 package com.openmpy.taleswiki.admin.application;
 
-import static com.openmpy.taleswiki.article.domain.ArticleCategory.PERSON;
+import static com.openmpy.taleswiki.article.domain.ArticleCategory.RUNNER;
 import static com.openmpy.taleswiki.support.Fixture.ADMIN_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -81,7 +81,7 @@ class AdminQueryServiceTest {
     @Test
     void admin_query_service_test_02() {
         // given
-        final Article article = Fixture.createArticle("제목", PERSON);
+        final Article article = Fixture.createArticle("제목", RUNNER);
         final Article savedArticle = articleRepository.save(article);
 
         for (int i = 0; i < 20; i++) {
@@ -116,7 +116,7 @@ class AdminQueryServiceTest {
     @Test
     void admin_query_service_test_03() {
         // given
-        final Article article = Fixture.createArticleWithVersion("제목", PERSON);
+        final Article article = Fixture.createArticleWithVersion("제목", RUNNER);
         final Article savedArticle = articleRepository.save(article);
         final ArticleVersion articleVersion = savedArticle.getLatestVersion();
 
