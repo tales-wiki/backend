@@ -4,6 +4,9 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
+import com.openmpy.taleswiki.member.domain.Member;
+import com.openmpy.taleswiki.member.domain.MemberSocial;
+import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -17,9 +20,28 @@ public class DummyData {
     @Profile("test")
     @Bean
     private CommandLineRunner init(
+            final MemberRepository memberRepository,
             final ArticleRepository articleRepository
     ) {
-        return (args -> saveArticles(articleRepository));
+        return (args -> {
+            saveMembers(memberRepository);
+            saveArticles(articleRepository);
+        });
+    }
+
+    private void saveMembers(final MemberRepository memberRepository) {
+        for (int i = 0; i < 100; i++) {
+            MemberSocial social = MemberSocial.KAKAO;
+
+            if (i % 2 == 0) {
+                social = MemberSocial.GOOGLE;
+            }
+
+            final Member member = Member.create(i + "test@test.com", social);
+            memberRepository.save(member);
+        }
+
+        log.info("생성된 회원: {}명", memberRepository.count());
     }
 
     private static void saveArticles(final ArticleRepository articleRepository) {

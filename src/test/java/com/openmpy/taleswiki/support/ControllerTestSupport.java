@@ -1,6 +1,10 @@
 package com.openmpy.taleswiki.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.openmpy.taleswiki.admin.application.AdminCommandService;
+import com.openmpy.taleswiki.admin.application.AdminQueryService;
+import com.openmpy.taleswiki.admin.presentation.AdminCommandController;
+import com.openmpy.taleswiki.admin.presentation.AdminQueryController;
 import com.openmpy.taleswiki.article.application.ArticleCommandService;
 import com.openmpy.taleswiki.article.application.ArticleQueryService;
 import com.openmpy.taleswiki.article.presentation.ArticleCommandController;
@@ -15,15 +19,23 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @AutoConfigureRestDocs
 @WebMvcTest(
-        controllers = {MemberController.class, ArticleCommandController.class, ArticleQueryController.class},
+        controllers = {
+                MemberController.class,
+                ArticleCommandController.class,
+                ArticleQueryController.class,
+                AdminCommandController.class,
+                AdminQueryController.class
+        },
         excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {WebMvcConfigurer.class})}
 )
+@Import(TestWebMvcConfig.class)
 public class ControllerTestSupport {
 
     @Autowired
@@ -49,4 +61,10 @@ public class ControllerTestSupport {
 
     @MockitoBean
     protected ArticleQueryService articleQueryService;
+
+    @MockitoBean
+    protected AdminCommandService adminCommandService;
+
+    @MockitoBean
+    protected AdminQueryService adminQueryService;
 }
