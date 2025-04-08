@@ -35,6 +35,9 @@ public enum CustomErrorCode {
     NO_EDITING_ARTICLE("편집 할 수 없는 게시글입니다."),
     ALREADY_ARTICLE_REPORT_VERSION_ID("이미 신고한 게시글 버전 번호입니다."),
 
+    // admin service
+    INVALID_MEMBER_AUTHORITY("올바르지 않은 회원 권한입니다."),
+
     // other
     NOT_FOUND_COOKIE("찾을 수 없는 쿠키입니다."),
     INVALID_ACCESS_TOKEN("올바르지 않은 액세스 토큰입니다."),
