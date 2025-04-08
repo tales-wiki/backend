@@ -39,6 +39,7 @@ public enum CustomErrorCode {
     INVALID_ACCESS_TOKEN("올바르지 않은 액세스 토큰입니다."),
     NOT_ALLOWED_IP_NULL_AND_BLANK("IP가 빈 값일 수 없습니다."),
     INVALID_IP("올바르지 않은 IP 주소입니다."),
+    BLOCKED_IP("정지된 IP 주소입니다."),
 
     // server
     REQUEST_METHOD_NOT_SUPPORTED("지원하지 않는 요청 메서드입니다."),
