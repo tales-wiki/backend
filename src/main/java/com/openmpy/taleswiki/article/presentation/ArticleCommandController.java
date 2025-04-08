@@ -4,6 +4,7 @@ import com.openmpy.taleswiki.article.application.ArticleCommandService;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
+import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.auth.annotation.Login;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -25,12 +26,12 @@ public class ArticleCommandController {
     private final ArticleCommandService articleCommandService;
 
     @PostMapping
-    public ResponseEntity<Void> createArticle(
+    public ResponseEntity<ArticleCreateResponse> createArticle(
             @RequestBody @Valid final ArticleCreateRequest request,
             final HttpServletRequest servletRequest
     ) {
-        articleCommandService.createArticle(request, servletRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        final ArticleCreateResponse response = articleCommandService.createArticle(request, servletRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{articleId}")

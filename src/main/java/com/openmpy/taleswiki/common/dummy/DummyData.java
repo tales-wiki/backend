@@ -56,7 +56,16 @@ public class DummyData {
                 category = ArticleCategory.GUILD;
             }
 
-            final String title = faker.name().fullName().replace(" ", "");
+            String title = faker.name().fullName().replace(" ", "");
+
+            if (i % 3 == 0) {
+                title = faker.animal().name().replace(" ", "");
+
+                if (title.length() > 9) {
+                    title = faker.number().digit();
+                }
+            }
+
             final Article article = Article.create(title + i, category);
             final ArticleVersion articleVersion = ArticleVersion.create("작성자" + i, "내용" + i, 10, "127.0.0.1", article);
 

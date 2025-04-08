@@ -16,6 +16,7 @@ import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
+import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
 import com.openmpy.taleswiki.member.application.MemberService;
@@ -36,7 +37,10 @@ public class ArticleCommandService {
     private final MemberService memberService;
 
     @Transactional
-    public void createArticle(final ArticleCreateRequest request, final HttpServletRequest servletRequest) {
+    public ArticleCreateResponse createArticle(
+            final ArticleCreateRequest request,
+            final HttpServletRequest servletRequest
+    ) {
         final ArticleCategory category = ArticleCategory.of(request.category());
 
         if (articleRepository.existsByTitle_ValueAndCategory(request.title(), category)) {
@@ -51,7 +55,9 @@ public class ArticleCommandService {
                 ArticleVersion.create(request.nickname(), request.content(), contentLength, ip, article);
 
         article.addVersion(articleVersion);
-        articleRepository.save(article);
+        final Article savedArticle = articleRepository.save(article);
+
+        return new ArticleCreateResponse(savedArticle.getLatestVersion().getId());
     }
 
     @Transactional

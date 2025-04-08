@@ -19,6 +19,7 @@ import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
+import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.member.application.MemberService;
@@ -54,11 +55,13 @@ class ArticleCommandServiceTest {
         final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "런너", "내용");
 
         // when
-        articleCommandService.createArticle(request, mockServerHttpRequest());
+        final ArticleCreateResponse response = articleCommandService.createArticle(request, mockServerHttpRequest());
 
         // then
         final Article article = articleRepository.findAll().getFirst();
         final ArticleVersion articleVersion = article.getLatestVersion();
+
+        assertThat(response.articleVersionId()).isEqualTo(articleVersion.getId());
 
         assertThat(article.getId()).isNotNull();
         assertThat(article.getTitle()).isEqualTo("제목");

@@ -4,6 +4,7 @@ import static com.openmpy.taleswiki.support.Fixture.MEMBER_COOKIE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -13,11 +14,13 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
+import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -31,11 +34,12 @@ class ArticleCommandControllerTest extends ControllerTestSupport {
     void article_command_controller_test_01() throws Exception {
         // given
         final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "인물", "내용");
+        final ArticleCreateResponse response = new ArticleCreateResponse(1L);
         final String payload = objectMapper.writeValueAsString(request);
 
         // stub
-        doNothing().when(articleCommandService)
-                .createArticle(any(ArticleCreateRequest.class), any(HttpServletRequest.class));
+        when(articleCommandService.createArticle(any(ArticleCreateRequest.class), any(HttpServletRequest.class)))
+                .thenReturn(response);
 
         // when & then
         mockMvc.perform(post("/api/articles")
@@ -44,6 +48,7 @@ class ArticleCommandControllerTest extends ControllerTestSupport {
                 )
                 .andExpect(status().isCreated())
                 .andDo(print())
+                .andExpect(jsonPath("$.articleVersionId").value(1))
                 .andDo(
                         document("createArticle",
                                 preprocessRequest(prettyPrint()),
