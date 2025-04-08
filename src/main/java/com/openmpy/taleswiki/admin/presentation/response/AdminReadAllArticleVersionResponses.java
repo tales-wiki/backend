@@ -6,6 +6,7 @@ import java.util.List;
 public record AdminReadAllArticleVersionResponses(
         List<AdminReadAllArticleVersionResponse> payload
 ) {
+
     public static AdminReadAllArticleVersionResponses of(final List<ArticleVersion> articleVersions) {
         final List<AdminReadAllArticleVersionResponse> responses = articleVersions.stream()
                 .map(it -> new AdminReadAllArticleVersionResponse(

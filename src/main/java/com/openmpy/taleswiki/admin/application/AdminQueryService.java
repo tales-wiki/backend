@@ -3,9 +3,12 @@ package com.openmpy.taleswiki.admin.application;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.INVALID_MEMBER_AUTHORITY;
 import static com.openmpy.taleswiki.member.domain.MemberAuthority.ADMIN;
 
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponses;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
+import com.openmpy.taleswiki.article.domain.ArticleVersionReport;
+import com.openmpy.taleswiki.article.domain.repository.ArticleVersionReportRepository;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.member.application.MemberService;
@@ -24,6 +27,7 @@ public class AdminQueryService {
 
     private final MemberRepository memberRepository;
     private final ArticleVersionRepository articleVersionRepository;
+    private final ArticleVersionReportRepository articleVersionReportRepository;
     private final MemberService memberService;
 
     @Transactional(readOnly = true)
@@ -58,5 +62,24 @@ public class AdminQueryService {
         final List<ArticleVersion> articleVersions = articleVersionPage.getContent();
 
         return AdminReadAllArticleVersionResponses.of(articleVersions);
+    }
+
+    @Transactional(readOnly = true)
+    public AdminReadAllArticleVersionReportResponses readAllArticleVersionReport(
+            final Long memberId,
+            final int page,
+            final int size
+    ) {
+        final Member member = memberService.getMember(memberId);
+
+        if (!member.getAuthority().equals(ADMIN)) {
+            throw new CustomException(INVALID_MEMBER_AUTHORITY);
+        }
+
+        final PageRequest pageRequest = PageRequest.of(page, size);
+        final Page<ArticleVersionReport> articleVersionReportPage = articleVersionReportRepository.findAll(pageRequest);
+        final List<ArticleVersionReport> articleVersionReports = articleVersionReportPage.getContent();
+
+        return AdminReadAllArticleVersionReportResponses.of(articleVersionReports);
     }
 }

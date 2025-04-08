@@ -6,13 +6,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponse;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponses;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
+import com.openmpy.taleswiki.article.domain.ArticleVersionReport;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
+import com.openmpy.taleswiki.article.domain.repository.ArticleVersionReportRepository;
 import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
@@ -36,6 +40,9 @@ class AdminQueryServiceTest {
 
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private ArticleVersionReportRepository articleVersionReportRepository;
 
     @MockitoBean
     private MemberService memberService;
@@ -96,5 +103,37 @@ class AdminQueryServiceTest {
         assertThat(payload.getLast().content()).isEqualTo("내용9");
         assertThat(payload.getLast().size()).isEqualTo(10);
         assertThat(payload.getLast().ip()).isEqualTo("127.0.0.9");
+    }
+
+    @DisplayName("[통과] 모든 게시물 버전 신고 목록을 페이지 형식으로 조회한다.")
+    @Test
+    void admin_query_service_test_03() {
+        // given
+        final Article article = Fixture.createArticleWithVersion("제목", PERSON);
+        final Article savedArticle = articleRepository.save(article);
+        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
+
+        for (int i = 0; i < 20; i++) {
+            final ArticleVersionReport articleVersionReport =
+                    ArticleVersionReport.create("내용".repeat(5 + i), "127.0.0." + i, articleVersion);
+
+            articleVersionReportRepository.save(articleVersionReport);
+        }
+
+        // stub
+        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
+
+        // when
+        final AdminReadAllArticleVersionReportResponses responses =
+                adminQueryService.readAllArticleVersionReport(1L, 0, 10);
+
+        // then
+        final List<AdminReadAllArticleVersionReportResponse> payload = responses.payload();
+
+        assertThat(payload).hasSize(10);
+        assertThat(payload.getFirst().ip()).isEqualTo("127.0.0.0");
+        assertThat(payload.getFirst().reportReason()).isEqualTo("내용".repeat(5));
+        assertThat(payload.getLast().ip()).isEqualTo("127.0.0.9");
+        assertThat(payload.getLast().reportReason()).isEqualTo("내용".repeat(14));
     }
 }
