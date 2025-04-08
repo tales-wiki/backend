@@ -68,4 +68,9 @@ public class ArticleQueryService {
         return articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_ID));
     }
+
+    public ArticleVersion getArticleVersion(final Long articleVersionId) {
+        return articleVersionRepository.findById(articleVersionId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION_ID));
+    }
 }

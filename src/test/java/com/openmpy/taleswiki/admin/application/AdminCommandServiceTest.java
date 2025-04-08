@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import com.openmpy.taleswiki.article.domain.Article;
+import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.support.CustomServiceTest;
@@ -62,5 +63,23 @@ class AdminCommandServiceTest {
 
         // then
         assertThat(savedArticle.isNoEditing()).isTrue();
+    }
+
+    @DisplayName("[통과] 게시글 버전 숨김 모드를 수정한다.")
+    @Test
+    void admin_command_service_test_03() {
+        // given
+        final Article article = Fixture.createArticleWithVersion("제목", PERSON);
+        final Article savedArticle = articleRepository.save(article);
+        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
+
+        // stub
+        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
+
+        // when
+        adminCommandService.toggleArticleVersionHideMode(1L, articleVersion.getId());
+
+        // then
+        assertThat(articleVersion.isHiding()).isTrue();
     }
 }

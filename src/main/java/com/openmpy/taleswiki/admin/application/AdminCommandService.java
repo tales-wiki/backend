@@ -2,6 +2,7 @@ package com.openmpy.taleswiki.admin.application;
 
 import com.openmpy.taleswiki.article.application.ArticleQueryService;
 import com.openmpy.taleswiki.article.domain.Article;
+import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.member.application.MemberService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,14 @@ public class AdminCommandService {
         final Article article = articleQueryService.getArticle(articleId);
 
         article.toggleNoEditing(!article.isNoEditing());
+    }
+
+    @Transactional
+    public void toggleArticleVersionHideMode(final Long memberId, final Long articleVersionId) {
+        memberService.checkAdminMember(memberId);
+
+        final ArticleVersion articleVersion = articleQueryService.getArticleVersion(articleVersionId);
+
+        articleVersion.toggleHiding(!articleVersion.isHiding());
     }
 }
