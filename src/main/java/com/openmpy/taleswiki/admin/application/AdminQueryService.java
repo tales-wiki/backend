@@ -32,11 +32,7 @@ public class AdminQueryService {
 
     @Transactional(readOnly = true)
     public AdminReadAllMemberResponses readAllMember(final Long memberId, final int page, final int size) {
-        final Member member = memberService.getMember(memberId);
-
-        if (!member.getAuthority().equals(ADMIN)) {
-            throw new CustomException(INVALID_MEMBER_AUTHORITY);
-        }
+        checkAdminMember(memberId);
 
         final PageRequest pageRequest = PageRequest.of(page, size);
         final Page<Member> memberPage = memberRepository.findAll(pageRequest);
@@ -51,11 +47,7 @@ public class AdminQueryService {
             final int page,
             final int size
     ) {
-        final Member member = memberService.getMember(memberId);
-
-        if (!member.getAuthority().equals(ADMIN)) {
-            throw new CustomException(INVALID_MEMBER_AUTHORITY);
-        }
+        checkAdminMember(memberId);
 
         final PageRequest pageRequest = PageRequest.of(page, size);
         final Page<ArticleVersion> articleVersionPage = articleVersionRepository.findAll(pageRequest);
@@ -70,16 +62,20 @@ public class AdminQueryService {
             final int page,
             final int size
     ) {
-        final Member member = memberService.getMember(memberId);
-
-        if (!member.getAuthority().equals(ADMIN)) {
-            throw new CustomException(INVALID_MEMBER_AUTHORITY);
-        }
+        checkAdminMember(memberId);
 
         final PageRequest pageRequest = PageRequest.of(page, size);
         final Page<ArticleVersionReport> articleVersionReportPage = articleVersionReportRepository.findAll(pageRequest);
         final List<ArticleVersionReport> articleVersionReports = articleVersionReportPage.getContent();
 
         return AdminReadAllArticleVersionReportResponses.of(articleVersionReports);
+    }
+
+    private void checkAdminMember(final Long memberId) {
+        final Member member = memberService.getMember(memberId);
+
+        if (!member.getAuthority().equals(ADMIN)) {
+            throw new CustomException(INVALID_MEMBER_AUTHORITY);
+        }
     }
 }
