@@ -54,7 +54,7 @@ public class Member extends BaseEntity {
         return Member.builder()
                 .email(email)
                 .social(social)
-                .authority(MemberAuthority.ADMIN)
+                .authority(MemberAuthority.MEMBER)
                 .build();
     }
 
