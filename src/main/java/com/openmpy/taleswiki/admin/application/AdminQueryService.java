@@ -17,6 +17,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,7 @@ public class AdminQueryService {
     public AdminReadAllMemberResponses readAllMember(final Long memberId, final int page, final int size) {
         memberService.checkAdminMember(memberId);
 
-        final PageRequest pageRequest = PageRequest.of(page, size);
+        final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         final Page<Member> memberPage = memberRepository.findAll(pageRequest);
         final List<Member> members = memberPage.getContent();
 
@@ -49,7 +50,7 @@ public class AdminQueryService {
     ) {
         memberService.checkAdminMember(memberId);
 
-        final PageRequest pageRequest = PageRequest.of(page, size);
+        final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         final Page<ArticleVersion> articleVersionPage = articleVersionRepository.findAll(pageRequest);
         final List<ArticleVersion> articleVersions = articleVersionPage.getContent();
 
@@ -64,7 +65,7 @@ public class AdminQueryService {
     ) {
         memberService.checkAdminMember(memberId);
 
-        final PageRequest pageRequest = PageRequest.of(page, size);
+        final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         final Page<ArticleVersionReport> articleVersionReportPage = articleVersionReportRepository.findAll(pageRequest);
         final List<ArticleVersionReport> articleVersionReports = articleVersionReportPage.getContent();
 
@@ -79,7 +80,7 @@ public class AdminQueryService {
     ) {
         memberService.checkAdminMember(memberId);
 
-        final PageRequest pageRequest = PageRequest.of(page, size);
+        final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         final Page<BlockedIp> blockedIpPage = blockedIpRepository.findAll(pageRequest);
         final List<BlockedIp> blockedIps = blockedIpPage.getContent();
 

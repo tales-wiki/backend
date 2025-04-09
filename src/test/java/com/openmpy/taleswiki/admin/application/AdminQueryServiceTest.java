@@ -73,8 +73,8 @@ class AdminQueryServiceTest {
         final List<AdminReadAllMemberResponse> payload = responses.payload();
 
         assertThat(payload).hasSize(10);
-        assertThat(payload.getFirst().email()).isEqualTo("0test@test.com");
-        assertThat(payload.getLast().email()).isEqualTo("9test@test.com");
+        assertThat(payload.getLast().email()).isEqualTo("10test@test.com");
+        assertThat(payload.getFirst().email()).isEqualTo("19test@test.com");
     }
 
     @DisplayName("[통과] 모든 게시물 버전 목록을 페이지 형식으로 조회한다.")
@@ -102,14 +102,14 @@ class AdminQueryServiceTest {
         final List<AdminReadAllArticleVersionResponse> payload = responses.payload();
 
         assertThat(payload).hasSize(10);
-        assertThat(payload.getFirst().nickname()).isEqualTo("작성자0");
-        assertThat(payload.getFirst().content()).isEqualTo("내용0");
-        assertThat(payload.getFirst().size()).isEqualTo(10);
-        assertThat(payload.getFirst().ip()).isEqualTo("127.0.0.0");
-        assertThat(payload.getLast().nickname()).isEqualTo("작성자9");
-        assertThat(payload.getLast().content()).isEqualTo("내용9");
+        assertThat(payload.getLast().nickname()).isEqualTo("작성자10");
+        assertThat(payload.getLast().content()).isEqualTo("내용10");
         assertThat(payload.getLast().size()).isEqualTo(10);
-        assertThat(payload.getLast().ip()).isEqualTo("127.0.0.9");
+        assertThat(payload.getLast().ip()).isEqualTo("127.0.0.10");
+        assertThat(payload.getFirst().nickname()).isEqualTo("작성자19");
+        assertThat(payload.getFirst().content()).isEqualTo("내용19");
+        assertThat(payload.getFirst().size()).isEqualTo(10);
+        assertThat(payload.getFirst().ip()).isEqualTo("127.0.0.19");
     }
 
     @DisplayName("[통과] 모든 게시물 버전 신고 목록을 페이지 형식으로 조회한다.")
@@ -138,10 +138,10 @@ class AdminQueryServiceTest {
         final List<AdminReadAllArticleVersionReportResponse> payload = responses.payload();
 
         assertThat(payload).hasSize(10);
-        assertThat(payload.getFirst().ip()).isEqualTo("127.0.0.0");
-        assertThat(payload.getFirst().reportReason()).isEqualTo("내용".repeat(5));
-        assertThat(payload.getLast().ip()).isEqualTo("127.0.0.9");
-        assertThat(payload.getLast().reportReason()).isEqualTo("내용".repeat(14));
+        assertThat(payload.getLast().ip()).isEqualTo("127.0.0.10");
+        assertThat(payload.getLast().reportReason()).isEqualTo("내용".repeat(15));
+        assertThat(payload.getFirst().ip()).isEqualTo("127.0.0.19");
+        assertThat(payload.getFirst().reportReason()).isEqualTo("내용".repeat(24));
     }
 
     @DisplayName("[통과] 정지된 IP 목록을 페이지 형식으로 조회한다.")
@@ -162,7 +162,7 @@ class AdminQueryServiceTest {
         // then
         final List<AdminReadAllBlockedIpResponse> payload = responses.payload();
 
-        assertThat(payload.getFirst().ip()).isEqualTo("127.0.0.0");
-        assertThat(payload.getLast().ip()).isEqualTo("127.0.0.9");
+        assertThat(payload.getLast().ip()).isEqualTo("127.0.0.10");
+        assertThat(payload.getFirst().ip()).isEqualTo("127.0.0.19");
     }
 }
