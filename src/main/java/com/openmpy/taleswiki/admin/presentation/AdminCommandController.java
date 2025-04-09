@@ -2,7 +2,6 @@ package com.openmpy.taleswiki.admin.presentation;
 
 import com.openmpy.taleswiki.admin.application.AdminCommandService;
 import com.openmpy.taleswiki.admin.presentation.request.AdminBlockedIpRequest;
-import com.openmpy.taleswiki.auth.annotation.Login;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,41 +21,32 @@ public class AdminCommandController {
     private final AdminCommandService adminCommandService;
 
     @DeleteMapping("/articles/{articleId}")
-    public ResponseEntity<Void> deleteArticle(@Login final Long memberId, @PathVariable final Long articleId) {
-        adminCommandService.deleteArticle(memberId, articleId);
+    public ResponseEntity<Void> deleteArticle(@PathVariable final Long articleId) {
+        adminCommandService.deleteArticle(articleId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/articles/{articleId}/edit-mode")
-    public ResponseEntity<Void> toggleArticleEditMode(@Login final Long memberId, @PathVariable final Long articleId) {
-        adminCommandService.toggleArticleEditMode(memberId, articleId);
+    public ResponseEntity<Void> toggleArticleEditMode(@PathVariable final Long articleId) {
+        adminCommandService.toggleArticleEditMode(articleId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/articles/versions/{articleVersionId}/hide-mode")
-    public ResponseEntity<Void> toggleArticleVersionHideMode(
-            @Login final Long memberId,
-            @PathVariable final Long articleVersionId
-    ) {
-        adminCommandService.toggleArticleVersionHideMode(memberId, articleVersionId);
+    public ResponseEntity<Void> toggleArticleVersionHideMode(@PathVariable final Long articleVersionId) {
+        adminCommandService.toggleArticleVersionHideMode(articleVersionId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/ip-block")
-    public ResponseEntity<Void> addBlockedIp(
-            @Login final Long memberId,
-            @RequestBody @Valid final AdminBlockedIpRequest request
-    ) {
-        adminCommandService.addBlockedIp(memberId, request);
+    public ResponseEntity<Void> addBlockedIp(@RequestBody @Valid final AdminBlockedIpRequest request) {
+        adminCommandService.addBlockedIp(request);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/ip-block")
-    public ResponseEntity<Void> deleteBlockedIp(
-            @Login final Long memberId,
-            @RequestBody @Valid final AdminBlockedIpRequest request
-    ) {
-        adminCommandService.deleteBlockedIp(memberId, request);
+    public ResponseEntity<Void> deleteBlockedIp(@RequestBody @Valid final AdminBlockedIpRequest request) {
+        adminCommandService.deleteBlockedIp(request);
         return ResponseEntity.noContent().build();
     }
 }

@@ -10,7 +10,6 @@ import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.ArticleVersionReport;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionReportRepository;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
-import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
 import java.util.List;
@@ -29,12 +28,9 @@ public class AdminQueryService {
     private final ArticleVersionRepository articleVersionRepository;
     private final ArticleVersionReportRepository articleVersionReportRepository;
     private final BlockedIpRepository blockedIpRepository;
-    private final MemberService memberService;
 
     @Transactional(readOnly = true)
-    public AdminReadAllMemberResponses readAllMember(final Long memberId, final int page, final int size) {
-        memberService.checkAdminMember(memberId);
-
+    public AdminReadAllMemberResponses readAllMember(final int page, final int size) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         final Page<Member> memberPage = memberRepository.findAll(pageRequest);
         final List<Member> members = memberPage.getContent();
@@ -43,13 +39,7 @@ public class AdminQueryService {
     }
 
     @Transactional(readOnly = true)
-    public AdminReadAllArticleVersionResponses readAllArticleVersion(
-            final Long memberId,
-            final int page,
-            final int size
-    ) {
-        memberService.checkAdminMember(memberId);
-
+    public AdminReadAllArticleVersionResponses readAllArticleVersion(final int page, final int size) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         final Page<ArticleVersion> articleVersionPage = articleVersionRepository.findAll(pageRequest);
         final List<ArticleVersion> articleVersions = articleVersionPage.getContent();
@@ -58,13 +48,7 @@ public class AdminQueryService {
     }
 
     @Transactional(readOnly = true)
-    public AdminReadAllArticleVersionReportResponses readAllArticleVersionReport(
-            final Long memberId,
-            final int page,
-            final int size
-    ) {
-        memberService.checkAdminMember(memberId);
-
+    public AdminReadAllArticleVersionReportResponses readAllArticleVersionReport(final int page, final int size) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         final Page<ArticleVersionReport> articleVersionReportPage = articleVersionReportRepository.findAll(pageRequest);
         final List<ArticleVersionReport> articleVersionReports = articleVersionReportPage.getContent();
@@ -73,13 +57,7 @@ public class AdminQueryService {
     }
 
     @Transactional(readOnly = true)
-    public AdminReadAllBlockedIpResponses readAllBlockedIp(
-            final Long memberId,
-            final int page,
-            final int size
-    ) {
-        memberService.checkAdminMember(memberId);
-
+    public AdminReadAllBlockedIpResponses readAllBlockedIp(final int page, final int size) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         final Page<BlockedIp> blockedIpPage = blockedIpRepository.findAll(pageRequest);
         final List<BlockedIp> blockedIps = blockedIpPage.getContent();

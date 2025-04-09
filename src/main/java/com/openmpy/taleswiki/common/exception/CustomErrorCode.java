@@ -46,6 +46,7 @@ public enum CustomErrorCode {
     NO_RESOURCE_REQUEST("존재하지 않는 리소스입니다."),
     MESSAGE_NOT_READABLE("읽을 수 없는 요청입니다."),
     INTERNAL_SERVER_ERROR("서버 내부에서 에러가 발생했습니다."),
+    FORBIDDEN("접근할 수 없습니다."),
     ;
 
     private final String message;

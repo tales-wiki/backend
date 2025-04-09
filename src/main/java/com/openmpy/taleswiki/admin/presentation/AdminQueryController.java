@@ -5,7 +5,6 @@ import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVers
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponses;
-import com.openmpy.taleswiki.auth.annotation.Login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,43 +21,38 @@ public class AdminQueryController {
 
     @GetMapping("/members")
     public ResponseEntity<AdminReadAllMemberResponses> readAllMember(
-            @Login final Long memberId,
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int size
     ) {
-        final AdminReadAllMemberResponses responses = adminQueryService.readAllMember(memberId, page, size);
+        final AdminReadAllMemberResponses responses = adminQueryService.readAllMember(page, size);
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/articles/versions")
     public ResponseEntity<AdminReadAllArticleVersionResponses> readAllArticleVersion(
-            @Login final Long memberId,
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int size
     ) {
-        final AdminReadAllArticleVersionResponses responses =
-                adminQueryService.readAllArticleVersion(memberId, page, size);
+        final AdminReadAllArticleVersionResponses responses = adminQueryService.readAllArticleVersion(page, size);
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/articles/versions/reports")
     public ResponseEntity<AdminReadAllArticleVersionReportResponses> readAllArticleVersionReport(
-            @Login final Long memberId,
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int size
     ) {
         final AdminReadAllArticleVersionReportResponses responses =
-                adminQueryService.readAllArticleVersionReport(memberId, page, size);
+                adminQueryService.readAllArticleVersionReport(page, size);
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/ip-block")
     public ResponseEntity<AdminReadAllBlockedIpResponses> readAllBlockedIp(
-            @Login final Long memberId,
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int size
     ) {
-        final AdminReadAllBlockedIpResponses responses = adminQueryService.readAllBlockedIp(memberId, page, size);
+        final AdminReadAllBlockedIpResponses responses = adminQueryService.readAllBlockedIp(page, size);
         return ResponseEntity.ok(responses);
     }
 }

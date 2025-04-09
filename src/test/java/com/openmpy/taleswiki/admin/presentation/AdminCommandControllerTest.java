@@ -31,7 +31,7 @@ class AdminCommandControllerTest extends ControllerTestSupport {
         final Long articleId = 1L;
 
         // stub
-        doNothing().when(adminCommandService).deleteArticle(anyLong(), anyLong());
+        doNothing().when(adminCommandService).deleteArticle(anyLong());
 
         // when & then
         mockMvc.perform(delete("/api/admin/articles/{articleId}", articleId)
@@ -55,7 +55,7 @@ class AdminCommandControllerTest extends ControllerTestSupport {
         final Long articleId = 1L;
 
         // stub
-        doNothing().when(adminCommandService).toggleArticleEditMode(anyLong(), anyLong());
+        doNothing().when(adminCommandService).toggleArticleEditMode(anyLong());
 
         // when & then
         mockMvc.perform(patch("/api/admin/articles/{articleId}/edit-mode", articleId)
@@ -79,7 +79,7 @@ class AdminCommandControllerTest extends ControllerTestSupport {
         final Long articleVersionId = 1L;
 
         // stub
-        doNothing().when(adminCommandService).toggleArticleVersionHideMode(anyLong(), anyLong());
+        doNothing().when(adminCommandService).toggleArticleVersionHideMode(anyLong());
 
         // when & then
         mockMvc.perform(patch("/api/admin/articles/versions/{articleVersionId}/hide-mode", articleVersionId)
@@ -104,7 +104,7 @@ class AdminCommandControllerTest extends ControllerTestSupport {
         final String payload = objectMapper.writeValueAsString(request);
 
         // stub
-        doNothing().when(adminCommandService).addBlockedIp(anyLong(), any(AdminBlockedIpRequest.class));
+        doNothing().when(adminCommandService).addBlockedIp(any(AdminBlockedIpRequest.class));
 
         // when & then
         mockMvc.perform(post("/api/admin/ip-block")
@@ -133,7 +133,7 @@ class AdminCommandControllerTest extends ControllerTestSupport {
         final String payload = objectMapper.writeValueAsString(request);
 
         // stub
-        doNothing().when(adminCommandService).deleteBlockedIp(anyLong(), any(AdminBlockedIpRequest.class));
+        doNothing().when(adminCommandService).deleteBlockedIp(any(AdminBlockedIpRequest.class));
 
         // when & then
         mockMvc.perform(delete("/api/admin/ip-block")

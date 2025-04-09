@@ -3,11 +3,8 @@ package com.openmpy.taleswiki.admin.application;
 import static com.openmpy.taleswiki.article.domain.ArticleCategory.RUNNER;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_BLOCKED_IP;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_BLOCKED_IP;
-import static com.openmpy.taleswiki.support.Fixture.ADMIN_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
 import com.openmpy.taleswiki.admin.domain.BlockedIp;
 import com.openmpy.taleswiki.admin.domain.repository.BlockedIpRepository;
@@ -16,13 +13,11 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.common.exception.CustomException;
-import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.support.CustomServiceTest;
 import com.openmpy.taleswiki.support.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @CustomServiceTest
 class AdminCommandServiceTest {
@@ -36,9 +31,6 @@ class AdminCommandServiceTest {
     @Autowired
     private BlockedIpRepository blockedIpRepository;
 
-    @MockitoBean
-    private MemberService memberService;
-
     @DisplayName("[통과] 게시글을 삭제한다.")
     @Test
     void admin_command_service_test_01() {
@@ -46,11 +38,8 @@ class AdminCommandServiceTest {
         final Article article = Fixture.createArticle("제목", RUNNER);
         final Article savedArticle = articleRepository.save(article);
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when
-        adminCommandService.deleteArticle(1L, savedArticle.getId());
+        adminCommandService.deleteArticle(savedArticle.getId());
 
         // then
         final long count = articleRepository.count();
@@ -65,11 +54,8 @@ class AdminCommandServiceTest {
         final Article article = Fixture.createArticle("제목", RUNNER);
         final Article savedArticle = articleRepository.save(article);
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when
-        adminCommandService.toggleArticleEditMode(1L, savedArticle.getId());
+        adminCommandService.toggleArticleEditMode(savedArticle.getId());
 
         // then
         assertThat(savedArticle.isNoEditing()).isTrue();
@@ -83,11 +69,8 @@ class AdminCommandServiceTest {
         final Article savedArticle = articleRepository.save(article);
         final ArticleVersion articleVersion = savedArticle.getLatestVersion();
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when
-        adminCommandService.toggleArticleVersionHideMode(1L, articleVersion.getId());
+        adminCommandService.toggleArticleVersionHideMode(articleVersion.getId());
 
         // then
         assertThat(articleVersion.isHiding()).isTrue();
@@ -99,11 +82,8 @@ class AdminCommandServiceTest {
         // given
         final AdminBlockedIpRequest request = new AdminBlockedIpRequest("127.0.0.1");
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when
-        adminCommandService.addBlockedIp(1L, request);
+        adminCommandService.addBlockedIp(request);
 
         // then
         final BlockedIp blockedIp = blockedIpRepository.findAll().getFirst();
@@ -120,11 +100,8 @@ class AdminCommandServiceTest {
         final BlockedIp blockedIp = BlockedIp.create("127.0.0.1");
         blockedIpRepository.save(blockedIp);
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when
-        adminCommandService.deleteBlockedIp(1L, request);
+        adminCommandService.deleteBlockedIp(request);
 
         // then
         final long count = blockedIpRepository.count();
@@ -141,11 +118,8 @@ class AdminCommandServiceTest {
         final BlockedIp blockedIp = BlockedIp.create("127.0.0.1");
         blockedIpRepository.save(blockedIp);
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when & then
-        assertThatThrownBy(() -> adminCommandService.addBlockedIp(1L, request))
+        assertThatThrownBy(() -> adminCommandService.addBlockedIp(request))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ALREADY_BLOCKED_IP.getMessage());
     }
@@ -156,11 +130,8 @@ class AdminCommandServiceTest {
         // given
         final AdminBlockedIpRequest request = new AdminBlockedIpRequest("127.0.0.1");
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when & then
-        assertThatThrownBy(() -> adminCommandService.deleteBlockedIp(1L, request))
+        assertThatThrownBy(() -> adminCommandService.deleteBlockedIp(request))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(NOT_FOUND_BLOCKED_IP.getMessage());
     }

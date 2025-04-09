@@ -2,7 +2,6 @@ package com.openmpy.taleswiki.admin.presentation;
 
 import static com.openmpy.taleswiki.support.Fixture.MEMBER_COOKIE;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -44,7 +43,7 @@ class AdminQueryControllerTest extends ControllerTestSupport {
         final AdminReadAllMemberResponses responses = new AdminReadAllMemberResponses(List.of(response02, response01));
 
         // stub
-        when(adminQueryService.readAllMember(anyLong(), anyInt(), anyInt())).thenReturn(responses);
+        when(adminQueryService.readAllMember(anyInt(), anyInt())).thenReturn(responses);
 
         // when & then
         mockMvc.perform(get("/api/admin/members")
@@ -107,7 +106,7 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 new AdminReadAllArticleVersionResponses(List.of(response02, response01));
 
         // stub
-        when(adminQueryService.readAllArticleVersion(anyLong(), anyInt(), anyInt())).thenReturn(responses);
+        when(adminQueryService.readAllArticleVersion(anyInt(), anyInt())).thenReturn(responses);
 
         // when & then
         mockMvc.perform(get("/api/admin/articles/versions")
@@ -180,7 +179,7 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 new AdminReadAllArticleVersionReportResponses(List.of(response02, response01));
 
         // stub
-        when(adminQueryService.readAllArticleVersionReport(anyLong(), anyInt(), anyInt())).thenReturn(responses);
+        when(adminQueryService.readAllArticleVersionReport(anyInt(), anyInt())).thenReturn(responses);
 
         // when & then
         mockMvc.perform(get("/api/admin/articles/versions/reports")
@@ -231,7 +230,7 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 new AdminReadAllBlockedIpResponses(List.of(response02, response01));
 
         // stub
-        when(adminQueryService.readAllBlockedIp(anyLong(), anyInt(), anyInt())).thenReturn(responses);
+        when(adminQueryService.readAllBlockedIp(anyInt(), anyInt())).thenReturn(responses);
 
         // when & then
         mockMvc.perform(get("/api/admin/ip-block"))

@@ -1,10 +1,7 @@
 package com.openmpy.taleswiki.admin.application;
 
 import static com.openmpy.taleswiki.article.domain.ArticleCategory.RUNNER;
-import static com.openmpy.taleswiki.support.Fixture.ADMIN_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
 import com.openmpy.taleswiki.admin.domain.BlockedIp;
 import com.openmpy.taleswiki.admin.domain.repository.BlockedIpRepository;
@@ -21,7 +18,6 @@ import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.ArticleVersionReport;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionReportRepository;
-import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
@@ -31,7 +27,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @CustomServiceTest
 class AdminQueryServiceTest {
@@ -51,9 +46,6 @@ class AdminQueryServiceTest {
     @Autowired
     private BlockedIpRepository blockedIpRepository;
 
-    @MockitoBean
-    private MemberService memberService;
-
     @DisplayName("[통과] 모든 회원 목록을 페이지 형식으로 조회한다.")
     @Test
     void admin_query_service_test_01() {
@@ -63,11 +55,8 @@ class AdminQueryServiceTest {
             memberRepository.save(member);
         }
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when
-        final AdminReadAllMemberResponses responses = adminQueryService.readAllMember(1L, 0, 10);
+        final AdminReadAllMemberResponses responses = adminQueryService.readAllMember(0, 10);
 
         // then
         final List<AdminReadAllMemberResponse> payload = responses.payload();
@@ -92,11 +81,8 @@ class AdminQueryServiceTest {
             articleRepository.save(savedArticle);
         }
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when
-        final AdminReadAllArticleVersionResponses responses = adminQueryService.readAllArticleVersion(1L, 0, 10);
+        final AdminReadAllArticleVersionResponses responses = adminQueryService.readAllArticleVersion(0, 10);
 
         // then
         final List<AdminReadAllArticleVersionResponse> payload = responses.payload();
@@ -127,12 +113,9 @@ class AdminQueryServiceTest {
             articleVersionReportRepository.save(articleVersionReport);
         }
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when
         final AdminReadAllArticleVersionReportResponses responses =
-                adminQueryService.readAllArticleVersionReport(1L, 0, 10);
+                adminQueryService.readAllArticleVersionReport(0, 10);
 
         // then
         final List<AdminReadAllArticleVersionReportResponse> payload = responses.payload();
@@ -153,11 +136,8 @@ class AdminQueryServiceTest {
             blockedIpRepository.save(blockedIp);
         }
 
-        // stub
-        when(memberService.getMember(anyLong())).thenReturn(ADMIN_MEMBER);
-
         // when
-        final AdminReadAllBlockedIpResponses responses = adminQueryService.readAllBlockedIp(1L, 0, 10);
+        final AdminReadAllBlockedIpResponses responses = adminQueryService.readAllBlockedIp(0, 10);
 
         // then
         final List<AdminReadAllBlockedIpResponse> payload = responses.payload();
