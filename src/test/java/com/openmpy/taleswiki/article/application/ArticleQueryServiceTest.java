@@ -199,4 +199,29 @@ class ArticleQueryServiceTest {
         assertThat(response.isHiding()).isFalse();
         assertThat(response.createdAt()).isNotNull();
     }
+
+    @DisplayName("[통과] 숨김 처리 된 게시글 버전을 조회할 경우 내용은 빈 값으로 나온다.")
+    @Test
+    void article_query_service_test_06() {
+        // given
+        final Article article = Article.create("제목", ArticleCategory.RUNNER);
+        final ArticleVersion articleVersion = ArticleVersion.create("닉네임", "내용", 10, "127.0.0.1", article);
+        articleVersion.toggleHiding(true);
+
+        article.addVersion(articleVersion);
+        final Article savedArticle = articleRepository.save(article);
+
+        // when
+        final ArticleReadResponse response =
+                articleQueryService.readArticleByArticleVersion(savedArticle.getLatestVersion().getId());
+
+        // then
+        assertThat(response.articleId()).isEqualTo(savedArticle.getId());
+        assertThat(response.articleVersionId()).isEqualTo(savedArticle.getLatestVersion().getId());
+        assertThat(response.title()).isEqualTo("제목");
+        assertThat(response.content()).isEqualTo("");
+        assertThat(response.isNoEditing()).isFalse();
+        assertThat(response.isHiding()).isTrue();
+        assertThat(response.createdAt()).isNotNull();
+    }
 }

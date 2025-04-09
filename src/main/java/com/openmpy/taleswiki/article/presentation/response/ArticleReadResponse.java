@@ -27,4 +27,18 @@ public record ArticleReadResponse(
                 articleVersion.getCreatedAt()
         );
     }
+
+    public static ArticleReadResponse of(final ArticleVersion articleVersion, final String content) {
+        final Article article = articleVersion.getArticle();
+
+        return new ArticleReadResponse(
+                article.getId(),
+                articleVersion.getId(),
+                article.getTitle(),
+                content,
+                article.isNoEditing(),
+                articleVersion.isHiding(),
+                articleVersion.getCreatedAt()
+        );
+    }
 }

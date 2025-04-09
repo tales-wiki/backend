@@ -61,6 +61,9 @@ public class ArticleQueryService {
         final ArticleVersion articleVersion = articleVersionRepository.findById(articleVersionId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION_ID));
 
+        if (articleVersion.isHiding()) {
+            return ArticleReadResponse.of(articleVersion, "");
+        }
         return ArticleReadResponse.of(articleVersion);
     }
 
