@@ -15,7 +15,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
-    private static final String ADMIN_URI_PATTERN = "/api/admin/([^/]+)";
+    private static final String ADMIN_URI_PATTERN = "/api/admin(?:/.*)?";
 
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationExtractor authenticationExtractor;

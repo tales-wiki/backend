@@ -19,7 +19,7 @@ public enum ArticleCategory {
 
     public static ArticleCategory of(final String category) {
         return Arrays.stream(values())
-                .filter(it -> it.value.equals(category))
+                .filter(it -> it.name().equalsIgnoreCase(category))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_CATEGORY));
     }

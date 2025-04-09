@@ -73,7 +73,7 @@ class ArticleQueryControllerTest extends ControllerTestSupport {
     @Test
     void article_query_controller_test_02() throws Exception {
         // given
-        final String category = "인물";
+        final String category = "runner";
         final ArticleReadCategoryResponse response01 = new ArticleReadCategoryResponse(1L, "제목1");
         final ArticleReadCategoryResponse response02 = new ArticleReadCategoryResponse(2L, "제목2");
         final ArticleReadCategoryResponses responses =

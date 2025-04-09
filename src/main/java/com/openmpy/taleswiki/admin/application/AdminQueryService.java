@@ -41,7 +41,7 @@ public class AdminQueryService {
     @Transactional(readOnly = true)
     public AdminReadAllArticleVersionResponses readAllArticleVersion(final int page, final int size) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
-        final Page<ArticleVersion> articleVersionPage = articleVersionRepository.findAll(pageRequest);
+        final Page<ArticleVersion> articleVersionPage = articleVersionRepository.findAllWithArticle(pageRequest);
         final List<ArticleVersion> articleVersions = articleVersionPage.getContent();
 
         return AdminReadAllArticleVersionResponses.of(articleVersions);

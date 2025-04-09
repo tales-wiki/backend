@@ -24,7 +24,7 @@ class ArticleCategoryTest {
     @Test
     void article_category_test_02() {
         // given
-        final String value = "런너";
+        final String value = "runner";
 
         // when
         final ArticleCategory category = ArticleCategory.of(value);
