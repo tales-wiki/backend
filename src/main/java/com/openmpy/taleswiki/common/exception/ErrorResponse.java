@@ -8,4 +8,8 @@ public record ErrorResponse(
     public static ErrorResponse of(final CustomErrorCode errorCode) {
         return new ErrorResponse(errorCode.name(), errorCode.getMessage());
     }
+
+    public static ErrorResponse of(final CustomErrorCode errorCode, final String message) {
+        return new ErrorResponse(errorCode.name(), message);
+    }
 }

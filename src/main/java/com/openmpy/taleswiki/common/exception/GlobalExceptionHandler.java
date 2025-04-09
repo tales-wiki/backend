@@ -1,5 +1,10 @@
 package com.openmpy.taleswiki.common.exception;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.INTERNAL_SERVER_ERROR;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.MESSAGE_NOT_READABLE;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NO_RESOURCE_REQUEST;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.REQUEST_METHOD_NOT_SUPPORTED;
+
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -44,19 +50,29 @@ public class GlobalExceptionHandler {
             final HttpRequestMethodNotSupportedException e
     ) {
         log.warn(e.getMessage(), e);
-        return ResponseEntity.badRequest().body(ErrorResponse.of(CustomErrorCode.REQUEST_METHOD_NOT_SUPPORTED));
+        return ResponseEntity.badRequest().body(ErrorResponse.of(REQUEST_METHOD_NOT_SUPPORTED));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> methodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        final String errorMessage = e.getFieldErrors().stream()
+                .map(it -> it.getField() + " " + it.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        log.warn(e.getMessage(), e);
+        return ResponseEntity.badRequest().body(ErrorResponse.of(REQUEST_METHOD_NOT_SUPPORTED, errorMessage));
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> noResourceException(final NoResourceFoundException e) {
         log.warn(e.getMessage(), e);
-        return ResponseEntity.badRequest().body(ErrorResponse.of(CustomErrorCode.NO_RESOURCE_REQUEST));
+        return ResponseEntity.badRequest().body(ErrorResponse.of(NO_RESOURCE_REQUEST));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> httpMessageNotReadableException(final HttpMessageNotReadableException e) {
         log.warn(e.getMessage(), e);
-        return ResponseEntity.badRequest().body(ErrorResponse.of(CustomErrorCode.MESSAGE_NOT_READABLE));
+        return ResponseEntity.badRequest().body(ErrorResponse.of(MESSAGE_NOT_READABLE));
     }
 
     @ExceptionHandler(Exception.class)
@@ -65,7 +81,7 @@ public class GlobalExceptionHandler {
             final HttpServletRequest servletRequest
     ) {
         log.error(e.getMessage(), e);
-        return ResponseEntity.internalServerError().body(ErrorResponse.of(CustomErrorCode.INTERNAL_SERVER_ERROR));
+        return ResponseEntity.internalServerError().body(ErrorResponse.of(INTERNAL_SERVER_ERROR));
     }
 
     private String getRequestPayloadWithLogin(final HttpServletRequest servletRequest) {
