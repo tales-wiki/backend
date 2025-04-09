@@ -49,7 +49,7 @@ class ArticleQueryServiceTest {
         }
 
         // when
-        final ArticleReadCategoryResponses responses = articleQueryService.readAllArticleByCategory("런너");
+        final ArticleReadCategoryResponses responses = articleQueryService.readAllArticleByCategory("runner");
 
         // then
         final List<ArticleReadCategoryResponse> payload = responses.payload();

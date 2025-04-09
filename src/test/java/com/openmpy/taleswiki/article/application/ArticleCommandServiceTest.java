@@ -53,7 +53,7 @@ class ArticleCommandServiceTest {
     @Test
     void article_command_service_test_01() {
         // given
-        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "런너", "내용");
+        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "runner", "내용");
 
         // when
         final ArticleResponse response = articleCommandService.createArticle(request, mockServerHttpRequest());
@@ -170,7 +170,7 @@ class ArticleCommandServiceTest {
     @Test
     void 예외_article_command_service_test_01() {
         // given
-        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "런너", "내용");
+        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "runner", "내용");
 
         final Article article = createArticleWithVersion("제목", ArticleCategory.RUNNER);
         articleRepository.save(article);
