@@ -1,9 +1,14 @@
 package com.openmpy.taleswiki.member.application;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.INVALID_MEMBER_AUTHORITY;
+import static com.openmpy.taleswiki.member.domain.MemberAuthority.ADMIN;
 import static com.openmpy.taleswiki.member.domain.MemberAuthority.MEMBER;
 import static com.openmpy.taleswiki.member.domain.MemberSocial.KAKAO;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
 import com.openmpy.taleswiki.member.presentation.response.MemberLoginResponse;
@@ -63,5 +68,53 @@ class MemberServiceTest {
 
         // then
         assertThat(token).isNotNull();
+    }
+
+    @DisplayName("[통과] 회원 엔티티를 조회한다.")
+    @Test
+    void member_service_test_04() {
+        // given
+        final String email = "test@test.com";
+        final Member member = Member.create(email, KAKAO);
+
+        final Member savedMember = memberRepository.save(member);
+
+        // when
+        final Member foundMember = memberService.getMember(savedMember.getId());
+
+        // then
+        assertThat(foundMember.getId()).isNotNull();
+        assertThat(foundMember.getEmail()).isEqualTo("test@test.com");
+    }
+
+    @DisplayName("[통과] 회원 권한이 어드민이다.")
+    @Test
+    void member_service_test_05() {
+        // given
+        final Member member = Member.builder()
+                .email("test@test.com")
+                .social(KAKAO)
+                .authority(ADMIN)
+                .build();
+
+        final Member savedMember = memberRepository.save(member);
+
+        // when & then
+        assertDoesNotThrow(() -> memberService.checkAdminMember(savedMember.getId()));
+    }
+
+    @DisplayName("[예외] 회원 권한이 어드민이 아니다.")
+    @Test
+    void 예외_member_service_test_01() {
+        // given
+        final String email = "test@test.com";
+        final Member member = Member.create(email, KAKAO);
+
+        final Member savedMember = memberRepository.save(member);
+
+        // when & then
+        assertThatThrownBy(() -> memberService.checkAdminMember(savedMember.getId()))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(INVALID_MEMBER_AUTHORITY.getMessage());
     }
 }
