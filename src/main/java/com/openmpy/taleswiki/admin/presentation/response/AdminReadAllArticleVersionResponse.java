@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public record AdminReadAllArticleVersionResponse(
         Long articleVersionId,
+        Long articleId,
         String title,
         String category,
         String nickname,
@@ -11,6 +12,7 @@ public record AdminReadAllArticleVersionResponse(
         int size,
         String ip,
         boolean isHiding,
+        boolean isNoEditing,
         LocalDateTime createdAt
 ) {
 }

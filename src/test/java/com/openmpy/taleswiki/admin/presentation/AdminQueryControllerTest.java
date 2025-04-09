@@ -79,6 +79,7 @@ class AdminQueryControllerTest extends ControllerTestSupport {
 
         final AdminReadAllArticleVersionResponse response01 = new AdminReadAllArticleVersionResponse(
                 1L,
+                1L,
                 "제목1",
                 "인물",
                 "작성자1",
@@ -86,9 +87,11 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 10,
                 "127.0.0.1",
                 false,
+                false,
                 dateTime01
         );
         final AdminReadAllArticleVersionResponse response02 = new AdminReadAllArticleVersionResponse(
+                2L,
                 2L,
                 "제목2",
                 "길드",
@@ -96,6 +99,7 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 "내용2",
                 10,
                 "127.0.0.2",
+                false,
                 false,
                 dateTime02
         );
@@ -113,6 +117,7 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.payload").isArray())
                 .andExpect(jsonPath("$.payload[0].articleVersionId").value(1))
+                .andExpect(jsonPath("$.payload[0].articleId").value(1))
                 .andExpect(jsonPath("$.payload[0].title").value("제목1"))
                 .andExpect(jsonPath("$.payload[0].category").value("인물"))
                 .andExpect(jsonPath("$.payload[0].nickname").value("작성자1"))
@@ -120,8 +125,10 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.payload[0].size").value(10))
                 .andExpect(jsonPath("$.payload[0].ip").value("127.0.0.1"))
                 .andExpect(jsonPath("$.payload[0].isHiding").value(false))
+                .andExpect(jsonPath("$.payload[0].isNoEditing").value(false))
                 .andExpect(jsonPath("$.payload[0].createdAt").value(dateTime01.toString()))
                 .andExpect(jsonPath("$.payload[1].articleVersionId").value(2))
+                .andExpect(jsonPath("$.payload[1].articleId").value(2))
                 .andExpect(jsonPath("$.payload[1].title").value("제목2"))
                 .andExpect(jsonPath("$.payload[1].category").value("길드"))
                 .andExpect(jsonPath("$.payload[1].nickname").value("작성자2"))
@@ -129,6 +136,7 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.payload[1].size").value(10))
                 .andExpect(jsonPath("$.payload[1].ip").value("127.0.0.2"))
                 .andExpect(jsonPath("$.payload[1].isHiding").value(false))
+                .andExpect(jsonPath("$.payload[1].isNoEditing").value(false))
                 .andExpect(jsonPath("$.payload[1].createdAt").value(dateTime02.toString()))
                 .andDo(print())
                 .andDo(

@@ -11,6 +11,7 @@ public record AdminReadAllArticleVersionResponses(
         final List<AdminReadAllArticleVersionResponse> responses = articleVersions.stream()
                 .map(it -> new AdminReadAllArticleVersionResponse(
                         it.getId(),
+                        it.getArticle().getId(),
                         it.getArticle().getTitle(),
                         it.getArticle().getCategory().toString(),
                         it.getNickname(),
@@ -18,6 +19,7 @@ public record AdminReadAllArticleVersionResponses(
                         it.getSize(),
                         it.getIp(),
                         it.isHiding(),
+                        it.getArticle().isNoEditing(),
                         it.getCreatedAt()
                 ))
                 .toList();
