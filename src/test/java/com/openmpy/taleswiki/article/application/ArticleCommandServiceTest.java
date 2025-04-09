@@ -1,6 +1,8 @@
 package com.openmpy.taleswiki.article.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_ARTICLE_REPORT_VERSION_ID;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NO_EDITING_ARTICLE;
 import static com.openmpy.taleswiki.support.Fixture.createArticleWithVersion;
 import static com.openmpy.taleswiki.support.Fixture.mockServerHttpRequest;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,8 +21,7 @@ import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
-import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
-import com.openmpy.taleswiki.common.exception.CustomErrorCode;
+import com.openmpy.taleswiki.article.presentation.response.ArticleResponse;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.domain.Member;
@@ -55,7 +56,7 @@ class ArticleCommandServiceTest {
         final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "런너", "내용");
 
         // when
-        final ArticleCreateResponse response = articleCommandService.createArticle(request, mockServerHttpRequest());
+        final ArticleResponse response = articleCommandService.createArticle(request, mockServerHttpRequest());
 
         // then
         final Article article = articleRepository.findAll().getFirst();
@@ -97,11 +98,14 @@ class ArticleCommandServiceTest {
         when(memberService.getMember(anyLong())).thenReturn(any(Member.class));
 
         // when
-        articleCommandService.updateArticle(1L, article.getId(), request, mockServerHttpRequest());
+        final ArticleResponse response =
+                articleCommandService.updateArticle(1L, article.getId(), request, mockServerHttpRequest());
 
         // then
         final Article savedArticle = articleRepository.findAll().getFirst();
         final ArticleVersion articleVersion = savedArticle.getLatestVersion();
+
+        assertThat(response.articleVersionId()).isEqualTo(articleVersion.getId());
 
         assertThat(savedArticle.getTitle()).isEqualTo("제목");
         assertThat(savedArticle.getLatestVersion()).isEqualTo(articleVersion);
@@ -166,7 +170,7 @@ class ArticleCommandServiceTest {
     @Test
     void 예외_article_command_service_test_01() {
         // given
-        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "인물", "내용");
+        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "런너", "내용");
 
         final Article article = createArticleWithVersion("제목", ArticleCategory.RUNNER);
         articleRepository.save(article);
@@ -174,7 +178,7 @@ class ArticleCommandServiceTest {
         // when & then
         assertThatThrownBy(() -> articleCommandService.createArticle(request, mockServerHttpRequest()))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY.getMessage());
+                .hasMessage(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY.getMessage());
     }
 
     @DisplayName("[예외] 게시글의 편집 모드가 금지일 경우 편집할 수 없다.")
@@ -194,7 +198,7 @@ class ArticleCommandServiceTest {
         assertThatThrownBy(() ->
                 articleCommandService.updateArticle(1L, savedArticle.getId(), request, mockServerHttpRequest()))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(CustomErrorCode.NO_EDITING_ARTICLE.getMessage());
+                .hasMessage(NO_EDITING_ARTICLE.getMessage());
     }
 
     @DisplayName("[예외] 이미 신고한 게시글 버전이다.")

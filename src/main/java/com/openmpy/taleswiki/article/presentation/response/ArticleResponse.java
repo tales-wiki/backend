@@ -1,6 +1,6 @@
 package com.openmpy.taleswiki.article.presentation.response;
 
-public record ArticleCreateResponse(
+public record ArticleResponse(
         Long articleVersionId
 ) {
 }

@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
-import com.openmpy.taleswiki.article.presentation.response.ArticleCreateResponse;
+import com.openmpy.taleswiki.article.presentation.response.ArticleResponse;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ class ArticleCommandControllerTest extends ControllerTestSupport {
     void article_command_controller_test_01() throws Exception {
         // given
         final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "인물", "내용");
-        final ArticleCreateResponse response = new ArticleCreateResponse(1L);
+        final ArticleResponse response = new ArticleResponse(1L);
         final String payload = objectMapper.writeValueAsString(request);
 
         // stub
@@ -69,11 +69,13 @@ class ArticleCommandControllerTest extends ControllerTestSupport {
         // given
         final Long articleId = 1L;
         final ArticleUpdateRequest request = new ArticleUpdateRequest("작성자", "내용");
+        final ArticleResponse response = new ArticleResponse(2L);
         final String payload = objectMapper.writeValueAsString(request);
 
         // stub
-        doNothing().when(articleCommandService)
-                .updateArticle(anyLong(), anyLong(), any(ArticleUpdateRequest.class), any(HttpServletRequest.class));
+        when(articleCommandService
+                .updateArticle(anyLong(), anyLong(), any(ArticleUpdateRequest.class), any(HttpServletRequest.class)))
+                .thenReturn(response);
 
         // when & then
         mockMvc.perform(put("/api/articles/{articleId}", articleId)
@@ -81,8 +83,9 @@ class ArticleCommandControllerTest extends ControllerTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payload)
                 )
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andDo(print())
+                .andExpect(jsonPath("$.articleVersionId").value(2))
                 .andDo(
                         document("updateArticle",
                                 preprocessRequest(prettyPrint()),
