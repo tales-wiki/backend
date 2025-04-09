@@ -42,7 +42,7 @@ public class ArticleQueryService {
 
     @Transactional(readOnly = true)
     public ArticleVersionReadArticleResponses readAllArticleVersionByArticle(final Long articleId) {
-        final Article article = articleRepository.findById(articleId)
+        final Article article = articleRepository.findByIdWithArticleVersion(articleId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_ARTICLE_ID));
 
         return ArticleVersionReadArticleResponses.of(article);
