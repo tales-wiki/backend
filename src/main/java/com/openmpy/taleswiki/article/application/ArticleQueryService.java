@@ -58,7 +58,7 @@ public class ArticleQueryService {
 
     @Transactional(readOnly = true)
     public ArticleReadResponse readArticleByArticleVersion(final Long articleVersionId) {
-        final ArticleVersion articleVersion = articleVersionRepository.findById(articleVersionId)
+        final ArticleVersion articleVersion = articleVersionRepository.findByIdWithArticle(articleVersionId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION_ID));
 
         if (articleVersion.isHiding()) {
