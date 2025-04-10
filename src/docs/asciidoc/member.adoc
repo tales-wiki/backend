@@ -7,3 +7,7 @@ operation::loginKakao[snippets="http-request,http-response"]
 === 구글 로그인
 
 operation::loginGoogle[snippets="http-request,http-response"]
+
+=== 내 정보 조회
+
+operation::me[snippets="http-request,http-response"]
