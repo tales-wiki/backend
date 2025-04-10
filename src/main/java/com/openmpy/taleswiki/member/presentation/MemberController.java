@@ -1,11 +1,13 @@
 package com.openmpy.taleswiki.member.presentation;
 
+import com.openmpy.taleswiki.auth.annotation.Login;
 import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
 import com.openmpy.taleswiki.common.properties.CookieProperties;
 import com.openmpy.taleswiki.member.application.GoogleService;
 import com.openmpy.taleswiki.member.application.KakaoService;
 import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.presentation.response.MemberLoginResponse;
+import com.openmpy.taleswiki.member.presentation.response.MemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -46,6 +48,12 @@ public class MemberController {
     public ResponseEntity<Void> logout() {
         final ResponseCookie cookie = deleteCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<MemberResponse> me(@Login final Long memberId) {
+        final MemberResponse response = memberService.me(memberId);
+        return ResponseEntity.ok().body(response);
     }
 
     private ResponseCookie createCookie(final String token) {

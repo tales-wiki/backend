@@ -1,7 +1,9 @@
 package com.openmpy.taleswiki.member.presentation;
 
 import static com.openmpy.taleswiki.member.domain.MemberAuthority.MEMBER;
+import static com.openmpy.taleswiki.support.Fixture.MEMBER_COOKIE;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -11,10 +13,12 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.openmpy.taleswiki.auth.jwt.JwtTokenProvider;
 import com.openmpy.taleswiki.member.presentation.response.MemberLoginResponse;
+import com.openmpy.taleswiki.member.presentation.response.MemberResponse;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,6 +85,34 @@ class MemberControllerTest extends ControllerTestSupport {
                 .andDo(print())
                 .andDo(
                         document("loginGoogle",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );
+    }
+
+    @DisplayName("[통과] 회원 정보를 조회한다.")
+    @Test
+    void member_controller_test_03() throws Exception {
+        // given
+        final MemberResponse response = new MemberResponse(1L, "test@test.com", "KAKAO", "ADMIN");
+
+        // stub
+        when(memberService.me(anyLong())).thenReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/members/me")
+                        .cookie(MEMBER_COOKIE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.memberId").value(1))
+                .andExpect(jsonPath("$.email").value("test@test.com"))
+                .andExpect(jsonPath("$.social").value("KAKAO"))
+                .andExpect(jsonPath("$.authority").value("ADMIN"))
+                .andDo(
+                        document("me",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint())
                         )

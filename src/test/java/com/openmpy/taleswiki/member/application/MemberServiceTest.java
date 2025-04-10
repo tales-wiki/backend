@@ -12,6 +12,7 @@ import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
 import com.openmpy.taleswiki.member.presentation.response.MemberLoginResponse;
+import com.openmpy.taleswiki.member.presentation.response.MemberResponse;
 import com.openmpy.taleswiki.support.CustomServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -101,6 +102,28 @@ class MemberServiceTest {
 
         // when & then
         assertDoesNotThrow(() -> memberService.checkAdminMember(savedMember.getId()));
+    }
+
+    @DisplayName("[통과] 회원 정보를 조회한다.")
+    @Test
+    void member_service_test_06() {
+        // given
+        final Member member = Member.builder()
+                .email("test@test.com")
+                .social(KAKAO)
+                .authority(ADMIN)
+                .build();
+
+        final Member savedMember = memberRepository.save(member);
+
+        // when
+        final MemberResponse response = memberService.me(savedMember.getId());
+
+        // then
+        assertThat(response.memberId()).isEqualTo(savedMember.getId());
+        assertThat(response.email()).isEqualTo("test@test.com");
+        assertThat(response.social()).isEqualTo("KAKAO");
+        assertThat(response.authority()).isEqualTo("ADMIN");
     }
 
     @DisplayName("[예외] 회원 권한이 어드민이 아니다.")

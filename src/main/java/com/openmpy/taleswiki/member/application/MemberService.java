@@ -12,6 +12,7 @@ import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
 import com.openmpy.taleswiki.member.presentation.response.MemberLoginResponse;
+import com.openmpy.taleswiki.member.presentation.response.MemberResponse;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,12 @@ public class MemberService {
         final Member newMember = Member.create(email, social);
         final Member savedMember = memberRepository.save(newMember);
         return MemberLoginResponse.of(savedMember);
+    }
+
+    @Transactional
+    public MemberResponse me(final Long memberId) {
+        final Member member = getMember(memberId);
+        return MemberResponse.of(member);
     }
 
     public Member getMember(final Long id) {
