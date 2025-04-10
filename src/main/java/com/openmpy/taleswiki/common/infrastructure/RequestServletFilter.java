@@ -14,11 +14,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 @RequiredArgsConstructor
 @Component
 public class RequestServletFilter implements Filter {
+
+    private static final String ACTUATOR_URI = "/actuator/**";
 
     private final BlockedIpRepository blockedIpRepository;
 
@@ -28,13 +31,21 @@ public class RequestServletFilter implements Filter {
             final ServletResponse servletResponse,
             final FilterChain filterChain
     ) throws IOException, ServletException {
-        final String ip = IpAddressUtil.getClientIp((HttpServletRequest) servletRequest);
+        final HttpServletRequest request = (HttpServletRequest) servletRequest;
+        final String requestURI = request.getRequestURI();
 
+        final AntPathMatcher antPathMatcher = new AntPathMatcher();
+        if (antPathMatcher.match(ACTUATOR_URI, requestURI)) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
+        final String ip = IpAddressUtil.getClientIp(request);
         if (blockedIpRepository.existsByIp_Value(ip)) {
             throw new AuthenticationException(BLOCKED_IP);
         }
 
-        final HttpServletRequest wrappedRequest = new ContentCachingRequestWrapper((HttpServletRequest) servletRequest);
+        final HttpServletRequest wrappedRequest = new ContentCachingRequestWrapper(request);
         filterChain.doFilter(wrappedRequest, servletResponse);
     }
 }
