@@ -72,7 +72,8 @@ public class DummyData {
             }
 
             final Article article = Article.create(title + i, category);
-            final ArticleVersion articleVersion = ArticleVersion.create("작성자" + i, markdown, 10, "127.0.0.1", article);
+            final ArticleVersion articleVersion =
+                    ArticleVersion.create("작성자" + i, markdown, markdown.length(), "127.0.0.1", article);
 
             article.addVersion(articleVersion);
             articleRepository.save(article);

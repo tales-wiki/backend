@@ -47,7 +47,7 @@ public class ArticleCommandService {
             throw new CustomException(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY);
         }
 
-        final int contentLength = servletRequest.getContentLength();
+        final int contentLength = request.content().length();
         final String ip = IpAddressUtil.getClientIp(servletRequest);
 
         final Article article = Article.create(request.title(), category);
@@ -75,7 +75,7 @@ public class ArticleCommandService {
             throw new CustomException(NO_EDITING_ARTICLE);
         }
 
-        final int contentLength = servletRequest.getContentLength();
+        final int contentLength = request.content().length();
         final String ip = IpAddressUtil.getClientIp(servletRequest);
 
         final ArticleVersion articleVersion =
