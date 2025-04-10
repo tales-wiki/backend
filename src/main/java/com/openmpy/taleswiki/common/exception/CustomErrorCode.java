@@ -40,6 +40,7 @@ public enum CustomErrorCode {
     NOT_ALLOWED_IP_NULL_AND_BLANK("IP가 빈 값일 수 없습니다."),
     INVALID_IP("올바르지 않은 IP 주소입니다."),
     BLOCKED_IP("정지된 IP 주소입니다."),
+    DISCORD_ERROR("디스코드에서 에러가 발생했습니다."),
 
     // server
     REQUEST_METHOD_NOT_SUPPORTED("지원하지 않는 요청 메서드입니다."),
