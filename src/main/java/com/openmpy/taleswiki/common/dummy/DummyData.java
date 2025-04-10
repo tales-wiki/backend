@@ -4,10 +4,12 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
+import com.openmpy.taleswiki.common.util.FileLoaderUtil;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
 import java.util.Locale;
+import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class DummyData {
+
+    private static final Random RANDOM = new Random();
 
     @Profile("dev")
     @Bean
@@ -57,6 +61,7 @@ public class DummyData {
             }
 
             String title = faker.name().fullName().replace(" ", "");
+            final String markdown = FileLoaderUtil.loadMarkdownFile((RANDOM.nextInt(3) + 1) + ".txt");
 
             if (i % 3 == 0) {
                 title = faker.animal().name().replace(" ", "");
@@ -67,7 +72,7 @@ public class DummyData {
             }
 
             final Article article = Article.create(title + i, category);
-            final ArticleVersion articleVersion = ArticleVersion.create("작성자" + i, "내용" + i, 10, "127.0.0.1", article);
+            final ArticleVersion articleVersion = ArticleVersion.create("작성자" + i, markdown, 10, "127.0.0.1", article);
 
             article.addVersion(articleVersion);
             articleRepository.save(article);
