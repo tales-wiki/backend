@@ -5,9 +5,10 @@ import static com.openmpy.taleswiki.common.exception.CustomErrorCode.MESSAGE_NOT
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NO_RESOURCE_REQUEST;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.REQUEST_METHOD_NOT_SUPPORTED;
 
+import com.openmpy.taleswiki.common.util.IpAddressUtil;
+import com.openmpy.taleswiki.discord.application.DiscordService;
+import com.openmpy.taleswiki.discord.application.request.DiscordErrorMessageRequest;
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -27,20 +28,16 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final DiscordService discordService;
+
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse> customException(
-            final CustomException e,
-            final HttpServletRequest servletRequest
-    ) {
+    public ResponseEntity<ErrorResponse> customException(final CustomException e) {
         log.warn(e.getMessage(), e);
         return ResponseEntity.badRequest().body(ErrorResponse.of(e.getErrorCode()));
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponse> authenticationException(
-            final AuthenticationException e,
-            final HttpServletRequest servletRequest
-    ) {
+    public ResponseEntity<ErrorResponse> authenticationException(final AuthenticationException e) {
         log.warn(e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.of(e.getErrorCode()));
     }
@@ -80,17 +77,16 @@ public class GlobalExceptionHandler {
             final Exception e,
             final HttpServletRequest servletRequest
     ) {
+        final DiscordErrorMessageRequest messageRequest = new DiscordErrorMessageRequest(
+                e.getMessage(),
+                servletRequest.getMethod() + " " + servletRequest.getRequestURI(),
+                getRequestPayload(servletRequest),
+                IpAddressUtil.getClientIp(servletRequest)
+        );
+
+        discordService.sendErrorMessage(messageRequest);
         log.error(e.getMessage(), e);
         return ResponseEntity.internalServerError().body(ErrorResponse.of(INTERNAL_SERVER_ERROR));
-    }
-
-    private String getRequestPayloadWithLogin(final HttpServletRequest servletRequest) {
-        try (BufferedReader reader = servletRequest.getReader()) {
-            return reader.lines().collect(Collectors.joining(System.lineSeparator() + "\t"));
-        } catch (final IOException e) {
-            log.error("Request Payload 값을 읽지 못했습니다.", e);
-            return "에러";
-        }
     }
 
     private String getRequestPayload(final HttpServletRequest servletRequest) {
@@ -100,7 +96,7 @@ public class GlobalExceptionHandler {
                 try {
                     return new String(bytes, wrapperRequest.getCharacterEncoding());
                 } catch (final UnsupportedEncodingException e) {
-                    log.error("Request Payload 값을 읽지 못했습니다.", e);
+                    log.error("요청 Payload 값을 읽지 못했습니다.", e);
                     return "에러";
                 }
             }

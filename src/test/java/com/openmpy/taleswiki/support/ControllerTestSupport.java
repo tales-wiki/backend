@@ -11,6 +11,7 @@ import com.openmpy.taleswiki.article.presentation.ArticleCommandController;
 import com.openmpy.taleswiki.article.presentation.ArticleQueryController;
 import com.openmpy.taleswiki.common.infrastructure.RequestServletFilter;
 import com.openmpy.taleswiki.common.properties.CookieProperties;
+import com.openmpy.taleswiki.discord.application.DiscordService;
 import com.openmpy.taleswiki.member.application.GoogleService;
 import com.openmpy.taleswiki.member.application.KakaoService;
 import com.openmpy.taleswiki.member.application.MemberService;
@@ -73,4 +74,7 @@ public class ControllerTestSupport {
 
     @MockitoBean
     protected AdminQueryService adminQueryService;
+
+    @MockitoBean
+    protected DiscordService discordService;
 }
