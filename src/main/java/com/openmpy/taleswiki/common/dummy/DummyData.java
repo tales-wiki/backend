@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DummyData {
 
-    @Profile("test")
+    @Profile("dev")
     @Bean
     private CommandLineRunner init(
             final MemberRepository memberRepository,
