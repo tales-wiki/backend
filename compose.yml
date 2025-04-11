@@ -1,0 +1,42 @@
+services:
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: openmpy
+      MYSQL_DATABASE: taleswiki
+      MYSQL_USER: suhwan
+      MYSQL_PASSWORD: openmpy
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-storage:/var/lib/mysql
+
+volumes:
+  grafana-storage:
+  mysql-storage:
