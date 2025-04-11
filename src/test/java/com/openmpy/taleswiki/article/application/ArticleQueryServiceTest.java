@@ -15,14 +15,13 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponse
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponses;
-import com.openmpy.taleswiki.support.CustomServiceTest;
+import com.openmpy.taleswiki.support.ServiceTestSupport;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@CustomServiceTest
-class ArticleQueryServiceTest {
+class ArticleQueryServiceTest extends ServiceTestSupport {
 
     @Autowired
     private ArticleQueryService articleQueryService;

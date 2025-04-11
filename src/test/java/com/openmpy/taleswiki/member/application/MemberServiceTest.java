@@ -13,13 +13,12 @@ import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
 import com.openmpy.taleswiki.member.presentation.response.MemberLoginResponse;
 import com.openmpy.taleswiki.member.presentation.response.MemberResponse;
-import com.openmpy.taleswiki.support.CustomServiceTest;
+import com.openmpy.taleswiki.support.ServiceTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@CustomServiceTest
-class MemberServiceTest {
+class MemberServiceTest extends ServiceTestSupport {
 
     @Autowired
     private MemberService memberService;

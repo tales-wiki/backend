@@ -7,19 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      localstack:
-        image: localstack/localstack:latest
-        ports:
-          - 4566:4566
-        env:
-          SERVICES: s3
-          DEBUG: 1
-        options: >-
-          --health-cmd="curl -f http://localhost:4566/health || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     steps:
       - name: Checkout sources
@@ -43,21 +30,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Wait for LocalStack
-        run: |
-          until curl -s http://localhost:4566/health | grep "\"s3\": \"running\"" > /dev/null; do
-          echo "Waiting for LocalStack S3 to be ready..."
-          sleep 5
-          done
-
-          - name: Create S3 bucket
-            run: |
-              aws --endpoint-url=http://localhost:4566 s3 mb s3://my-bucket
-            env:
-              AWS_ACCESS_KEY_ID: test
-              AWS_SECRET_ACCESS_KEY: test
-              AWS_DEFAULT_REGION: us-east-1
 
       - name: Test with Gradle Wrapper
         run: ./gradlew clean build

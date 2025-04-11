@@ -8,18 +8,16 @@ import static org.mockito.Mockito.when;
 
 import com.openmpy.taleswiki.admin.domain.repository.BlockedIpRepository;
 import com.openmpy.taleswiki.common.exception.AuthenticationException;
+import com.openmpy.taleswiki.support.ServiceTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
-class RequestServletFilterTest {
+class RequestServletFilterTest extends ServiceTestSupport {
 
     @Autowired
     private RequestServletFilter servletFilter;
