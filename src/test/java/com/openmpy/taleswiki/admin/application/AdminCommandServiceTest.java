@@ -13,14 +13,13 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.common.exception.CustomException;
-import com.openmpy.taleswiki.support.CustomServiceTest;
 import com.openmpy.taleswiki.support.Fixture;
+import com.openmpy.taleswiki.support.ServiceTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@CustomServiceTest
-class AdminCommandServiceTest {
+class AdminCommandServiceTest extends ServiceTestSupport {
 
     @Autowired
     private AdminCommandService adminCommandService;

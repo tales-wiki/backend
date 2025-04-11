@@ -25,14 +25,13 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleResponse;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.domain.Member;
-import com.openmpy.taleswiki.support.CustomServiceTest;
+import com.openmpy.taleswiki.support.ServiceTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-@CustomServiceTest
-class ArticleCommandServiceTest {
+class ArticleCommandServiceTest extends ServiceTestSupport {
 
     @Autowired
     private ArticleCommandService articleCommandService;

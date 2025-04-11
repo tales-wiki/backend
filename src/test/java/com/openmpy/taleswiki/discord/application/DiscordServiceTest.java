@@ -1,16 +1,14 @@
 package com.openmpy.taleswiki.discord.application;
 
 import com.openmpy.taleswiki.discord.application.request.DiscordErrorMessageRequest;
+import com.openmpy.taleswiki.support.ServiceTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.EnabledIf;
 
-@ActiveProfiles("dev")
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
-class DiscordServiceTest {
+@EnabledIf(expression = "#{environment.acceptsProfiles('dev')}", loadContext = true)
+class DiscordServiceTest extends ServiceTestSupport {
 
     @Autowired
     private DiscordService discordService;

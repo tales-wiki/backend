@@ -21,15 +21,14 @@ import com.openmpy.taleswiki.article.domain.repository.ArticleVersionReportRepos
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
-import com.openmpy.taleswiki.support.CustomServiceTest;
 import com.openmpy.taleswiki.support.Fixture;
+import com.openmpy.taleswiki.support.ServiceTestSupport;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@CustomServiceTest
-class AdminQueryServiceTest {
+class AdminQueryServiceTest extends ServiceTestSupport {
 
     @Autowired
     private AdminQueryService adminQueryService;
