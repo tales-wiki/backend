@@ -1,6 +1,6 @@
 package com.openmpy.taleswiki.common.presentation;
 
-import com.openmpy.taleswiki.common.application.ImageService;
+import com.openmpy.taleswiki.common.application.ImageS3Service;
 import com.openmpy.taleswiki.common.presentation.response.ImageUploadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class ImageController {
 
-    private final ImageService imageService;
+    private final ImageS3Service imageS3Service;
 
     @PostMapping("/upload")
     public ResponseEntity<ImageUploadResponse> upload(@RequestParam("image") final MultipartFile file) {
-        final ImageUploadResponse response = imageService.upload(file);
+        final ImageUploadResponse response = imageS3Service.upload(file);
         return ResponseEntity.ok(response);
     }
 }
