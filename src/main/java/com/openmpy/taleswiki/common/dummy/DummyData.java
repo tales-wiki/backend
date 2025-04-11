@@ -61,7 +61,7 @@ public class DummyData {
             }
 
             String title = faker.name().fullName().replace(" ", "");
-            final String markdown = FileLoaderUtil.loadMarkdownFile((RANDOM.nextInt(3) + 1) + ".txt");
+            final String markdown = FileLoaderUtil.loadMarkdownFile((RANDOM.nextInt(3) + 1) + ".md");
 
             if (i % 3 == 0) {
                 title = faker.animal().name().replace(" ", "");
