@@ -9,6 +9,7 @@ import com.openmpy.taleswiki.article.application.ArticleCommandService;
 import com.openmpy.taleswiki.article.application.ArticleQueryService;
 import com.openmpy.taleswiki.article.presentation.ArticleCommandController;
 import com.openmpy.taleswiki.article.presentation.ArticleQueryController;
+import com.openmpy.taleswiki.common.application.ImageS3Service;
 import com.openmpy.taleswiki.common.infrastructure.RequestServletFilter;
 import com.openmpy.taleswiki.common.properties.CookieProperties;
 import com.openmpy.taleswiki.discord.application.DiscordService;
@@ -77,4 +78,7 @@ public class ControllerTestSupport {
 
     @MockitoBean
     protected DiscordService discordService;
+
+    @MockitoBean
+    protected ImageS3Service imageS3Service;
 }
