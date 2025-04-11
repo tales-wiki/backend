@@ -41,7 +41,7 @@ public enum CustomErrorCode {
     INVALID_IP("올바르지 않은 IP 주소입니다."),
     BLOCKED_IP("정지된 IP 주소입니다."),
     DISCORD_ERROR("디스코드에서 에러가 발생했습니다."),
-    INVALID_FILE_EXTENSION("올바르지 않은 파일 확장자입니다."),
+    INVALID_IMAGE_FILE_EXTENSION("올바르지 않은 이미지 파일 확장자입니다."),
     NOT_FOUND_FILE("찾을 수 없는 파일입니다."),
 
     // server
