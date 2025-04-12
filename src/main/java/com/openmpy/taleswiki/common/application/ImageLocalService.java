@@ -1,9 +1,9 @@
 package com.openmpy.taleswiki.common.application;
 
 import static com.openmpy.taleswiki.common.util.FileLoaderUtil.getExtension;
+import static com.openmpy.taleswiki.common.util.FileLoaderUtil.validateFileExtension;
 
 import com.openmpy.taleswiki.common.presentation.response.ImageUploadResponse;
-import com.openmpy.taleswiki.common.util.FileLoaderUtil;
 import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class ImageLocalService implements ImageService {
     @Override
     public ImageUploadResponse upload(final MultipartFile file) {
         final String extension = getExtension(file);
-        FileLoaderUtil.getExtension(file);
+        validateFileExtension(extension);
 
         try {
             final String fileName = UUID.randomUUID() + "." + extension;
