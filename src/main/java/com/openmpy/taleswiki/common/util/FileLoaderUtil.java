@@ -48,7 +48,7 @@ public class FileLoaderUtil {
         return filename.substring(filename.lastIndexOf(".") + 1);
     }
 
-    public void validateFileExtension(final String extension) {
+    public static void validateFileExtension(final String extension) {
         if (!VALID_FILE_EXTENSIONS.contains(extension)) {
             throw new CustomException(INVALID_IMAGE_FILE_EXTENSION);
         }

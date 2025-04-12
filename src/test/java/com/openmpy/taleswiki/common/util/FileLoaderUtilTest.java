@@ -1,12 +1,16 @@
 package com.openmpy.taleswiki.common.util;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.INVALID_IMAGE_FILE_EXTENSION;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_FILE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.openmpy.taleswiki.common.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.mock.web.MockMultipartFile;
 
 class FileLoaderUtilTest {
@@ -51,6 +55,14 @@ class FileLoaderUtilTest {
         assertThat(extension).isEmpty();
     }
 
+    @DisplayName("[통과] 지원하는 이미지 확장자이다.")
+    @ParameterizedTest(name = "값: {0}")
+    @ValueSource(strings = {"jpg", "png", "webp"})
+    void file_loader_util_test_04(final String value) {
+        // when & then
+        assertDoesNotThrow(() -> FileLoaderUtil.validateFileExtension(value));
+    }
+
     @DisplayName("[예외] 읽을 파일 경로를 찾지 못한다.")
     @Test
     void 예외_file_loader_util_test_01() {
@@ -58,5 +70,15 @@ class FileLoaderUtilTest {
         assertThatThrownBy(() -> FileLoaderUtil.loadMarkdownFile("test.md"))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(NOT_FOUND_FILE.getMessage() + " " + "test.md");
+    }
+
+    @DisplayName("[예외] 지원하지 않는 이미지 확장자이다.")
+    @ParameterizedTest(name = "값: {0}")
+    @ValueSource(strings = {"exe", "pdf", "txt"})
+    void 예외_file_loader_util_test_02() {
+        // when & then
+        assertThatThrownBy(() -> FileLoaderUtil.validateFileExtension("test.md"))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(INVALID_IMAGE_FILE_EXTENSION.getMessage());
     }
 }
