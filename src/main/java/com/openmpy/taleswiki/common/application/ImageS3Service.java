@@ -1,13 +1,11 @@
 package com.openmpy.taleswiki.common.application;
 
-import static com.openmpy.taleswiki.common.exception.CustomErrorCode.INVALID_IMAGE_FILE_EXTENSION;
 import static com.openmpy.taleswiki.common.util.FileLoaderUtil.getExtension;
 
-import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.presentation.response.ImageUploadResponse;
+import com.openmpy.taleswiki.common.util.FileLoaderUtil;
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,13 +18,11 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 
 @RequiredArgsConstructor
 @Service
-public class ImageS3Service {
+public class ImageS3Service implements ImageService {
 
     private static final String BUCKET_NAME = "tales-wiki-bucket";
     private static final String BUCKET_ALREADY_OWNED_BY_YOU = "BucketAlreadyOwnedByYou";
-    private static final Set<String> VALID_FILE_EXTENSIONS = Set.of(
-            "jpg", "jpeg", "png", "gif", "bmp", "webp", "tiff", "svg"
-    );
+    private static final String S3_STORAGE_TYPE = "S3";
 
     private final S3Client s3Client;
 
@@ -45,9 +41,10 @@ public class ImageS3Service {
         }
     }
 
+    @Override
     public ImageUploadResponse upload(final MultipartFile file) {
         final String extension = getExtension(file);
-        validateFileExtension(extension);
+        FileLoaderUtil.getExtension(file);
 
         try {
             final String key = UUID.randomUUID() + "." + extension;
@@ -64,9 +61,8 @@ public class ImageS3Service {
         }
     }
 
-    private void validateFileExtension(final String extension) {
-        if (!VALID_FILE_EXTENSIONS.contains(extension)) {
-            throw new CustomException(INVALID_IMAGE_FILE_EXTENSION);
-        }
+    @Override
+    public String getStorageType() {
+        return S3_STORAGE_TYPE;
     }
 }
