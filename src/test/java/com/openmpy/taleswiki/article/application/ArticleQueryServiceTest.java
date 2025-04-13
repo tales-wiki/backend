@@ -6,8 +6,8 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryGroupResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponse;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
@@ -48,11 +48,13 @@ class ArticleQueryServiceTest extends ServiceTestSupport {
         }
 
         // when
-        final ArticleReadCategoryResponses responses = articleQueryService.readAllArticleByCategory("runner");
+        final ArticleReadCategoryGroupResponse groupResponse = articleQueryService.readAllArticleByCategory("runner");
 
         // then
-        final List<ArticleReadCategoryResponse> payload = responses.payload();
+        final char initial = groupResponse.groups().getFirst().initial();
+        final List<ArticleReadCategoryResponse> payload = groupResponse.groups().getFirst().payload();
 
+        assertThat(initial).isEqualTo('ㅈ');
         assertThat(payload).hasSize(5);
         assertThat(payload.getFirst().articleVersionId()).isNotNull();
         assertThat(payload.getFirst().title()).isEqualTo("제목1");
