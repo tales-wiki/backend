@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryGroupResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponse;
@@ -26,6 +27,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArt
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponses;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,21 +79,25 @@ class ArticleQueryControllerTest extends ControllerTestSupport {
         final ArticleReadCategoryResponse response01 = new ArticleReadCategoryResponse(1L, "제목1");
         final ArticleReadCategoryResponse response02 = new ArticleReadCategoryResponse(2L, "제목2");
         final ArticleReadCategoryResponses responses =
-                new ArticleReadCategoryResponses(List.of(response01, response02));
+                new ArticleReadCategoryResponses('ㅈ', List.of(response01, response02));
+        final ArticleReadCategoryGroupResponse groupResponse =
+                new ArticleReadCategoryGroupResponse(Collections.singletonList(responses));
 
         // stub
-        when(articleQueryService.readAllArticleByCategory(anyString())).thenReturn(responses);
+        when(articleQueryService.readAllArticleByCategory(anyString())).thenReturn(groupResponse);
 
         // when & then
         mockMvc.perform(get("/api/articles/categories/{category}", category)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.payload").isArray())
-                .andExpect(jsonPath("$.payload[0].articleVersionId").value(1))
-                .andExpect(jsonPath("$.payload[0].title").value("제목1"))
-                .andExpect(jsonPath("$.payload[1].articleVersionId").value(2))
-                .andExpect(jsonPath("$.payload[1].title").value("제목2"))
+                .andExpect(jsonPath("$.groups").isArray())
+                .andExpect(jsonPath("$.groups[0].initial").value("ㅈ"))
+                .andExpect(jsonPath("$.groups[0].payload").isArray())
+                .andExpect(jsonPath("$.groups[0].payload[0].articleVersionId").value(1))
+                .andExpect(jsonPath("$.groups[0].payload[0].title").value("제목1"))
+                .andExpect(jsonPath("$.groups[0].payload[1].articleVersionId").value(2))
+                .andExpect(jsonPath("$.groups[0].payload[1].title").value("제목2"))
                 .andDo(print())
                 .andDo(
                         document("readAllArticleByCategory",

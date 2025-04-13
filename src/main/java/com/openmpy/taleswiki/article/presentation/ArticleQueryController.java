@@ -1,7 +1,7 @@
 package com.openmpy.taleswiki.article.presentation;
 
 import com.openmpy.taleswiki.article.application.ArticleQueryService;
-import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryGroupResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponses;
@@ -28,9 +28,11 @@ public class ArticleQueryController {
     }
 
     @GetMapping("/categories/{category}")
-    public ResponseEntity<ArticleReadCategoryResponses> readAllArticleByCategory(@PathVariable final String category) {
-        final ArticleReadCategoryResponses responses = articleQueryService.readAllArticleByCategory(category);
-        return ResponseEntity.ok(responses);
+    public ResponseEntity<ArticleReadCategoryGroupResponse> readAllArticleByCategory(
+            @PathVariable final String category
+    ) {
+        final ArticleReadCategoryGroupResponse response = articleQueryService.readAllArticleByCategory(category);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/latest-update")

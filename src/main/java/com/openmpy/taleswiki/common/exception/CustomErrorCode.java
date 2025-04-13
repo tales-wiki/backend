@@ -43,6 +43,7 @@ public enum CustomErrorCode {
     DISCORD_ERROR("디스코드에서 에러가 발생했습니다."),
     INVALID_IMAGE_FILE_EXTENSION("올바르지 않은 이미지 파일 확장자입니다."),
     NOT_FOUND_FILE("찾을 수 없는 파일입니다."),
+    NOT_ALLOWED_TEXT_NULL_AND_BLANK("문자열이 null 또는 빈 값일 수 없습니다."),
 
     // server
     REQUEST_METHOD_NOT_SUPPORTED("지원하지 않는 요청 메서드입니다."),

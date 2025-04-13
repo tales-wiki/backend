@@ -8,6 +8,7 @@ import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
+import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryGroupResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
@@ -28,10 +29,11 @@ public class ArticleQueryService {
     private final ArticleVersionRepository articleVersionRepository;
 
     @Transactional(readOnly = true)
-    public ArticleReadCategoryResponses readAllArticleByCategory(final String category) {
+    public ArticleReadCategoryGroupResponse readAllArticleByCategory(final String category) {
         final ArticleCategory articleCategory = ArticleCategory.of(category);
         final List<Article> articles = articleRepository.findAllByCategory(articleCategory);
-        return ArticleReadCategoryResponses.of(articles);
+        final List<ArticleReadCategoryResponses> responses = ArticleReadCategoryResponses.of(articles);
+        return new ArticleReadCategoryGroupResponse(responses);
     }
 
     @Transactional(readOnly = true)
