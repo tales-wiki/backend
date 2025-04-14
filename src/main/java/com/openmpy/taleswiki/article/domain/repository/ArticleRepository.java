@@ -12,7 +12,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     List<Article> findAllByTitle_ValueContainingIgnoreCaseOrderByUpdatedAtDesc(final String title);
 
-    List<Article> findAllByCategory(final ArticleCategory category);
+    List<Article> findAllByCategoryOrderByTitle_Value(final ArticleCategory category);
 
     List<Article> findTop10ByOrderByUpdatedAtDesc();
 

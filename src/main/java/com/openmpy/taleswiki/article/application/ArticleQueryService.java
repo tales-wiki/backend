@@ -31,7 +31,7 @@ public class ArticleQueryService {
     @Transactional(readOnly = true)
     public ArticleReadCategoryGroupResponse readAllArticleByCategory(final String category) {
         final ArticleCategory articleCategory = ArticleCategory.of(category);
-        final List<Article> articles = articleRepository.findAllByCategory(articleCategory);
+        final List<Article> articles = articleRepository.findAllByCategoryOrderByTitle_Value(articleCategory);
         final List<ArticleReadCategoryResponses> responses = ArticleReadCategoryResponses.of(articles);
         return new ArticleReadCategoryGroupResponse(responses);
     }
