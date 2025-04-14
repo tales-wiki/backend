@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import com.openmpy.taleswiki.article.domain.Article;
@@ -22,6 +23,7 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleResponse;
+import com.openmpy.taleswiki.common.application.RedisService;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.domain.Member;
@@ -39,6 +41,9 @@ class ArticleCommandServiceTest extends ServiceTestSupport {
     @MockitoBean
     private MemberService memberService;
 
+    @MockitoBean
+    private RedisService redisService;
+
     @Autowired
     private ArticleRepository articleRepository;
 
@@ -53,6 +58,9 @@ class ArticleCommandServiceTest extends ServiceTestSupport {
     void article_command_service_test_01() {
         // given
         final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "runner", "내용");
+
+        // stub
+        when(redisService.acquireLock(anyString(), anyString(), anyLong())).thenReturn(true);
 
         // when
         final ArticleResponse response = articleCommandService.createArticle(request, mockServerHttpRequest());
@@ -91,30 +99,33 @@ class ArticleCommandServiceTest extends ServiceTestSupport {
         final ArticleUpdateRequest request = new ArticleUpdateRequest("작성자2", "내용2");
 
         final Article article = createArticleWithVersion("제목", ArticleCategory.RUNNER);
-        articleRepository.save(article);
+        final Article savedArticle = articleRepository.save(article);
+
+        // stub
+        when(redisService.acquireLock(anyString(), anyString(), anyLong())).thenReturn(true);
 
         // stub
         when(memberService.getMember(anyLong())).thenReturn(any(Member.class));
 
         // when
         final ArticleResponse response =
-                articleCommandService.updateArticle(1L, article.getId(), request, mockServerHttpRequest());
+                articleCommandService.updateArticle(1L, savedArticle.getId(), request, mockServerHttpRequest());
 
         // then
-        final Article savedArticle = articleRepository.findAll().getFirst();
-        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
+        final Article foundArticle = articleRepository.findAll().getFirst();
+        final ArticleVersion articleVersion = foundArticle.getLatestVersion();
 
         assertThat(response.articleVersionId()).isEqualTo(articleVersion.getId());
 
-        assertThat(savedArticle.getTitle()).isEqualTo("제목");
-        assertThat(savedArticle.getLatestVersion()).isEqualTo(articleVersion);
-        assertThat(savedArticle.getVersions()).hasSize(2);
-        assertThat(savedArticle.getUpdatedAt()).isNotNull();
+        assertThat(foundArticle.getTitle()).isEqualTo("제목");
+        assertThat(foundArticle.getLatestVersion()).isEqualTo(articleVersion);
+        assertThat(foundArticle.getVersions()).hasSize(2);
+        assertThat(foundArticle.getUpdatedAt()).isNotNull();
 
         assertThat(articleVersion.getNickname()).isEqualTo("작성자2");
         assertThat(articleVersion.getContent()).isEqualTo("내용2");
         assertThat(articleVersion.getVersionNumber()).isEqualTo(2);
-        assertThat(articleVersion.getArticle()).isEqualTo(savedArticle);
+        assertThat(articleVersion.getArticle()).isEqualTo(foundArticle);
     }
 
     @DisplayName("[통과] 게시글 버전을 신고한다.")

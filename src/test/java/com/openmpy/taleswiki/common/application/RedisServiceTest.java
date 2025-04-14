@@ -1,9 +1,18 @@
 package com.openmpy.taleswiki.common.application;
 
+import static com.openmpy.taleswiki.support.Fixture.mockServerHttpRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.openmpy.taleswiki.article.application.ArticleCommandService;
+import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.support.EmbeddedRedisConfig;
 import com.openmpy.taleswiki.support.ServiceTestSupport;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,45 +22,39 @@ import org.springframework.context.annotation.Import;
 class RedisServiceTest extends ServiceTestSupport {
 
     @Autowired
+    private ArticleCommandService articleCommandService;
+
+    @Autowired
     private RedisService redisService;
 
-    @DisplayName("[통과] 레디스에 데이터를 저장한다.")
+    @DisplayName("[예외] 게시글 작성을 10명이 동시에 누른다.")
     @Test
-    void redis_service_test_01() {
-        // when
-        redisService.save("key", "value");
-
-        // then
-        final Object value = redisService.get("key");
-
-        assertThat((String) value).isEqualTo("value");
-    }
-
-    @DisplayName("[통과] 레디스에 저장된 데이터를 조회한다.")
-    @Test
-    void redis_service_test_02() {
+    void 예외_redis_service_test_01() throws InterruptedException {
         // given
-        redisService.save("key", "value");
+        final ArticleCreateRequest request = new ArticleCreateRequest("제목", "작성자", "runner", "내용");
+
+        final int threadCount = 10;
+        final ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+        final CountDownLatch latch = new CountDownLatch(threadCount);
+        final List<Throwable> exceptions = Collections.synchronizedList(new ArrayList<>());
 
         // when
-        final Object value = redisService.get("key");
+        for (int i = 0; i < threadCount; i++) {
+            executor.execute(() -> {
+                try {
+                    articleCommandService.createArticle(request, mockServerHttpRequest());
+                } catch (final Throwable e) {
+                    exceptions.add(e);
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+        executor.shutdown();
 
         // then
-        assertThat((String) value).isEqualTo("value");
-    }
-
-    @DisplayName("[통과] 레디스에 저장된 데이터를 삭제한다.")
-    @Test
-    void redis_service_test_03() {
-        // given
-        redisService.save("key", "value");
-
-        // when
-        redisService.delete("key");
-
-        // then
-        final Object value = redisService.get("key");
-
-        assertThat(value).isNull();
+        assertThat(exceptions).hasSize(9);
     }
 }
