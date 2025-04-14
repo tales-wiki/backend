@@ -2,6 +2,7 @@ package com.openmpy.taleswiki.article.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_ARTICLE_REPORT_VERSION_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.EXIST_REDIS_KEY;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NO_EDITING_ARTICLE;
@@ -17,6 +18,7 @@ import com.openmpy.taleswiki.article.presentation.request.ArticleCreateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleUpdateRequest;
 import com.openmpy.taleswiki.article.presentation.request.ArticleVersionReportRequest;
 import com.openmpy.taleswiki.article.presentation.response.ArticleResponse;
+import com.openmpy.taleswiki.common.application.RedisService;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.common.util.IpAddressUtil;
 import com.openmpy.taleswiki.member.application.MemberService;
@@ -35,6 +37,7 @@ public class ArticleCommandService {
     private final ArticleVersionRepository articleVersionRepository;
     private final ArticleVersionReportRepository articleVersionReportRepository;
     private final MemberService memberService;
+    private final RedisService redisService;
 
     @Transactional
     public ArticleResponse createArticle(
@@ -45,6 +48,13 @@ public class ArticleCommandService {
 
         if (articleRepository.existsByTitle_ValueAndCategory(request.title(), category)) {
             throw new CustomException(ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY);
+        }
+
+        final String key = String.format("create-article:%s:%s", request.category(), request.title());
+        boolean lockAcquired = redisService.acquireLock(key, "locked", 3000);
+
+        if (!lockAcquired) {
+            throw new CustomException(EXIST_REDIS_KEY);
         }
 
         final int contentLength = request.content().length();
@@ -73,6 +83,13 @@ public class ArticleCommandService {
 
         if (article.isNoEditing()) {
             throw new CustomException(NO_EDITING_ARTICLE);
+        }
+
+        final String key = String.format("update-article:%d", articleId);
+        boolean lockAcquired = redisService.acquireLock(key, "locked", 3000);
+
+        if (!lockAcquired) {
+            throw new CustomException(EXIST_REDIS_KEY);
         }
 
         final int contentLength = request.content().length();

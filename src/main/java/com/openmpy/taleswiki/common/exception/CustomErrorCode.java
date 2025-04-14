@@ -45,6 +45,9 @@ public enum CustomErrorCode {
     NOT_FOUND_FILE("찾을 수 없는 파일입니다."),
     NOT_ALLOWED_TEXT_NULL_AND_BLANK("문자열이 null 또는 빈 값일 수 없습니다."),
 
+    // redis
+    EXIST_REDIS_KEY("잠시 후에 이용해주시길 바랍니다."),
+
     // server
     REQUEST_METHOD_NOT_SUPPORTED("지원하지 않는 요청 메서드입니다."),
     METHOD_ARGUMENT_NOT_VALID("유효성 에러가 발생했습니다."),

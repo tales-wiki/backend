@@ -13,7 +13,7 @@ services:
     container_name: grafana
     restart: always
     ports:
-      - "3000:3000"
+      - "4000:3000"
     volumes:
       - grafana-storage:/var/lib/grafana
       - ../monitoring/grafana/provisioning:/etc/grafana/provisioning
@@ -37,6 +37,15 @@ services:
     volumes:
       - mysql-storage:/var/lib/mysql
 
+  redis:
+    container_name: redis
+    image: redis:7.4.2
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-storage:/data
+
   localstack:
     container_name: localstack
     image: localstack/localstack:latest
@@ -55,3 +64,4 @@ services:
 volumes:
   grafana-storage:
   mysql-storage:
+  redis-storage:
