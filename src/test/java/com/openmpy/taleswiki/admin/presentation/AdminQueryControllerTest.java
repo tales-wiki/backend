@@ -1,7 +1,5 @@
 package com.openmpy.taleswiki.admin.presentation;
 
-import static com.openmpy.taleswiki.member.domain.MemberAuthority.ADMIN;
-import static com.openmpy.taleswiki.member.domain.MemberAuthority.MEMBER;
 import static com.openmpy.taleswiki.member.domain.MemberSocial.GOOGLE;
 import static com.openmpy.taleswiki.member.domain.MemberSocial.KAKAO;
 import static com.openmpy.taleswiki.support.Fixture.MEMBER_COOKIE;
@@ -20,8 +18,8 @@ import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVers
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponse;
 import com.openmpy.taleswiki.common.presentation.response.PaginatedResponse;
-import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,11 +36,17 @@ class AdminQueryControllerTest extends ControllerTestSupport {
     @Test
     void admin_query_controller_test_01() throws Exception {
         // given
-        final Member member01 = new Member(1L, "test1@test.com", KAKAO, MEMBER);
-        final Member member02 = new Member(2L, "test2@test.com", GOOGLE, ADMIN);
+        final LocalDateTime dateTime01 = LocalDateTime.of(2025, 1, 1, 1, 1, 1);
+        final LocalDateTime dateTime02 = LocalDateTime.of(2025, 1, 1, 1, 1, 2);
 
-        final Page<Member> members = new PageImpl<>(List.of(member02, member01), PageRequest.of(0, 10), 2);
-        final PaginatedResponse<Member> response = PaginatedResponse.of(members);
+        final AdminReadAllMemberResponse response01 =
+                new AdminReadAllMemberResponse(1L, "test1@test.com", KAKAO.name(), dateTime01);
+        final AdminReadAllMemberResponse response02 =
+                new AdminReadAllMemberResponse(2L, "test2@test.com", GOOGLE.name(), dateTime02);
+
+        final Page<AdminReadAllMemberResponse> responses =
+                new PageImpl<>(List.of(response02, response01), PageRequest.of(0, 10), 2);
+        final PaginatedResponse<AdminReadAllMemberResponse> response = PaginatedResponse.of(responses);
 
         // stub
         when(adminQueryService.readAllMember(anyInt(), anyInt())).thenReturn(response);
@@ -54,12 +58,14 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content[0].id").value(2))
+                .andExpect(jsonPath("$.content[0].memberId").value(2))
                 .andExpect(jsonPath("$.content[0].email").value("test2@test.com"))
                 .andExpect(jsonPath("$.content[0].social").value("GOOGLE"))
-                .andExpect(jsonPath("$.content[1].id").value(1))
+                .andExpect(jsonPath("$.content[0].createdAt").value("2025-01-01T01:01:02"))
+                .andExpect(jsonPath("$.content[1].memberId").value(1))
                 .andExpect(jsonPath("$.content[1].email").value("test1@test.com"))
                 .andExpect(jsonPath("$.content[1].social").value("KAKAO"))
+                .andExpect(jsonPath("$.content[1].createdAt").value("2025-01-01T01:01:01"))
                 .andExpect(jsonPath("$.totalElements").value(2))
                 .andExpect(jsonPath("$.totalPages").value(1))
                 .andExpect(jsonPath("$.size").value(10))

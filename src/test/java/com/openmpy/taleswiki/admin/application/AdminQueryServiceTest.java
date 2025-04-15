@@ -9,6 +9,7 @@ import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVers
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponse;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.ArticleVersionReport;
@@ -52,7 +53,7 @@ class AdminQueryServiceTest extends ServiceTestSupport {
         }
 
         // when
-        final PaginatedResponse<Member> response = adminQueryService.readAllMember(0, 10);
+        final PaginatedResponse<AdminReadAllMemberResponse> response = adminQueryService.readAllMember(0, 10);
 
         // then
         assertThat(response.content()).hasSize(10);

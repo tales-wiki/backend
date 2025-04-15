@@ -5,6 +5,7 @@ import com.openmpy.taleswiki.admin.domain.repository.BlockedIpRepository;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponse;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.ArticleVersionReport;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionReportRepository;
@@ -30,10 +31,19 @@ public class AdminQueryService {
     private final BlockedIpRepository blockedIpRepository;
 
     @Transactional(readOnly = true)
-    public PaginatedResponse<Member> readAllMember(final int page, final int size) {
+    public PaginatedResponse<AdminReadAllMemberResponse> readAllMember(final int page, final int size) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
-        final Page<Member> memberPage = memberRepository.findAll(pageRequest);
-        return PaginatedResponse.of(memberPage);
+        final Page<Member> pageResult = memberRepository.findAll(pageRequest);
+        final Page<AdminReadAllMemberResponse> responses = pageResult.map(it ->
+                new AdminReadAllMemberResponse(
+                        it.getId(),
+                        it.getEmail(),
+                        it.getSocial().name(),
+                        it.getCreatedAt()
+                )
+        );
+
+        return PaginatedResponse.of(responses);
     }
 
     @Transactional(readOnly = true)

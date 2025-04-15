@@ -4,8 +4,8 @@ import com.openmpy.taleswiki.admin.application.AdminQueryService;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponse;
 import com.openmpy.taleswiki.common.presentation.response.PaginatedResponse;
-import com.openmpy.taleswiki.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +21,11 @@ public class AdminQueryController {
     private final AdminQueryService adminQueryService;
 
     @GetMapping("/members")
-    public ResponseEntity<PaginatedResponse<Member>> readAllMember(
+    public ResponseEntity<PaginatedResponse<AdminReadAllMemberResponse>> readAllMember(
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int size
     ) {
-        final PaginatedResponse<Member> response = adminQueryService.readAllMember(page, size);
+        final PaginatedResponse<AdminReadAllMemberResponse> response = adminQueryService.readAllMember(page, size);
         return ResponseEntity.ok(response);
     }
 
