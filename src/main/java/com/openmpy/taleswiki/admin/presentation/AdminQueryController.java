@@ -2,7 +2,7 @@ package com.openmpy.taleswiki.admin.presentation;
 
 import com.openmpy.taleswiki.admin.application.AdminQueryService;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
 import com.openmpy.taleswiki.common.presentation.response.PaginatedResponse;
 import com.openmpy.taleswiki.member.domain.Member;
@@ -30,12 +30,13 @@ public class AdminQueryController {
     }
 
     @GetMapping("/articles/versions")
-    public ResponseEntity<AdminReadAllArticleVersionResponses> readAllArticleVersion(
+    public ResponseEntity<PaginatedResponse<AdminReadAllArticleVersionResponse>> readAllArticleVersion(
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int size
     ) {
-        final AdminReadAllArticleVersionResponses responses = adminQueryService.readAllArticleVersion(page, size);
-        return ResponseEntity.ok(responses);
+        final PaginatedResponse<AdminReadAllArticleVersionResponse> response =
+                adminQueryService.readAllArticleVersion(page, size);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/articles/versions/reports")

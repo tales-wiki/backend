@@ -8,7 +8,6 @@ import com.openmpy.taleswiki.admin.domain.repository.BlockedIpRepository;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
 import com.openmpy.taleswiki.article.domain.Article;
@@ -82,20 +81,17 @@ class AdminQueryServiceTest extends ServiceTestSupport {
         }
 
         // when
-        final AdminReadAllArticleVersionResponses responses = adminQueryService.readAllArticleVersion(0, 10);
+        final PaginatedResponse<AdminReadAllArticleVersionResponse> response =
+                adminQueryService.readAllArticleVersion(0, 10);
 
         // then
-        final List<AdminReadAllArticleVersionResponse> payload = responses.payload();
-
-        assertThat(payload).hasSize(10);
-        assertThat(payload.getLast().nickname()).isEqualTo("작성자10");
-        assertThat(payload.getLast().content()).isEqualTo("내용10");
-        assertThat(payload.getLast().size()).isEqualTo(10);
-        assertThat(payload.getLast().ip()).isEqualTo("127.0.0.10");
-        assertThat(payload.getFirst().nickname()).isEqualTo("작성자19");
-        assertThat(payload.getFirst().content()).isEqualTo("내용19");
-        assertThat(payload.getFirst().size()).isEqualTo(10);
-        assertThat(payload.getFirst().ip()).isEqualTo("127.0.0.19");
+        assertThat(response.content()).hasSize(10);
+        assertThat(response.totalElements()).isEqualTo(20);
+        assertThat(response.totalPages()).isEqualTo(2);
+        assertThat(response.size()).isEqualTo(10);
+        assertThat(response.number()).isZero();
+        assertThat(response.isFirst()).isTrue();
+        assertThat(response.isLast()).isFalse();
     }
 
     @DisplayName("[통과] 모든 게시물 버전 신고 목록을 페이지 형식으로 조회한다.")

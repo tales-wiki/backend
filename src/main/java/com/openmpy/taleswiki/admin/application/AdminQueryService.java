@@ -3,7 +3,7 @@ package com.openmpy.taleswiki.admin.application;
 import com.openmpy.taleswiki.admin.domain.BlockedIp;
 import com.openmpy.taleswiki.admin.domain.repository.BlockedIpRepository;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.ArticleVersionReport;
@@ -37,12 +37,26 @@ public class AdminQueryService {
     }
 
     @Transactional(readOnly = true)
-    public AdminReadAllArticleVersionResponses readAllArticleVersion(final int page, final int size) {
+    public PaginatedResponse<AdminReadAllArticleVersionResponse> readAllArticleVersion(final int page, final int size) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
-        final Page<ArticleVersion> articleVersionPage = articleVersionRepository.findAllWithArticle(pageRequest);
-        final List<ArticleVersion> articleVersions = articleVersionPage.getContent();
+        final Page<ArticleVersion> pageResult = articleVersionRepository.findAllWithArticle(pageRequest);
+        final Page<AdminReadAllArticleVersionResponse> versionResponses = pageResult.map(it ->
+                new AdminReadAllArticleVersionResponse(
+                        it.getId(),
+                        it.getArticle().getId(),
+                        it.getArticle().getTitle(),
+                        it.getArticle().getCategory().toString(),
+                        it.getNickname(),
+                        it.getContent(),
+                        it.getSize(),
+                        it.getIp(),
+                        it.isHiding(),
+                        it.getArticle().isNoEditing(),
+                        it.getCreatedAt()
+                )
+        );
 
-        return AdminReadAllArticleVersionResponses.of(articleVersions);
+        return PaginatedResponse.of(versionResponses);
     }
 
     @Transactional(readOnly = true)

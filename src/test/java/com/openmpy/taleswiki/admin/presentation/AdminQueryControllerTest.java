@@ -19,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
 import com.openmpy.taleswiki.common.presentation.response.PaginatedResponse;
@@ -110,11 +109,13 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 false,
                 dateTime02
         );
-        final AdminReadAllArticleVersionResponses responses =
-                new AdminReadAllArticleVersionResponses(List.of(response02, response01));
+
+        final Page<AdminReadAllArticleVersionResponse> versionResponses =
+                new PageImpl<>(List.of(response02, response01), PageRequest.of(0, 10), 2);
+        final PaginatedResponse<AdminReadAllArticleVersionResponse> response = PaginatedResponse.of(versionResponses);
 
         // stub
-        when(adminQueryService.readAllArticleVersion(anyInt(), anyInt())).thenReturn(responses);
+        when(adminQueryService.readAllArticleVersion(anyInt(), anyInt())).thenReturn(response);
 
         // when & then
         mockMvc.perform(get("/api/admin/articles/versions")
@@ -122,29 +123,35 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.payload").isArray())
-                .andExpect(jsonPath("$.payload[0].articleVersionId").value(2))
-                .andExpect(jsonPath("$.payload[0].articleId").value(2))
-                .andExpect(jsonPath("$.payload[0].title").value("제목2"))
-                .andExpect(jsonPath("$.payload[0].category").value("길드"))
-                .andExpect(jsonPath("$.payload[0].nickname").value("작성자2"))
-                .andExpect(jsonPath("$.payload[0].content").value("내용2"))
-                .andExpect(jsonPath("$.payload[0].size").value(10))
-                .andExpect(jsonPath("$.payload[0].ip").value("127.0.0.2"))
-                .andExpect(jsonPath("$.payload[0].isHiding").value(false))
-                .andExpect(jsonPath("$.payload[0].isNoEditing").value(false))
-                .andExpect(jsonPath("$.payload[0].createdAt").value(dateTime02.toString()))
-                .andExpect(jsonPath("$.payload[1].articleVersionId").value(1))
-                .andExpect(jsonPath("$.payload[1].articleId").value(1))
-                .andExpect(jsonPath("$.payload[1].title").value("제목1"))
-                .andExpect(jsonPath("$.payload[1].category").value("인물"))
-                .andExpect(jsonPath("$.payload[1].nickname").value("작성자1"))
-                .andExpect(jsonPath("$.payload[1].content").value("내용1"))
-                .andExpect(jsonPath("$.payload[1].size").value(10))
-                .andExpect(jsonPath("$.payload[1].ip").value("127.0.0.1"))
-                .andExpect(jsonPath("$.payload[1].isHiding").value(false))
-                .andExpect(jsonPath("$.payload[1].isNoEditing").value(false))
-                .andExpect(jsonPath("$.payload[1].createdAt").value(dateTime01.toString()))
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].articleVersionId").value(2))
+                .andExpect(jsonPath("$.content[0].articleId").value(2))
+                .andExpect(jsonPath("$.content[0].title").value("제목2"))
+                .andExpect(jsonPath("$.content[0].category").value("길드"))
+                .andExpect(jsonPath("$.content[0].nickname").value("작성자2"))
+                .andExpect(jsonPath("$.content[0].content").value("내용2"))
+                .andExpect(jsonPath("$.content[0].size").value(10))
+                .andExpect(jsonPath("$.content[0].ip").value("127.0.0.2"))
+                .andExpect(jsonPath("$.content[0].isHiding").value(false))
+                .andExpect(jsonPath("$.content[0].isNoEditing").value(false))
+                .andExpect(jsonPath("$.content[0].createdAt").value(dateTime02.toString()))
+                .andExpect(jsonPath("$.content[1].articleVersionId").value(1))
+                .andExpect(jsonPath("$.content[1].articleId").value(1))
+                .andExpect(jsonPath("$.content[1].title").value("제목1"))
+                .andExpect(jsonPath("$.content[1].category").value("인물"))
+                .andExpect(jsonPath("$.content[1].nickname").value("작성자1"))
+                .andExpect(jsonPath("$.content[1].content").value("내용1"))
+                .andExpect(jsonPath("$.content[1].size").value(10))
+                .andExpect(jsonPath("$.content[1].ip").value("127.0.0.1"))
+                .andExpect(jsonPath("$.content[1].isHiding").value(false))
+                .andExpect(jsonPath("$.content[1].isNoEditing").value(false))
+                .andExpect(jsonPath("$.content[1].createdAt").value(dateTime01.toString()))
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(1))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.number").value(0))
+                .andExpect(jsonPath("$.isFirst").value(true))
+                .andExpect(jsonPath("$.isLast").value(true))
                 .andDo(print())
                 .andDo(
                         document("readAllArticleVersion",
