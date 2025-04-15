@@ -75,7 +75,8 @@ public class AdminQueryService {
             final int size
     ) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
-        final Page<ArticleVersionReport> pageResult = articleVersionReportRepository.findAll(pageRequest);
+        final Page<ArticleVersionReport> pageResult = articleVersionReportRepository
+                .findAllWithExistingArticle(pageRequest);
         final Page<AdminReadAllArticleVersionReportResponse> responses = pageResult.map(it ->
                 new AdminReadAllArticleVersionReportResponse(
                         it.getId(),
