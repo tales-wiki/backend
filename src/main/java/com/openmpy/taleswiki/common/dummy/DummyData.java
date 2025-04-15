@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 public class DummyData {
 
     private static final Random RANDOM = new Random();
+    private static final Faker faker = new Faker(new Locale("ko"));
 
     @Profile("dev")
     @Bean
@@ -36,14 +37,16 @@ public class DummyData {
     }
 
     private void saveMembers(final MemberRepository memberRepository) {
+
         for (int i = 0; i < 100; i++) {
+            String email = i + faker.animal().name().replace(" ", "") + "@test.com";
             MemberSocial social = MemberSocial.KAKAO;
 
             if (i % 2 == 0) {
                 social = MemberSocial.GOOGLE;
             }
 
-            final Member member = Member.create(i + "test@test.com", social);
+            final Member member = Member.create(email, social);
             memberRepository.save(member);
         }
 
@@ -51,8 +54,6 @@ public class DummyData {
     }
 
     private static void saveArticles(final ArticleRepository articleRepository) {
-        final Faker faker = new Faker(new Locale("ko"));
-
         for (int i = 0; i < 1000; i++) {
             ArticleCategory category = ArticleCategory.RUNNER;
 
