@@ -11,13 +11,12 @@ import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVers
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponse;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponses;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.ArticleVersionReport;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionReportRepository;
+import com.openmpy.taleswiki.common.presentation.response.PaginatedResponse;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.MemberSocial;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
@@ -55,14 +54,16 @@ class AdminQueryServiceTest extends ServiceTestSupport {
         }
 
         // when
-        final AdminReadAllMemberResponses responses = adminQueryService.readAllMember(0, 10);
+        final PaginatedResponse<Member> response = adminQueryService.readAllMember(0, 10);
 
         // then
-        final List<AdminReadAllMemberResponse> payload = responses.payload();
-
-        assertThat(payload).hasSize(10);
-        assertThat(payload.getLast().email()).isEqualTo("10test@test.com");
-        assertThat(payload.getFirst().email()).isEqualTo("19test@test.com");
+        assertThat(response.content()).hasSize(10);
+        assertThat(response.totalElements()).isEqualTo(20);
+        assertThat(response.totalPages()).isEqualTo(2);
+        assertThat(response.size()).isEqualTo(10);
+        assertThat(response.number()).isZero();
+        assertThat(response.isFirst()).isTrue();
+        assertThat(response.isLast()).isFalse();
     }
 
     @DisplayName("[통과] 모든 게시물 버전 목록을 페이지 형식으로 조회한다.")

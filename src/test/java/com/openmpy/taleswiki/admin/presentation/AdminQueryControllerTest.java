@@ -1,5 +1,9 @@
 package com.openmpy.taleswiki.admin.presentation;
 
+import static com.openmpy.taleswiki.member.domain.MemberAuthority.ADMIN;
+import static com.openmpy.taleswiki.member.domain.MemberAuthority.MEMBER;
+import static com.openmpy.taleswiki.member.domain.MemberSocial.GOOGLE;
+import static com.openmpy.taleswiki.member.domain.MemberSocial.KAKAO;
 import static com.openmpy.taleswiki.support.Fixture.MEMBER_COOKIE;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -18,13 +22,16 @@ import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVers
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponse;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponses;
+import com.openmpy.taleswiki.common.presentation.response.PaginatedResponse;
+import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.support.ControllerTestSupport;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 
 class AdminQueryControllerTest extends ControllerTestSupport {
@@ -33,17 +40,14 @@ class AdminQueryControllerTest extends ControllerTestSupport {
     @Test
     void admin_query_controller_test_01() throws Exception {
         // given
-        final LocalDateTime dateTime01 = LocalDateTime.of(2025, 1, 1, 1, 1, 1);
-        final LocalDateTime dateTime02 = LocalDateTime.of(2025, 1, 1, 1, 1, 2);
+        final Member member01 = new Member(1L, "test1@test.com", KAKAO, MEMBER);
+        final Member member02 = new Member(2L, "test2@test.com", GOOGLE, ADMIN);
 
-        final AdminReadAllMemberResponse response01 =
-                new AdminReadAllMemberResponse(1L, "test1@test.com", "KAKAO", dateTime01);
-        final AdminReadAllMemberResponse response02 =
-                new AdminReadAllMemberResponse(2L, "test2@test.com", "GOOGLE", dateTime02);
-        final AdminReadAllMemberResponses responses = new AdminReadAllMemberResponses(List.of(response02, response01));
+        final Page<Member> members = new PageImpl<>(List.of(member02, member01), PageRequest.of(0, 10), 2);
+        final PaginatedResponse<Member> response = PaginatedResponse.of(members);
 
         // stub
-        when(adminQueryService.readAllMember(anyInt(), anyInt())).thenReturn(responses);
+        when(adminQueryService.readAllMember(anyInt(), anyInt())).thenReturn(response);
 
         // when & then
         mockMvc.perform(get("/api/admin/members")
@@ -51,15 +55,19 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.payload").isArray())
-                .andExpect(jsonPath("$.payload[0].memberId").value(2))
-                .andExpect(jsonPath("$.payload[0].email").value("test2@test.com"))
-                .andExpect(jsonPath("$.payload[0].social").value("GOOGLE"))
-                .andExpect(jsonPath("$.payload[0].createdAt").value(dateTime02.toString()))
-                .andExpect(jsonPath("$.payload[1].memberId").value(1))
-                .andExpect(jsonPath("$.payload[1].email").value("test1@test.com"))
-                .andExpect(jsonPath("$.payload[1].social").value("KAKAO"))
-                .andExpect(jsonPath("$.payload[1].createdAt").value(dateTime01.toString()))
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].id").value(2))
+                .andExpect(jsonPath("$.content[0].email").value("test2@test.com"))
+                .andExpect(jsonPath("$.content[0].social").value("GOOGLE"))
+                .andExpect(jsonPath("$.content[1].id").value(1))
+                .andExpect(jsonPath("$.content[1].email").value("test1@test.com"))
+                .andExpect(jsonPath("$.content[1].social").value("KAKAO"))
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(1))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.number").value(0))
+                .andExpect(jsonPath("$.isFirst").value(true))
+                .andExpect(jsonPath("$.isLast").value(true))
                 .andDo(print())
                 .andDo(
                         document("readAllMember",

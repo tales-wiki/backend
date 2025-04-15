@@ -5,11 +5,11 @@ import com.openmpy.taleswiki.admin.domain.repository.BlockedIpRepository;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllMemberResponses;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.ArticleVersionReport;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionReportRepository;
 import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
+import com.openmpy.taleswiki.common.presentation.response.PaginatedResponse;
 import com.openmpy.taleswiki.member.domain.Member;
 import com.openmpy.taleswiki.member.domain.repository.MemberRepository;
 import java.util.List;
@@ -30,12 +30,10 @@ public class AdminQueryService {
     private final BlockedIpRepository blockedIpRepository;
 
     @Transactional(readOnly = true)
-    public AdminReadAllMemberResponses readAllMember(final int page, final int size) {
+    public PaginatedResponse<Member> readAllMember(final int page, final int size) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         final Page<Member> memberPage = memberRepository.findAll(pageRequest);
-        final List<Member> members = memberPage.getContent();
-
-        return AdminReadAllMemberResponses.of(members);
+        return PaginatedResponse.of(memberPage);
     }
 
     @Transactional(readOnly = true)
