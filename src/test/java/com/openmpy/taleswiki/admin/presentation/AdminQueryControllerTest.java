@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponse;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
@@ -110,9 +109,9 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 dateTime02
         );
 
-        final Page<AdminReadAllArticleVersionResponse> versionResponses =
+        final Page<AdminReadAllArticleVersionResponse> responses =
                 new PageImpl<>(List.of(response02, response01), PageRequest.of(0, 10), 2);
-        final PaginatedResponse<AdminReadAllArticleVersionResponse> response = PaginatedResponse.of(versionResponses);
+        final PaginatedResponse<AdminReadAllArticleVersionResponse> response = PaginatedResponse.of(responses);
 
         // stub
         when(adminQueryService.readAllArticleVersion(anyInt(), anyInt())).thenReturn(response);
@@ -190,11 +189,13 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                 "신고 사유2",
                 dateTime02
         );
-        final AdminReadAllArticleVersionReportResponses responses =
-                new AdminReadAllArticleVersionReportResponses(List.of(response02, response01));
+
+        final Page<AdminReadAllArticleVersionReportResponse> responses =
+                new PageImpl<>(List.of(response02, response01), PageRequest.of(0, 10), 2);
+        final PaginatedResponse<AdminReadAllArticleVersionReportResponse> response = PaginatedResponse.of(responses);
 
         // stub
-        when(adminQueryService.readAllArticleVersionReport(anyInt(), anyInt())).thenReturn(responses);
+        when(adminQueryService.readAllArticleVersionReport(anyInt(), anyInt())).thenReturn(response);
 
         // when & then
         mockMvc.perform(get("/api/admin/articles/versions/reports")
@@ -202,25 +203,31 @@ class AdminQueryControllerTest extends ControllerTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.payload").isArray())
-                .andExpect(jsonPath("$.payload[0].articleVersionReportId").value(2))
-                .andExpect(jsonPath("$.payload[0].articleVersionId").value(2))
-                .andExpect(jsonPath("$.payload[0].title").value("제목2"))
-                .andExpect(jsonPath("$.payload[0].category").value("길드"))
-                .andExpect(jsonPath("$.payload[0].nickname").value("작성자2"))
-                .andExpect(jsonPath("$.payload[0].content").value("내용2"))
-                .andExpect(jsonPath("$.payload[0].ip").value("127.0.0.2"))
-                .andExpect(jsonPath("$.payload[0].reportReason").value("신고 사유2"))
-                .andExpect(jsonPath("$.payload[0].createdAt").value(dateTime02.toString()))
-                .andExpect(jsonPath("$.payload[1].articleVersionReportId").value(1))
-                .andExpect(jsonPath("$.payload[1].articleVersionId").value(1))
-                .andExpect(jsonPath("$.payload[1].title").value("제목1"))
-                .andExpect(jsonPath("$.payload[1].category").value("인물"))
-                .andExpect(jsonPath("$.payload[1].nickname").value("작성자1"))
-                .andExpect(jsonPath("$.payload[1].content").value("내용1"))
-                .andExpect(jsonPath("$.payload[1].ip").value("127.0.0.1"))
-                .andExpect(jsonPath("$.payload[1].reportReason").value("신고 사유1"))
-                .andExpect(jsonPath("$.payload[1].createdAt").value(dateTime01.toString()))
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].articleVersionReportId").value(2))
+                .andExpect(jsonPath("$.content[0].articleVersionId").value(2))
+                .andExpect(jsonPath("$.content[0].title").value("제목2"))
+                .andExpect(jsonPath("$.content[0].category").value("길드"))
+                .andExpect(jsonPath("$.content[0].nickname").value("작성자2"))
+                .andExpect(jsonPath("$.content[0].content").value("내용2"))
+                .andExpect(jsonPath("$.content[0].ip").value("127.0.0.2"))
+                .andExpect(jsonPath("$.content[0].reportReason").value("신고 사유2"))
+                .andExpect(jsonPath("$.content[0].createdAt").value(dateTime02.toString()))
+                .andExpect(jsonPath("$.content[1].articleVersionReportId").value(1))
+                .andExpect(jsonPath("$.content[1].articleVersionId").value(1))
+                .andExpect(jsonPath("$.content[1].title").value("제목1"))
+                .andExpect(jsonPath("$.content[1].category").value("인물"))
+                .andExpect(jsonPath("$.content[1].nickname").value("작성자1"))
+                .andExpect(jsonPath("$.content[1].content").value("내용1"))
+                .andExpect(jsonPath("$.content[1].ip").value("127.0.0.1"))
+                .andExpect(jsonPath("$.content[1].reportReason").value("신고 사유1"))
+                .andExpect(jsonPath("$.content[1].createdAt").value(dateTime01.toString()))
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(1))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.number").value(0))
+                .andExpect(jsonPath("$.isFirst").value(true))
+                .andExpect(jsonPath("$.isLast").value(true))
                 .andDo(print())
                 .andDo(
                         document("readAllArticleVersionReport",

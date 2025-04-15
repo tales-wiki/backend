@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.openmpy.taleswiki.admin.domain.BlockedIp;
 import com.openmpy.taleswiki.admin.domain.repository.BlockedIpRepository;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponse;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
@@ -110,17 +109,17 @@ class AdminQueryServiceTest extends ServiceTestSupport {
         }
 
         // when
-        final AdminReadAllArticleVersionReportResponses responses =
+        final PaginatedResponse<AdminReadAllArticleVersionReportResponse> response =
                 adminQueryService.readAllArticleVersionReport(0, 10);
 
         // then
-        final List<AdminReadAllArticleVersionReportResponse> payload = responses.payload();
-
-        assertThat(payload).hasSize(10);
-        assertThat(payload.getLast().ip()).isEqualTo("127.0.0.10");
-        assertThat(payload.getLast().reportReason()).isEqualTo("내용".repeat(15));
-        assertThat(payload.getFirst().ip()).isEqualTo("127.0.0.19");
-        assertThat(payload.getFirst().reportReason()).isEqualTo("내용".repeat(24));
+        assertThat(response.content()).hasSize(10);
+        assertThat(response.totalElements()).isEqualTo(20);
+        assertThat(response.totalPages()).isEqualTo(2);
+        assertThat(response.size()).isEqualTo(10);
+        assertThat(response.number()).isZero();
+        assertThat(response.isFirst()).isTrue();
+        assertThat(response.isLast()).isFalse();
     }
 
     @DisplayName("[통과] 정지된 IP 목록을 페이지 형식으로 조회한다.")

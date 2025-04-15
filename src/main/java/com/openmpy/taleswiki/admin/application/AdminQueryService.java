@@ -2,7 +2,7 @@ package com.openmpy.taleswiki.admin.application;
 
 import com.openmpy.taleswiki.admin.domain.BlockedIp;
 import com.openmpy.taleswiki.admin.domain.repository.BlockedIpRepository;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
@@ -40,7 +40,7 @@ public class AdminQueryService {
     public PaginatedResponse<AdminReadAllArticleVersionResponse> readAllArticleVersion(final int page, final int size) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         final Page<ArticleVersion> pageResult = articleVersionRepository.findAllWithArticle(pageRequest);
-        final Page<AdminReadAllArticleVersionResponse> versionResponses = pageResult.map(it ->
+        final Page<AdminReadAllArticleVersionResponse> responses = pageResult.map(it ->
                 new AdminReadAllArticleVersionResponse(
                         it.getId(),
                         it.getArticle().getId(),
@@ -56,16 +56,31 @@ public class AdminQueryService {
                 )
         );
 
-        return PaginatedResponse.of(versionResponses);
+        return PaginatedResponse.of(responses);
     }
 
     @Transactional(readOnly = true)
-    public AdminReadAllArticleVersionReportResponses readAllArticleVersionReport(final int page, final int size) {
+    public PaginatedResponse<AdminReadAllArticleVersionReportResponse> readAllArticleVersionReport(
+            final int page,
+            final int size
+    ) {
         final PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
-        final Page<ArticleVersionReport> articleVersionReportPage = articleVersionReportRepository.findAll(pageRequest);
-        final List<ArticleVersionReport> articleVersionReports = articleVersionReportPage.getContent();
+        final Page<ArticleVersionReport> pageResult = articleVersionReportRepository.findAll(pageRequest);
+        final Page<AdminReadAllArticleVersionReportResponse> responses = pageResult.map(it ->
+                new AdminReadAllArticleVersionReportResponse(
+                        it.getId(),
+                        it.getArticleVersion().getId(),
+                        it.getArticleVersion().getArticle().getTitle(),
+                        it.getArticleVersion().getArticle().getCategory().toString(),
+                        it.getArticleVersion().getNickname(),
+                        it.getArticleVersion().getContent(),
+                        it.getIp(),
+                        it.getReportReason(),
+                        it.getCreatedAt()
+                )
+        );
 
-        return AdminReadAllArticleVersionReportResponses.of(articleVersionReports);
+        return PaginatedResponse.of(responses);
     }
 
     @Transactional(readOnly = true)

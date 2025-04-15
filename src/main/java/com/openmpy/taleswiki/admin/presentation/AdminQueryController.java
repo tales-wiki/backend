@@ -1,7 +1,7 @@
 package com.openmpy.taleswiki.admin.presentation;
 
 import com.openmpy.taleswiki.admin.application.AdminQueryService;
-import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponses;
+import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionReportResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllArticleVersionResponse;
 import com.openmpy.taleswiki.admin.presentation.response.AdminReadAllBlockedIpResponses;
 import com.openmpy.taleswiki.common.presentation.response.PaginatedResponse;
@@ -40,13 +40,13 @@ public class AdminQueryController {
     }
 
     @GetMapping("/articles/versions/reports")
-    public ResponseEntity<AdminReadAllArticleVersionReportResponses> readAllArticleVersionReport(
+    public ResponseEntity<PaginatedResponse<AdminReadAllArticleVersionReportResponse>> readAllArticleVersionReport(
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int size
     ) {
-        final AdminReadAllArticleVersionReportResponses responses =
+        final PaginatedResponse<AdminReadAllArticleVersionReportResponse> response =
                 adminQueryService.readAllArticleVersionReport(page, size);
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/ip-block")
