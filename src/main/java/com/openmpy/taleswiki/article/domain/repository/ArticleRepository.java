@@ -20,4 +20,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Optional<Article> findByIdWithArticleVersion(@Param("id") final Long id);
 
     boolean existsByTitle_ValueAndCategory(final String title, final ArticleCategory category);
+
+    @Query("SELECT MAX(a.id) FROM Article a")
+    Long findByMaxId();
 }
