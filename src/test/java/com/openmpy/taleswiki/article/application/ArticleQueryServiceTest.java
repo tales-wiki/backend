@@ -1,11 +1,14 @@
 package com.openmpy.taleswiki.article.application;
 
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
+import com.openmpy.taleswiki.article.presentation.response.ArticleRandomResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryGroupResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponse;
@@ -15,6 +18,7 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponse
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponses;
+import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.support.ServiceTestSupport;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -224,5 +228,33 @@ class ArticleQueryServiceTest extends ServiceTestSupport {
         assertThat(response.isNoEditing()).isFalse();
         assertThat(response.isHiding()).isTrue();
         assertThat(response.createdAt()).isNotNull();
+    }
+
+    @DisplayName("[통과] 최신 버전의 게시글 ID를 랜덤으로 조회한다.")
+    @Test
+    void article_query_service_test_07() {
+        // given
+        for (int i = 0; i < 10; i++) {
+            final Article article = Article.create("제목" + i, ArticleCategory.RUNNER);
+            final ArticleVersion articleVersion = ArticleVersion.create("닉네임" + i, "내용" + i, 10, "127.0.0.1", article);
+
+            article.addVersion(articleVersion);
+            articleRepository.save(article);
+        }
+
+        // when
+        final ArticleRandomResponse response = articleQueryService.randomArticle();
+
+        // then
+        assertThat(response.articleVersionId()).isNotNull();
+    }
+
+    @DisplayName("[예외] 최신 버전의 게시글 ID를 랜덤으로 찾지 못한다.")
+    @Test
+    void 예외_article_query_service_test_01() {
+        // when & then
+        assertThatThrownBy(() -> articleQueryService.randomArticle())
+                .isInstanceOf(CustomException.class)
+                .hasMessage(NOT_FOUND_ARTICLE_ID.getMessage());
     }
 }

@@ -1,6 +1,7 @@
 package com.openmpy.taleswiki.article.presentation;
 
 import com.openmpy.taleswiki.article.application.ArticleQueryService;
+import com.openmpy.taleswiki.article.presentation.response.ArticleRandomResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryGroupResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
@@ -56,5 +57,11 @@ public class ArticleQueryController {
     ) {
         final ArticleSearchResponses responses = articleQueryService.searchArticleByTitle(title);
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<ArticleRandomResponse> randomArticle() {
+        final ArticleRandomResponse response = articleQueryService.randomArticle();
+        return ResponseEntity.ok(response);
     }
 }

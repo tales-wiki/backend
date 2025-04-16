@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.openmpy.taleswiki.article.presentation.response.ArticleRandomResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryGroupResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponses;
@@ -227,6 +228,30 @@ class ArticleQueryControllerTest extends ControllerTestSupport {
                                 queryParameters(
                                         parameterWithName("title").description("게시글 제목")
                                 )
+                        )
+                );
+    }
+
+    @DisplayName("[통과] 랜덤으로 게시글 버전 ID를 조회한다.")
+    @Test
+    void article_query_controller_test_07() throws Exception {
+        // given
+        final ArticleRandomResponse response = new ArticleRandomResponse(1L);
+
+        // stub
+        when(articleQueryService.randomArticle()).thenReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/articles/random")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.articleVersionId").value(1))
+                .andDo(print())
+                .andDo(
+                        document("randomArticle",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
                         )
                 );
     }
