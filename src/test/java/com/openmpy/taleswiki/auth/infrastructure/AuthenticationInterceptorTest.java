@@ -38,8 +38,8 @@ class AuthenticationInterceptorTest {
     @Test
     void authentication_interceptor_test_01() throws Exception {
         // given
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
+        final HttpServletRequest request = mock(HttpServletRequest.class);
+        final HttpServletResponse response = mock(HttpServletResponse.class);
 
         // stub
         when(request.getMethod()).thenReturn(HttpMethod.OPTIONS.name());
@@ -55,8 +55,8 @@ class AuthenticationInterceptorTest {
     @Test
     void authentication_interceptor_test_02() throws Exception {
         // given
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
+        final HttpServletRequest request = mock(HttpServletRequest.class);
+        final HttpServletResponse response = mock(HttpServletResponse.class);
 
         // stub
         when(request.getMethod()).thenReturn(HttpMethod.POST.name());
@@ -76,8 +76,8 @@ class AuthenticationInterceptorTest {
     @Test
     void 예외_authentication_interceptor_test_01() {
         // given
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
+        final HttpServletRequest request = mock(HttpServletRequest.class);
+        final HttpServletResponse response = mock(HttpServletResponse.class);
 
         // stub
         when(request.getMethod()).thenReturn(HttpMethod.GET.name());
