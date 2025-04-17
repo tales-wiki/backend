@@ -2,6 +2,7 @@ package com.openmpy.taleswiki.article.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_ARTICLE_REPORT_VERSION_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_WRITTEN_ARTICLE_TITLE_AND_CATEGORY;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.EXIST_REDIS_KEY;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NO_EDITING_ARTICLE;
 import static com.openmpy.taleswiki.support.Fixture.createArticleWithVersion;
 import static com.openmpy.taleswiki.support.Fixture.mockServerHttpRequest;
@@ -27,6 +28,7 @@ import com.openmpy.taleswiki.common.application.RedisService;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.member.application.MemberService;
 import com.openmpy.taleswiki.member.domain.Member;
+import com.openmpy.taleswiki.member.domain.MemberSocial;
 import com.openmpy.taleswiki.support.ServiceTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -231,5 +233,25 @@ class ArticleCommandServiceTest extends ServiceTestSupport {
                 articleCommandService.reportArticleVersion(articleVersion.getId(), request, mockServerHttpRequest()))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ALREADY_ARTICLE_REPORT_VERSION_ID.getMessage());
+    }
+
+    @DisplayName("[예외] 작업 처리중인 게시글을 수정할 수 없다.")
+    @Test
+    void 예외_article_command_service_test_04() {
+        // given
+        final ArticleUpdateRequest request = new ArticleUpdateRequest("작성자", "내용");
+        final Article article = createArticleWithVersion("제목", ArticleCategory.RUNNER);
+        final Article savedArticle = articleRepository.save(article);
+        final Member mockMember = Member.create("test@test.com", MemberSocial.KAKAO);
+
+        // stub
+        when(memberService.getMember(anyLong())).thenReturn(mockMember);
+        when(redisService.acquireLock(anyString(), anyString(), anyLong())).thenReturn(false);
+
+        // when & then
+        assertThatThrownBy(
+                () -> articleCommandService.updateArticle(1L, savedArticle.getId(), request, mockServerHttpRequest()))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(EXIST_REDIS_KEY.getMessage());
     }
 }
