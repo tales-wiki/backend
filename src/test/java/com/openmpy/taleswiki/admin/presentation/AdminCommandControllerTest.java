@@ -153,4 +153,28 @@ class AdminCommandControllerTest extends ControllerTestSupport {
                         )
                 );
     }
+
+    @DisplayName("[통과] 게시글 버전을 삭제한다.")
+    @Test
+    void admin_command_controller_test_06() throws Exception {
+        // given
+        final Long articleVersionId = 1L;
+
+        // stub
+        doNothing().when(adminCommandService).deleteArticleVersion(anyLong());
+
+        // when & then
+        mockMvc.perform(delete("/api/admin/articles/versions/{articleVersionId}", articleVersionId)
+                        .cookie(MEMBER_COOKIE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(
+                        document("deleteArticleVersion",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );
+    }
 }

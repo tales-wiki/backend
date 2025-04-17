@@ -108,6 +108,21 @@ class AdminCommandServiceTest extends ServiceTestSupport {
         assertThat(count).isZero();
     }
 
+    @DisplayName("[통과] 게시글 버전을 삭제한다.")
+    @Test
+    void admin_command_service_test_06() {
+        // given
+        final Article article = Fixture.createArticleWithVersion("제목", RUNNER);
+        final Article savedArticle = articleRepository.save(article);
+        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
+
+        // when
+        adminCommandService.deleteArticleVersion(articleVersion.getId());
+
+        // then
+        assertThat(articleVersion.getDeletedAt()).isNotNull();
+    }
+
     @DisplayName("[예외] 이미 정지된 아이피를 정지시킨다.")
     @Test
     void 예외_admin_command_service_test_01() {

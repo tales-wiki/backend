@@ -38,6 +38,12 @@ public class AdminCommandController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/articles/versions/{articleVersionId}")
+    public ResponseEntity<Void> deleteArticleVersion(@PathVariable final Long articleVersionId) {
+        adminCommandService.deleteArticleVersion(articleVersionId);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/ip-block")
     public ResponseEntity<Void> addBlockedIp(@RequestBody @Valid final AdminBlockedIpRequest request) {
         adminCommandService.addBlockedIp(request);

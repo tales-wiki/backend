@@ -44,6 +44,13 @@ public class AdminCommandService {
     }
 
     @Transactional
+    public void deleteArticleVersion(final Long articleVersionId) {
+        final ArticleVersion articleVersion = articleQueryService.getArticleVersion(articleVersionId);
+
+        articleVersion.delete(LocalDateTime.now());
+    }
+
+    @Transactional
     public void addBlockedIp(final AdminBlockedIpRequest request) {
         final String ip = request.ip();
 

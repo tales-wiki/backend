@@ -17,12 +17,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
+@SQLRestriction("deleted_at is null")
 @Entity
 public class ArticleVersion {
 
@@ -58,6 +60,9 @@ public class ArticleVersion {
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;
+
+    @Column
+    private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
@@ -131,6 +136,10 @@ public class ArticleVersion {
 
     public void toggleHiding(final boolean isHiding) {
         this.isHiding = isHiding;
+    }
+
+    public void delete(final LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public String getNickname() {
