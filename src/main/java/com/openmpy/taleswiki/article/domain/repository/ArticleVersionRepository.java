@@ -1,5 +1,6 @@
 package com.openmpy.taleswiki.article.domain.repository;
 
+import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ public interface ArticleVersionRepository extends JpaRepository<ArticleVersion, 
 
     @Query("SELECT av FROM ArticleVersion av JOIN FETCH av.article WHERE av.id = :id")
     Optional<ArticleVersion> findByIdWithArticle(@Param("id") final Long id);
+
+    Optional<ArticleVersion> findFirstByArticleOrderByVersionNumberDesc(final Article article);
 
     @Query(
             value = "SELECT av FROM ArticleVersion av JOIN FETCH av.article",

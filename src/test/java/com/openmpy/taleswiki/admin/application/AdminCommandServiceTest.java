@@ -112,7 +112,7 @@ class AdminCommandServiceTest extends ServiceTestSupport {
     @Test
     void admin_command_service_test_06() {
         // given
-        final Article article = Fixture.createArticleWithVersion("제목", RUNNER);
+        final Article article = Fixture.createArticleWithVersions("제목", RUNNER);
         final Article savedArticle = articleRepository.save(article);
         final ArticleVersion articleVersion = savedArticle.getLatestVersion();
 
@@ -148,5 +148,17 @@ class AdminCommandServiceTest extends ServiceTestSupport {
         assertThatThrownBy(() -> adminCommandService.deleteBlockedIp(request))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(NOT_FOUND_BLOCKED_IP.getMessage());
+    }
+
+    @DisplayName("[예외] 게시글 버전이 한개일 경우 삭제할 수 없다.")
+    @Test
+    void 예외_admin_command_service_test_03() {
+        // given
+        final Article article = Fixture.createArticleWithVersion("제목", RUNNER);
+        final Article savedArticle = articleRepository.save(article);
+        final ArticleVersion articleVersion = savedArticle.getLatestVersion();
+
+        // when & then
+        assertThatThrownBy(() -> adminCommandService.deleteArticleVersion(articleVersion.getId()));
     }
 }

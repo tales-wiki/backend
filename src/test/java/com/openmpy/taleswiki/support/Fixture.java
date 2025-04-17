@@ -40,6 +40,16 @@ public class Fixture {
         return article;
     }
 
+    public static Article createArticleWithVersions(final String title, final ArticleCategory category) {
+        final Article article = Article.create(title, category);
+        final ArticleVersion articleVersion01 = ArticleVersion.create("작성자1", "내용1", 10, "127.0.0.1", article);
+        final ArticleVersion articleVersion02 = ArticleVersion.create("작성자2", "내용2", 10, "127.0.0.1", article);
+
+        article.addVersion(articleVersion01);
+        article.addVersion(articleVersion02);
+        return article;
+    }
+
     public static MockHttpServletRequest mockServerHttpRequest() {
         final MockHttpServletRequest servletRequest = new MockHttpServletRequest();
         final byte[] content = new byte[10];
