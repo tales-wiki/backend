@@ -15,11 +15,11 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpda
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponses;
+import com.openmpy.taleswiki.common.component.RandomGenerator;
 import com.openmpy.taleswiki.common.exception.CustomErrorCode;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleQueryService {
 
     private static final int RANDOM_ARTICLE_ID_RETRY_COUNT = 10;
-    private static final Random random = new Random();
 
     private final ArticleRepository articleRepository;
     private final ArticleVersionRepository articleVersionRepository;
+    private final RandomGenerator randomGenerator;
 
     @Transactional(readOnly = true)
     public ArticleReadCategoryGroupResponse readAllArticleByCategory(final String category) {
@@ -83,7 +83,7 @@ public class ArticleQueryService {
         int attempts = 0;
 
         while (attempts < RANDOM_ARTICLE_ID_RETRY_COUNT) {
-            final long randomId = 1L + random.nextLong(maxId);
+            final long randomId = randomGenerator.generate(maxId);
             final Optional<Article> optionalArticle = articleRepository.findById(randomId);
 
             if (optionalArticle.isPresent()) {

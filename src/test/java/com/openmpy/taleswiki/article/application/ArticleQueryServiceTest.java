@@ -3,6 +3,7 @@ package com.openmpy.taleswiki.article.application;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
 
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
@@ -18,11 +19,13 @@ import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponse
 import com.openmpy.taleswiki.article.presentation.response.ArticleSearchResponses;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleVersionReadArticleResponses;
+import com.openmpy.taleswiki.common.component.RandomGenerator;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import com.openmpy.taleswiki.support.ServiceTestSupport;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class ArticleQueryServiceTest extends ServiceTestSupport {
@@ -32,6 +35,9 @@ class ArticleQueryServiceTest extends ServiceTestSupport {
 
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Mock
+    private RandomGenerator randomGenerator;
 
     @DisplayName("[통과] 카테고리별 게시글 전체를 조회한다.")
     @Test
@@ -241,6 +247,9 @@ class ArticleQueryServiceTest extends ServiceTestSupport {
             article.addVersion(articleVersion);
             articleRepository.save(article);
         }
+
+        // stub
+        when(randomGenerator.generate(10)).thenReturn(1L);
 
         // when
         final ArticleRandomResponse response = articleQueryService.randomArticle();
