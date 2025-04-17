@@ -133,6 +133,10 @@ public class Article {
         this.deletedAt = deletedAt;
     }
 
+    public void updateLatestVersion(final ArticleVersion latestVersion) {
+        this.latestVersion = latestVersion;
+    }
+
     public String getTitle() {
         return title.getValue();
     }

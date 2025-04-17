@@ -1,5 +1,5 @@
 ## 테스트 커비리지
-<img width="755" alt="Image" src="https://github.com/user-attachments/assets/26d57ba7-0bf5-4b69-a090-1ff7279e1771" />
+<img width="933" alt="Image" src="https://github.com/user-attachments/assets/61cb0337-ec84-4285-9696-8ae16d1b96d3" />
 
 ## 프로젝트 구조
 
@@ -63,6 +63,7 @@
 │   │               │       │   ├── ArticleUpdateRequest.java
 │   │               │       │   └── ArticleVersionReportRequest.java
 │   │               │       └── response
+│   │               │           ├── ArticleRandomResponse.java
 │   │               │           ├── ArticleReadCategoryGroupResponse.java
 │   │               │           ├── ArticleReadCategoryResponse.java
 │   │               │           ├── ArticleReadCategoryResponses.java
@@ -91,6 +92,8 @@
 │   │               │   │   ├── ImageService.java
 │   │               │   │   ├── ImageStorageStrategyContext.java
 │   │               │   │   └── RedisService.java
+│   │               │   ├── component
+│   │               │   │   └── RandomGenerator.java
 │   │               │   ├── config
 │   │               │   │   ├── JpaAuditingConfig.java
 │   │               │   │   ├── RedisConfig.java
@@ -186,6 +189,7 @@
     │               ├── article
     │               │   ├── application
     │               │   │   ├── ArticleCommandServiceTest.java
+    │               │   │   ├── ArticleQueryServiceMockTest.java
     │               │   │   └── ArticleQueryServiceTest.java
     │               │   ├── domain
     │               │   │   ├── ArticleCategoryTest.java
@@ -202,13 +206,19 @@
     │               │       ├── ArticleCommandControllerTest.java
     │               │       └── ArticleQueryControllerTest.java
     │               ├── auth
-    │               │   └── infrastructure
-    │               │       └── AuthenticationExtractorTest.java
+    │               │   ├── infrastructure
+    │               │   │   ├── AuthenticationExtractorTest.java
+    │               │   │   ├── AuthenticationInterceptorTest.java
+    │               │   │   └── AuthenticationPrincipalArgumentResolverTest.java
+    │               │   └── jwt
+    │               │       └── JwtTokenProviderTest.java
     │               ├── common
     │               │   ├── application
     │               │   │   ├── ImageLocalServiceTest.java
     │               │   │   ├── ImageS3ServiceTest.java
     │               │   │   └── RedisServiceTest.java
+    │               │   ├── component
+    │               │   │   └── RandomGeneratorTest.java
     │               │   ├── domain
     │               │   │   └── ClientIpTest.java
     │               │   ├── infrastructure
@@ -239,5 +249,4 @@
     │                   └── TestWebMvcConfig.java
     └── resources
         └── application.yml
-
 ```

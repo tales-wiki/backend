@@ -8,7 +8,6 @@ import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleCategory;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
 import com.openmpy.taleswiki.article.domain.repository.ArticleRepository;
-import com.openmpy.taleswiki.article.presentation.response.ArticleRandomResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryGroupResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadCategoryResponse;
 import com.openmpy.taleswiki.article.presentation.response.ArticleReadLatestUpdateResponse;
@@ -228,25 +227,6 @@ class ArticleQueryServiceTest extends ServiceTestSupport {
         assertThat(response.isNoEditing()).isFalse();
         assertThat(response.isHiding()).isTrue();
         assertThat(response.createdAt()).isNotNull();
-    }
-
-    @DisplayName("[통과] 최신 버전의 게시글 ID를 랜덤으로 조회한다.")
-    @Test
-    void article_query_service_test_07() {
-        // given
-        for (int i = 0; i < 10; i++) {
-            final Article article = Article.create("제목" + i, ArticleCategory.RUNNER);
-            final ArticleVersion articleVersion = ArticleVersion.create("닉네임" + i, "내용" + i, 10, "127.0.0.1", article);
-
-            article.addVersion(articleVersion);
-            articleRepository.save(article);
-        }
-
-        // when
-        final ArticleRandomResponse response = articleQueryService.randomArticle();
-
-        // then
-        assertThat(response.articleVersionId()).isNotNull();
     }
 
     @DisplayName("[예외] 최신 버전의 게시글 ID를 랜덤으로 찾지 못한다.")

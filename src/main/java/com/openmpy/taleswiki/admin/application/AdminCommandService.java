@@ -1,6 +1,7 @@
 package com.openmpy.taleswiki.admin.application;
 
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.ALREADY_BLOCKED_IP;
+import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_ARTICLE_VERSION_ID;
 import static com.openmpy.taleswiki.common.exception.CustomErrorCode.NOT_FOUND_BLOCKED_IP;
 
 import com.openmpy.taleswiki.admin.domain.BlockedIp;
@@ -9,6 +10,7 @@ import com.openmpy.taleswiki.admin.presentation.request.AdminBlockedIpRequest;
 import com.openmpy.taleswiki.article.application.ArticleQueryService;
 import com.openmpy.taleswiki.article.domain.Article;
 import com.openmpy.taleswiki.article.domain.ArticleVersion;
+import com.openmpy.taleswiki.article.domain.repository.ArticleVersionRepository;
 import com.openmpy.taleswiki.common.exception.CustomException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AdminCommandService {
 
+    private final ArticleVersionRepository articleVersionRepository;
     private final BlockedIpRepository blockedIpRepository;
     private final ArticleQueryService articleQueryService;
 
@@ -41,6 +44,20 @@ public class AdminCommandService {
         final ArticleVersion articleVersion = articleQueryService.getArticleVersion(articleVersionId);
 
         articleVersion.toggleHiding(!articleVersion.isHiding());
+    }
+
+    @Transactional
+    public void deleteArticleVersion(final Long articleVersionId) {
+        final ArticleVersion articleVersion = articleQueryService.getArticleVersion(articleVersionId);
+        final Article article = articleVersion.getArticle();
+
+        articleVersion.delete(LocalDateTime.now());
+
+        final ArticleVersion foundArticleVersion = articleVersionRepository
+                .findFirstByArticleOrderByVersionNumberDesc(article)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_ARTICLE_VERSION_ID));
+
+        article.updateLatestVersion(foundArticleVersion);
     }
 
     @Transactional
